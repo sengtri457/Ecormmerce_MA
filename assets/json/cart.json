@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "id": "cart_1",
+      "productId": "prod_1",
+      "title": "Radical Graphic Oversized T-Shirt",
+      "brand": "MA STUDIO",
+      "price": 45.00,
+      "originalPrice": 65.00,
+      "color": "Washed Black",
+      "size": "L",
+      "quantity": 1,
+      "imageUrl": "assets/images/products/image1.jpg"
+    },
+    {
+      "id": "cart_2",
+      "productId": "prod_2",
+      "title": "Essential Boxy Fit Pocket Tee",
+      "brand": "ATELIER ÉPURE",
+      "price": 38.00,
+      "originalPrice": 55.00,
+      "color": "Chalk White",
+      "size": "M",
+      "quantity": 2,
+      "imageUrl": "assets/images/products/image2.jpg"
+    }
+  ],
+  "shippingAddress": {
+    "name": "Sengtri",
+    "street": "142 Fashion Blvd, Apt 4B",
+    "city": "Phnom Penh",
+    "country": "Cambodia",
+    "phone": "+855 12 345 678"
+  },
+  "promoCode": "FIRST20",
+  "discountAmount": 20.00,
+  "shippingFee": 15.00
+}

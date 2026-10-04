@@ -1,0 +1,43 @@
+{
+  "id": "usr_99182",
+  "fullName": "Sengtri Chan",
+  "email": "sengtri@example.com",
+  "avatarUrl": "assets/images/profiles.jpg",
+  "tier": "VIP Black Member",
+  "ordersCount": 8,
+  "wishlistCount": 12,
+  "addresses": [
+    {
+      "id": "addr_1",
+      "label": "Home",
+      "isDefault": true,
+      "street": "142 Fashion Blvd, Apt 4B",
+      "city": "Phnom Penh",
+      "country": "Cambodia"
+    },
+    {
+      "id": "addr_2",
+      "label": "Studio",
+      "isDefault": false,
+      "street": "88 Creative Studio St, Level 3",
+      "city": "Phnom Penh",
+      "country": "Cambodia"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "id": "pm_1",
+      "brand": "Mastercard",
+      "last4": "8842",
+      "isDefault": true,
+      "expiry": "09/28"
+    },
+    {
+      "id": "pm_2",
+      "brand": "Visa",
+      "last4": "3104",
+      "isDefault": false,
+      "expiry": "11/27"
+    }
+  ]
+}

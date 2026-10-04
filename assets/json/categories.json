@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cat_women",
+    "name": "Women",
+    "slug": "women",
+    "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80",
+    "subcategories": [
+      { "id": "w_all", "name": "All Items", "count": 240 },
+      { "id": "w_dresses", "name": "Dresses", "count": 68 },
+      { "id": "w_coats", "name": "Coats & Jackets", "count": 42 },
+      { "id": "w_tops", "name": "Tops & Blouses", "count": 55 },
+      { "id": "w_shoes", "name": "Footwear", "count": 35 },
+      { "id": "w_bags", "name": "Bags & Leather", "count": 40 }
+    ]
+  },
+  {
+    "id": "cat_men",
+    "name": "Men",
+    "slug": "men",
+    "imageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
+    "subcategories": [
+      { "id": "m_all", "name": "All Items", "count": 180 },
+      { "id": "m_suits", "name": "Tailoring", "count": 32 },
+      { "id": "m_shirts", "name": "Shirts", "count": 48 },
+      { "id": "m_jackets", "name": "Outerwear", "count": 36 },
+      { "id": "m_shoes", "name": "Shoes", "count": 28 },
+      { "id": "m_accessories", "name": "Accessories", "count": 36 }
+    ]
+  },
+  {
+    "id": "cat_kids",
+    "name": "Kids",
+    "slug": "kids",
+    "imageUrl": "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=600&auto=format&fit=crop&q=80",
+    "subcategories": [
+      { "id": "k_all", "name": "All Items", "count": 95 },
+      { "id": "k_girls", "name": "Girls", "count": 45 },
+      { "id": "k_boys", "name": "Boys", "count": 38 },
+      { "id": "k_baby", "name": "Baby & Toddler", "count": 12 }
+    ]
+  },
+  {
+    "id": "cat_home",
+    "name": "Home",
+    "slug": "home",
+    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80",
+    "subcategories": [
+      { "id": "h_all", "name": "All Items", "count": 64 },
+      { "id": "h_decor", "name": "Interior Decor", "count": 28 },
+      { "id": "h_candles", "name": "Scents & Candles", "count": 18 },
+      { "id": "h_textiles", "name": "Linen & Textiles", "count": 18 }
+    ]
+  },
+  {
+    "id": "cat_beauty",
+    "name": "Beauty",
+    "slug": "beauty",
+    "imageUrl": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80",
+    "subcategories": [
+      { "id": "b_all", "name": "All Beauty", "count": 82 },
+      { "id": "b_fragrance", "name": "Fragrance", "count": 30 },
+      { "id": "b_skincare", "name": "Skincare", "count": 34 },
+      { "id": "b_body", "name": "Body & Bath", "count": 18 }
+    ]
+  }
+]
