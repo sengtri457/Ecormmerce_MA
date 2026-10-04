@@ -1,0 +1,372 @@
+[
+  {
+    "id": "prod_w1",
+    "title": "Structured Oversized Wool Blazer",
+    "brand": "MA STUDIO",
+    "category": "women",
+    "subcategory": "w_coats",
+    "price": 289.00,
+    "originalPrice": 385.00,
+    "discountPercent": 25,
+    "rating": 4.9,
+    "reviewCount": 128,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Tailored from Italian double-faced virgin wool, this structured blazer features structured peak lapels and a clean silhouette.",
+    "material": "100% Virgin Wool. Cupro lining.",
+    "care": "Specialist dry clean only.",
+    "colors": [
+      { "name": "Noir", "hex": "#1E1E1E" },
+      { "name": "Camel", "hex": "#864433" }
+    ],
+    "sizes": ["XS", "S", "M", "L"],
+    "images": [
+      "assets/images/products/product1.avif",
+      "assets/images/products/image1.jpg",
+      "assets/images/products/image2.jpg"
+    ]
+  },
+  {
+    "id": "prod_w2",
+    "title": "Pleated Silk Maxi Dress",
+    "brand": "ATELIER ÉPURE",
+    "category": "women",
+    "subcategory": "w_dresses",
+    "price": 340.00,
+    "originalPrice": 450.00,
+    "discountPercent": 24,
+    "rating": 4.8,
+    "reviewCount": 94,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Fluid accordion pleating crafted from pure Mulberry silk. Fluid floor-length hem with delicate waist ties.",
+    "material": "100% Mulberry Silk.",
+    "care": "Hand wash cold or dry clean.",
+    "colors": [
+      { "name": "Burgundy", "hex": "#4A121A" },
+      { "name": "Champagne", "hex": "#F4EBD9" }
+    ],
+    "sizes": ["XS", "S", "M", "L"],
+    "images": [
+      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&auto=format&fit=crop&q=80",
+      "assets/images/products/product1.avif"
+    ]
+  },
+  {
+    "id": "prod_w3",
+    "title": "Minimalist Calfskin Crossbody Bag",
+    "brand": "MAISON NORD",
+    "category": "women",
+    "subcategory": "w_bags",
+    "price": 240.00,
+    "originalPrice": 320.00,
+    "discountPercent": 25,
+    "rating": 4.8,
+    "reviewCount": 77,
+    "isNew": false,
+    "isFeatured": true,
+    "description": "Full-grain supple calfskin with matte black hardware and adjustable shoulder strap.",
+    "material": "100% Italian Calf Leather.",
+    "care": "Wipe with soft cloth. Store in dust bag.",
+    "colors": [
+      { "name": "Pitch Black", "hex": "#111111" },
+      { "name": "Terracotta", "hex": "#864433" }
+    ],
+    "sizes": ["One Size"],
+    "images": [
+      "assets/images/products/image1.jpg",
+      "assets/images/products/image3.jpg"
+    ]
+  },
+  {
+    "id": "prod_w4",
+    "title": "Cashmere Knit Turtleneck",
+    "brand": "MA STUDIO",
+    "category": "women",
+    "subcategory": "w_tops",
+    "price": 195.00,
+    "originalPrice": 240.00,
+    "discountPercent": 19,
+    "rating": 4.7,
+    "reviewCount": 76,
+    "isNew": true,
+    "isFeatured": false,
+    "description": "Ultra-soft Mongolian grade-A cashmere in an oversized relaxed cut with ribbed trims.",
+    "material": "100% Mongolian Cashmere.",
+    "care": "Hand wash cold with wool detergent.",
+    "colors": [
+      { "name": "Oatmeal", "hex": "#D8CFBC" },
+      { "name": "Charcoal", "hex": "#2F323A" }
+    ],
+    "sizes": ["S", "M", "L"],
+    "images": [
+      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop&q=80",
+      "assets/images/products/image2.jpg"
+    ]
+  },
+
+  {
+    "id": "prod_m1",
+    "title": "Radical Graphic Oversized T-Shirt",
+    "brand": "MA STUDIO",
+    "category": "men",
+    "subcategory": "m_shirts",
+    "price": 45.00,
+    "originalPrice": 65.00,
+    "discountPercent": 30,
+    "rating": 4.9,
+    "reviewCount": 142,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Crafted from 280gsm heavyweight combed cotton. Features dropped shoulders and screen-printed graphic art.",
+    "material": "100% Organic Heavyweight Cotton.",
+    "care": "Machine wash cold inside out.",
+    "colors": [
+      { "name": "Washed Black", "hex": "#1F1F1F" },
+      { "name": "Vintage White", "hex": "#F4F1EA" }
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "images": [
+      "assets/images/products/image1.jpg",
+      "assets/images/products/image2.jpg",
+      "assets/images/products/image3.jpg"
+    ]
+  },
+  {
+    "id": "prod_m2",
+    "title": "Essential Boxy Fit Pocket Tee",
+    "brand": "ATELIER ÉPURE",
+    "category": "men",
+    "subcategory": "m_shirts",
+    "price": 38.00,
+    "originalPrice": 55.00,
+    "discountPercent": 30,
+    "rating": 4.8,
+    "reviewCount": 98,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Clean minimalist boxy cut with single chest welt pocket. Pre-shrunk premium jersey cotton.",
+    "material": "100% Combed Cotton.",
+    "care": "Machine wash cold.",
+    "colors": [
+      { "name": "Chalk White", "hex": "#FAFAFA" },
+      { "name": "Charcoal Grey", "hex": "#3A3D40" }
+    ],
+    "sizes": ["S", "M", "L", "XL"],
+    "images": [
+      "assets/images/products/image2.jpg",
+      "assets/images/products/image3.jpg",
+      "assets/images/products/image1.jpg"
+    ]
+  },
+  {
+    "id": "prod_m3",
+    "title": "Heavyweight Vintage Washed Hoodie",
+    "brand": "MA STUDIO",
+    "category": "men",
+    "subcategory": "m_jackets",
+    "price": 95.00,
+    "originalPrice": 135.00,
+    "discountPercent": 30,
+    "rating": 5.0,
+    "reviewCount": 215,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Custom 450gsm loopback French terry. Relaxed double-layered hood without drawstrings.",
+    "material": "100% French Terry Cotton.",
+    "care": "Cold gentle cycle.",
+    "colors": [
+      { "name": "Faded Noir", "hex": "#232323" },
+      { "name": "Ash Heather", "hex": "#D1D5DB" }
+    ],
+    "sizes": ["M", "L", "XL"],
+    "images": [
+      "assets/images/products/image3.jpg",
+      "assets/images/products/image1.jpg",
+      "assets/images/products/image2.jpg"
+    ]
+  },
+  {
+    "id": "prod_m4",
+    "title": "Raw Hem Selvedge Denim Trouser",
+    "brand": "ATELIER ÉPURE",
+    "category": "men",
+    "subcategory": "m_suits",
+    "price": 110.00,
+    "originalPrice": 160.00,
+    "discountPercent": 31,
+    "rating": 4.7,
+    "reviewCount": 63,
+    "isNew": false,
+    "isFeatured": true,
+    "description": "13.5oz Japanese selvedge denim in a wide straight leg with raw hem detailing.",
+    "material": "100% Selvedge Cotton Denim.",
+    "care": "Wash inside out with cold water.",
+    "colors": [
+      { "name": "Washed Indigo", "hex": "#304352" },
+      { "name": "Black Wash", "hex": "#222222" }
+    ],
+    "sizes": ["30", "32", "34", "36"],
+    "images": [
+      "assets/images/products/image2.jpg",
+      "assets/images/products/image3.jpg"
+    ]
+  },
+
+  {
+    "id": "prod_k1",
+    "title": "Kids Archival Heavyweight Hoodie",
+    "brand": "MA MINI",
+    "category": "kids",
+    "subcategory": "k_boys",
+    "price": 48.00,
+    "originalPrice": 65.00,
+    "discountPercent": 26,
+    "rating": 4.9,
+    "reviewCount": 42,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Downscaled version of our signature streetwear hoodie in soft organic fleece cotton.",
+    "material": "100% Organic Fleece Cotton.",
+    "care": "Machine wash cold with like colors.",
+    "colors": [
+      { "name": "Heather Grey", "hex": "#CFCFCF" },
+      { "name": "Pitch Black", "hex": "#111111" }
+    ],
+    "sizes": ["4Y", "6Y", "8Y", "10Y", "12Y"],
+    "images": [
+      "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=800&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    "id": "prod_k2",
+    "title": "Kids Boxy Graphic Cotton Tee",
+    "brand": "MA MINI",
+    "category": "kids",
+    "subcategory": "k_girls",
+    "price": 28.00,
+    "originalPrice": 38.00,
+    "discountPercent": 26,
+    "rating": 4.8,
+    "reviewCount": 35,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Breathable 220gsm jersey cotton with minimal chest art print.",
+    "material": "100% Organic Jersey Cotton.",
+    "care": "Machine wash cold.",
+    "colors": [
+      { "name": "Cream", "hex": "#F7F5F0" },
+      { "name": "Terracotta", "hex": "#864433" }
+    ],
+    "sizes": ["4Y", "6Y", "8Y", "10Y"],
+    "images": [
+      "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=800&auto=format&fit=crop&q=80"
+    ]
+  },
+
+  {
+    "id": "prod_h1",
+    "title": "Ceramic Scented Candle • Santal & Fig",
+    "brand": "MA MAISON",
+    "category": "home",
+    "subcategory": "h_candles",
+    "price": 54.00,
+    "originalPrice": 70.00,
+    "discountPercent": 22,
+    "rating": 5.0,
+    "reviewCount": 89,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Hand-thrown matte ceramic vessel with 100% natural soy wax and lead-free cotton wick. 65 hours burn time.",
+    "material": "Matte Ceramic, Soy Wax.",
+    "care": "Trim wick to 1/4 inch before lighting.",
+    "colors": [
+      { "name": "Alabaster", "hex": "#F4F1EA" },
+      { "name": "Terracotta", "hex": "#864433" }
+    ],
+    "sizes": ["300g / 10.5oz"],
+    "images": [
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    "id": "prod_h2",
+    "title": "French Washed Linen Duvet Set",
+    "brand": "MA MAISON",
+    "category": "home",
+    "subcategory": "h_textiles",
+    "price": 220.00,
+    "originalPrice": 280.00,
+    "discountPercent": 21,
+    "rating": 4.9,
+    "reviewCount": 61,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Woven from 100% natural Normandy flax, pre-washed for effortless drape and relaxed texture.",
+    "material": "100% French Flax Linen.",
+    "care": "Machine wash gentle. Tumble dry low.",
+    "colors": [
+      { "name": "Flax Oatmeal", "hex": "#E3DCCB" },
+      { "name": "Chalk White", "hex": "#FAFAFA" }
+    ],
+    "sizes": ["Queen", "King"],
+    "images": [
+      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80"
+    ]
+  },
+
+  {
+    "id": "prod_b1",
+    "title": "Botanical Restorative Face Elixir",
+    "brand": "MA BEAUTÉ",
+    "category": "beauty",
+    "subcategory": "b_skincare",
+    "price": 68.00,
+    "originalPrice": 85.00,
+    "discountPercent": 20,
+    "rating": 4.9,
+    "reviewCount": 114,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Cold-pressed nutrient-dense botanical oil blend with squalane, bakuchiol, and rosehip seed extract.",
+    "material": "Glass Dropper Bottle, 30ml.",
+    "care": "Store in a cool dry place away from direct sunlight.",
+    "colors": [
+      { "name": "Golden Amber", "hex": "#E5A93C" }
+    ],
+    "sizes": ["30ml / 1.0 fl oz"],
+    "images": [
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop&q=80"
+    ]
+  },
+  {
+    "id": "prod_b2",
+    "title": "Archival Santal Eau de Parfum",
+    "brand": "MA BEAUTÉ",
+    "category": "beauty",
+    "subcategory": "b_fragrance",
+    "price": 125.00,
+    "originalPrice": 150.00,
+    "discountPercent": 16,
+    "rating": 5.0,
+    "reviewCount": 182,
+    "isNew": true,
+    "isFeatured": true,
+    "description": "Notes of Australian sandalwood, cardamom, violet leaves, cedarwood, and warm amber.",
+    "material": "Eau de Parfum Spray, 50ml.",
+    "care": "Flammable until dry. Keep away from heat.",
+    "colors": [
+      { "name": "Clear Crystal", "hex": "#ECECEC" }
+    ],
+    "sizes": ["50ml / 1.7 fl oz"],
+    "images": [
+      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80"
+    ]
+  }
+]

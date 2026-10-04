@@ -1,0 +1,71 @@
+{
+  "onboarding": [
+    {
+      "id": 1,
+      "title": "Discover Exclusive Collections",
+      "subtitle": "Explore curated luxury fashion and new arrivals tailored to your personal aesthetic.",
+      "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": 2,
+      "title": "Minimalist Elegance",
+      "subtitle": "Timeless apparel crafted with the finest fabrics for every modern wardrobe.",
+      "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": 3,
+      "title": "Seamless Shopping Bag",
+      "subtitle": "Effortless checkout and fast delivery to your door with real-time tracking.",
+      "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&auto=format&fit=crop&q=80"
+    }
+  ],
+  "home_hero_banners": [
+    {
+      "id": "b1",
+      "tag": "LIMITED TIME OFFER",
+      "title": "30% - 70% OFF",
+      "subtitle": "SALE ENDS SOON EXTENDED",
+      "ctaText": "SHOP NOW",
+      "category": "women",
+      "imageUrl": "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=1000&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "b2",
+      "tag": "NEW SEASON",
+      "title": "AUTUMN / WINTER '26",
+      "subtitle": "ARCHIVAL RUNWAY EDIT",
+      "ctaText": "DISCOVER",
+      "category": "women",
+      "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1000&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "b3",
+      "tag": "FEATURED EDIT",
+      "title": "CONTEMPORARY SUITING",
+      "subtitle": "MODERN SILHOUETTES",
+      "ctaText": "EXPLORE",
+      "category": "men",
+      "imageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1000&auto=format&fit=crop&q=80"
+    }
+  ],
+  "promo_offers": [
+    {
+      "id": "p1",
+      "code": "FIRST20",
+      "title": "20% OFF FIRST PURCHASE",
+      "condition": "Use code FIRST20 on orders above $100"
+    },
+    {
+      "id": "p2",
+      "code": "FREESHIP",
+      "title": "FREE EXPRESS SHIPPING",
+      "condition": "Automatically applied on checkout"
+    },
+    {
+      "id": "p3",
+      "code": "FLASH50",
+      "title": "BUY 2 GET 1 AT 50% OFF",
+      "condition": "Valid on selected summer collections"
+    }
+  ]
+}
