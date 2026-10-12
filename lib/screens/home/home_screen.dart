@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
+import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../models/category.dart';
 import '../../models/product.dart';
@@ -9,6 +10,7 @@ import '../../widgets/app_button.dart';
 import '../../widgets/trust_badges.dart';
 import '../catalog/product_list_screen.dart';
 import '../product/product_detail_screen.dart';
+import 'widgets/category_horizontal_list.dart';
 import 'widgets/department_category_grid.dart';
 import 'widgets/department_promo_banner.dart';
 import 'widgets/department_tab_bar.dart';
@@ -17,8 +19,6 @@ import 'widgets/home_hero_carousel.dart';
 import 'widgets/home_section_header.dart';
 import 'widgets/product_horizontal_list.dart';
 
-/// The central Home Screen orchestrator.
-/// High-level declarative layout composing isolated, reusable subcomponents.
 class HomeScreen extends StatefulWidget {
   final Function(int) onNavigateTab;
 
@@ -81,13 +81,21 @@ class _HomeScreenState extends State<HomeScreen> {
     // Filter products for the selected department
     final List<Product> displayProducts;
     final List<Product> trendingProducts;
+    // ignore: unused_local_variable
+    final List<Product> featuredProducts;
 
     if (isHomeTab) {
-      // Home tab features the entire store flagship curated products
-      displayProducts = allProducts;
-      trendingProducts = allProducts.reversed.toList();
+      final fp = _mockService.featureProducts;
+      displayProducts = (fp != null && fp.exclusiveOffers.isNotEmpty)
+          ? fp.exclusiveOffers
+          : allProducts;
+      trendingProducts = (fp != null && fp.bestSellings.isNotEmpty)
+          ? fp.bestSellings
+          : allProducts.reversed.toList();
+      featuredProducts = (fp != null && fp.features.isNotEmpty)
+          ? fp.features
+          : allProducts.where((p) => p.isFeatured).toList();
     } else if (isAccessoryTab) {
-      // Accessory department filters for bags, jewelry, leather
       final accProds = allProducts
           .where(
             (p) =>
@@ -97,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
       displayProducts = accProds.isNotEmpty ? accProds : allProducts;
       trendingProducts = displayProducts.reversed.toList();
+      featuredProducts = const [];
     } else {
       final deptProducts = allProducts
           .where(
@@ -105,31 +114,39 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
       displayProducts = deptProducts.isNotEmpty ? deptProducts : allProducts;
       trendingProducts = displayProducts.reversed.toList();
+      featuredProducts = const [];
     }
 
     // Active category for subcategories
-    final CategoryItem? activeCategory = isHomeTab
-        ? allCategories.firstOrNull
-        : (isAccessoryTab
-              ? allCategories
-                    .where(
-                      (c) => c.slug.contains('bag') || c.slug.contains('women'),
-                    )
-                    .firstOrNull
-              : allCategories
-                    .where(
-                      (c) =>
-                          c.slug.toLowerCase() == _selectedGender.toLowerCase(),
-                    )
-                    .firstOrNull);
+    final List<Subcategory> subcategories;
+    final String activeCategoryTitle;
 
-    final String activeCategoryTitle = isHomeTab
-        ? 'FEATURED CATEGORIES'
-        : (isAccessoryTab
-              ? 'ACCESSORY STYLES'
-              : (activeCategory?.name ?? _selectedGender.toUpperCase()));
-    final List<Subcategory> subcategories =
-        activeCategory?.subcategories ?? const [];
+    if (isHomeTab) {
+      activeCategoryTitle = 'FEATURED CATEGORIES';
+      // Curate a vibrant selection of cross-store styles for the flagship Home tab
+      subcategories = [
+        Subcategory(id: 'disc', name: 'Discount', count: 120),
+        Subcategory(id: 'tees', name: 'T-shirt', count: 85),
+        Subcategory(id: 'hoodies', name: 'Hoodie', count: 64),
+        Subcategory(id: 'hats', name: 'Hat', count: 36),
+        Subcategory(id: 'dresses', name: 'Dresses', count: 68),
+        Subcategory(id: 'coats', name: 'Jackets', count: 42),
+        Subcategory(id: 'shoes', name: 'Shoes', count: 48),
+        Subcategory(id: 'bags', name: 'Bags', count: 40),
+      ];
+    } else if (isAccessoryTab) {
+      activeCategoryTitle = 'ACCESSORY STYLES';
+      final cat = allCategories
+          .where((c) => c.slug.contains('bag') || c.slug.contains('women'))
+          .firstOrNull;
+      subcategories = cat?.subcategories ?? const [];
+    } else {
+      final cat = allCategories
+          .where((c) => c.slug.toLowerCase() == _selectedGender.toLowerCase())
+          .firstOrNull;
+      activeCategoryTitle = cat?.name ?? _selectedGender.toUpperCase();
+      subcategories = cat?.subcategories ?? const [];
+    }
 
     // Dynamic titles
     final String newArrivalsTitle = isHomeTab
@@ -202,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // 2. Department Hero Carousel
-            const SizedBox(height: 14),
+            const SizedBox(height: AppSpacing.md),
             HomeHeroCarousel(
               controller: _carouselController,
               slides: department.slides,
@@ -216,38 +233,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // 3. New Arrivals Horizontal Feed
-            const SizedBox(height: 24),
-            HomeSectionHeader(
+            // 3. Category Horizontal Scroll with Emojis (Placed right after Slide)
+            if (subcategories.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.lg),
+              CategoryHorizontalList(
+                subcategories: subcategories,
+                onSubCategoryTap: (sub) => _navigateToCatalog(
+                  title: sub.name,
+                  slug: isHomeTab ? 'all' : _selectedGender,
+                ),
+              ),
+            ],
+
+            // 4. New Arrivals Horizontal Feed
+            _buildProductSection(
               title: newArrivalsTitle,
               subtitle:
                   'Headplacket daily from the world best brands and boutiques',
               actionText: 'SWIPE TO VIEW',
+              products: displayProducts,
               onActionTap: () => _navigateToCatalog(
                 title: newArrivalsTitle,
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-            const SizedBox(height: 12),
-            ProductHorizontalList(
-              products: displayProducts,
-              onProductTap: _navigateToProductDetail,
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: AppButton.outlined(
-                text: 'Shop Now',
-                onPressed: () => _navigateToCatalog(
-                  title: newArrivalsTitle,
-                  slug: isHomeTab ? 'all' : _selectedGender,
-                ),
-              ),
-            ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.xxl),
 
-            // 4. Split Promo Banner
+            // 5. Split Promo Banner
             DepartmentPromoBanner(
               promo: department.promoBox,
               onTap: () => _navigateToCatalog(
@@ -257,35 +270,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-
-            // 5. Trending Products Horizontal Feed
-            HomeSectionHeader(
+            // 6. Trending Products Horizontal Feed
+            _buildProductSection(
               title: trendingTitle,
               actionText: 'VIEW ALL',
+              products: trendingProducts,
               onActionTap: () => _navigateToCatalog(
                 title: trendingTitle,
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-            const SizedBox(height: 12),
-            ProductHorizontalList(
-              products: trendingProducts,
-              onProductTap: _navigateToProductDetail,
-            ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: AppButton.outlined(
-                text: 'Shop Now',
-                onPressed: () => _navigateToCatalog(
-                  title: trendingTitle,
-                  slug: isHomeTab ? 'all' : _selectedGender,
-                ),
-              ),
-            ),
-
-            // 6. Subcategory Grid
-            const SizedBox(height: 20),
+            // 7. Subcategory Grid
+            const SizedBox(height: AppSpacing.xxl),
             HomeSectionHeader(
               title: categoriesTitle,
               actionText: 'EXPLORE',
@@ -294,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             DepartmentCategoryGrid(
               subcategories: subcategories,
               onSubCategoryTap: (sub) => _navigateToCatalog(
@@ -302,8 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-
-            // 7. Editorial Lookbook Card
+            // 8. Editorial Lookbook Card
             EditorialLookbookCard(
               lookbook: department.lookbook,
               onViewLookbook: () => _navigateToCatalog(
@@ -311,13 +306,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 slug: isHomeTab ? 'all' : _selectedGender,
               ),
             ),
-
-            // 8. Trust Badges
-            const SizedBox(height: 36),
+            // 9. Trust Badges
+            const SizedBox(height: AppSpacing.xxxl),
             const TrustBadges(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildProductSection({
+    required String title,
+    String? subtitle,
+    required String actionText,
+    required List<Product> products,
+    required VoidCallback onActionTap,
+  }) {
+    if (products.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        HomeSectionHeader(
+          title: title,
+          subtitle: subtitle,
+          actionText: actionText,
+          onActionTap: onActionTap,
+        ),
+        const SizedBox(height: 12),
+        ProductHorizontalList(
+          products: products,
+          onProductTap: _navigateToProductDetail,
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppButton.outlined(text: 'Shop Now', onPressed: onActionTap),
+        ),
+      ],
     );
   }
 }

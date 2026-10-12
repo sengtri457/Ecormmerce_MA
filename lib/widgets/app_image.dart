@@ -41,6 +41,15 @@ class AppImage extends StatelessWidget {
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
           if (fallbackUrl != null && fallbackUrl!.isNotEmpty) {
+            if (fallbackUrl!.startsWith('assets/')) {
+              return Image.asset(
+                fallbackUrl!,
+                width: width,
+                height: height,
+                fit: fit,
+                errorBuilder: (_, _, _) => errorWidget ?? _buildPlaceholder(),
+              );
+            }
             return _buildNetworkImage(fallbackUrl!);
           }
           return errorWidget ?? _buildPlaceholder();

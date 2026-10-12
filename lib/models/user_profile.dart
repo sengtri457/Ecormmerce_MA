@@ -17,12 +17,12 @@ class UserAddress {
 
   factory UserAddress.fromJson(Map<String, dynamic> json) {
     return UserAddress(
-      id: json['id'] as String,
-      label: json['label'] as String,
+      id: json['id'] as String? ?? '',
+      label: json['label'] as String? ?? '',
       isDefault: json['isDefault'] as bool? ?? false,
-      street: json['street'] as String,
-      city: json['city'] as String,
-      country: json['country'] as String,
+      street: json['street'] as String? ?? '',
+      city: json['city'] as String? ?? '',
+      country: json['country'] as String? ?? '',
     );
   }
 }
@@ -44,11 +44,11 @@ class UserPaymentMethod {
 
   factory UserPaymentMethod.fromJson(Map<String, dynamic> json) {
     return UserPaymentMethod(
-      id: json['id'] as String,
-      brand: json['brand'] as String,
-      last4: json['last4'] as String,
+      id: json['id'] as String? ?? '',
+      brand: json['brand'] as String? ?? '',
+      last4: json['last4'] as String? ?? '',
       isDefault: json['isDefault'] as bool? ?? false,
-      expiry: json['expiry'] as String,
+      expiry: json['expiry'] as String? ?? '',
     );
   }
 }
@@ -77,18 +77,24 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
-    var rawAddresses = json['addresses'] as List? ?? [];
-    var rawPayments = json['paymentMethods'] as List? ?? [];
+    final rawAddresses = json['addresses'] as List? ?? const [];
+    final rawPayments = json['paymentMethods'] as List? ?? const [];
     return UserProfile(
-      id: json['id'] as String,
-      fullName: json['fullName'] as String,
-      email: json['email'] as String,
-      avatarUrl: json['avatarUrl'] as String,
+      id: json['id'] as String? ?? '',
+      fullName: json['fullName'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      avatarUrl: json['avatarUrl'] as String? ?? '',
       tier: json['tier'] as String? ?? 'Member',
-      ordersCount: json['ordersCount'] as int? ?? 0,
-      wishlistCount: json['wishlistCount'] as int? ?? 0,
-      addresses: rawAddresses.map((a) => UserAddress.fromJson(a as Map<String, dynamic>)).toList(),
-      paymentMethods: rawPayments.map((p) => UserPaymentMethod.fromJson(p as Map<String, dynamic>)).toList(),
+      ordersCount: (json['ordersCount'] as num?)?.toInt() ?? 0,
+      wishlistCount: (json['wishlistCount'] as num?)?.toInt() ?? 0,
+      addresses: rawAddresses
+          .whereType<Map<String, dynamic>>()
+          .map((a) => UserAddress.fromJson(a))
+          .toList(),
+      paymentMethods: rawPayments
+          .whereType<Map<String, dynamic>>()
+          .map((p) => UserPaymentMethod.fromJson(p))
+          .toList(),
     );
   }
 }

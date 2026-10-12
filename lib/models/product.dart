@@ -6,14 +6,14 @@ class ProductColor {
 
   factory ProductColor.fromJson(Map<String, dynamic> json) {
     return ProductColor(
-      name: json['name'] as String,
-      hex: json['hex'] as String,
+      name: json['name'] as String? ?? '',
+      hex: json['hex'] as String? ?? '#000000',
     );
   }
 }
 
 class Product {
-  final String id;
+  final int id;
   final String title;
   final String brand;
   final String category;
@@ -54,29 +54,63 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
-    var rawColors = json['colors'] as List? ?? [];
-    var rawSizes = json['sizes'] as List? ?? [];
-    var rawImages = json['images'] as List? ?? [];
+    final rawColors = json['colors'] as List? ?? const [];
+    final rawSizes = json['sizes'] as List? ?? const [];
+    final rawImages = json['images'] as List? ?? const [];
 
     return Product(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      brand: json['brand'] as String,
-      category: json['category'] as String,
-      subcategory: json['subcategory'] as String,
-      price: (json['price'] as num).toDouble(),
-      originalPrice: (json['originalPrice'] as num).toDouble(),
-      discountPercent: json['discountPercent'] as int? ?? 0,
-      rating: (json['rating'] as num).toDouble(),
-      reviewCount: json['reviewCount'] as int? ?? 0,
+      id: json['id'] is num
+          ? (json['id'] as num).toInt()
+          : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      title: json['title'] as String? ?? '',
+      brand: json['brand'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      subcategory: json['subcategory'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      originalPrice: (json['originalPrice'] as num?)?.toDouble() ?? 0.0,
+      discountPercent: (json['discountPercent'] as num?)?.toInt() ?? 0,
+      rating: (json['rating'] as num?)?.toDouble() ?? 5.0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       isNew: json['isNew'] as bool? ?? false,
       isFeatured: json['isFeatured'] as bool? ?? false,
       description: json['description'] as String? ?? '',
       material: json['material'] as String? ?? '',
       care: json['care'] as String? ?? '',
-      colors: rawColors.map((c) => ProductColor.fromJson(c as Map<String, dynamic>)).toList(),
+      colors: rawColors
+          .whereType<Map<String, dynamic>>()
+          .map((c) => ProductColor.fromJson(c))
+          .toList(),
       sizes: rawSizes.map((s) => s.toString()).toList(),
       images: rawImages.map((i) => i.toString()).toList(),
+    );
+  }
+}
+
+class FeatureProduct {
+  final List<Product> exclusiveOffers;
+  final List<Product> bestSellings;
+  final List<Product> features;
+
+  const FeatureProduct({
+    this.exclusiveOffers = const [],
+    this.bestSellings = const [],
+    this.features = const [],
+  });
+
+  factory FeatureProduct.fromJson(Map<String, dynamic> json) {
+    return FeatureProduct(
+      exclusiveOffers: (json['exclusive_offers'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
+      bestSellings: (json['best_sellings'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
+      features: (json['features'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
     );
   }
 }

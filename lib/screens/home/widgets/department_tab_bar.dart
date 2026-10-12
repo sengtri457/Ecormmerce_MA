@@ -27,26 +27,34 @@ class DepartmentTabBar extends StatelessWidget {
             child: InkWell(
               onTap: () => onDepartmentSelected(dept['id']!),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 11),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: isSelected ? AppColors.black : Colors.transparent,
-                      width: 2.5,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      dept['name']!,
+                      style: AppTypography.badge.copyWith(
+                        fontSize: 12,
+                        letterSpacing: 1.1,
+                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: isSelected
+                            ? AppColors.black
+                            : AppColors.textSecondary,
+                      ),
                     ),
-                  ),
-                ),
-                child: Text(
-                  dept['name']!,
-                  style: AppTypography.badge.copyWith(
-                    fontSize: 12,
-                    letterSpacing: 1.0,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected
-                        ? AppColors.black
-                        : AppColors.textSecondary,
-                  ),
+                    const SizedBox(height: 6),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                      height: 2.0,
+                      width: isSelected ? 28.0 : 0.0,
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.black : Colors.transparent,
+                        borderRadius: BorderRadius.circular(1.0),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

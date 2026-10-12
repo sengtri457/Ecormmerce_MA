@@ -24,8 +24,8 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  final Map<String, String> _selectedSizes = {};
-  final Set<String> _selectedItemIds = {};
+  final Map<int, String> _selectedSizes = {};
+  final Set<int> _selectedItemIds = {};
 
   void _navigateToBag() {
     if (widget.onNavigateToBag != null) {
@@ -201,7 +201,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 child: ListView.separated(
                   padding: const EdgeInsets.only(top: 8, bottom: 24),
                   itemCount: items.length,
-                  separatorBuilder: (_, __) => const Divider(
+                  separatorBuilder: (_, _) => const Divider(
                     color: AppColors.border,
                     height: 1,
                     indent: 16,

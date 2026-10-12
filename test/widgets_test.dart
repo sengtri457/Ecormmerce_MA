@@ -145,7 +145,7 @@ void main() {
 
     testWidgets('ProductDetailScreen renders modular sections and handles Add to Bag', (tester) async {
       final sampleProduct = Product(
-        id: 'test_p1',
+        id: 101,
         title: 'Structured Oversized Wool Blazer',
         brand: 'MA STUDIO',
         category: 'women',
