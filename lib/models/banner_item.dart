@@ -13,10 +13,10 @@ class OnboardingItem {
 
   factory OnboardingItem.fromJson(Map<String, dynamic> json) {
     return OnboardingItem(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      subtitle: json['subtitle'] as String,
-      image: json['image'] as String,
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? '',
+      image: json['image'] as String? ?? '',
     );
   }
 }
@@ -42,13 +42,13 @@ class HomeBannerItem {
 
   factory HomeBannerItem.fromJson(Map<String, dynamic> json) {
     return HomeBannerItem(
-      id: json['id'] as String,
-      tag: json['tag'] as String,
-      title: json['title'] as String,
-      subtitle: json['subtitle'] as String,
-      ctaText: json['ctaText'] as String,
-      category: json['category'] as String,
-      imageUrl: json['imageUrl'] as String,
+      id: json['id'] as String? ?? '',
+      tag: json['tag'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      subtitle: json['subtitle'] as String? ?? '',
+      ctaText: json['ctaText'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
     );
   }
 }
@@ -68,10 +68,10 @@ class PromoOffer {
 
   factory PromoOffer.fromJson(Map<String, dynamic> json) {
     return PromoOffer(
-      id: json['id'] as String,
-      code: json['code'] as String,
-      title: json['title'] as String,
-      condition: json['condition'] as String,
+      id: json['id'] as String? ?? '',
+      code: json['code'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      condition: json['condition'] as String? ?? '',
     );
   }
 }

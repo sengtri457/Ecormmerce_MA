@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
+import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../helpers/currency_helper.dart';
 import '../../services/mock_data_service.dart';
@@ -52,7 +53,7 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
         title: Text('REMOVE ITEM', style: AppTypography.headingSmall),
         content: Text('Are you sure you want to remove "$title" from your shopping bag?'),
         actions: [
@@ -62,9 +63,9 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.alertRed,
+              backgroundColor: AppColors.saleRed,
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
             ),
             onPressed: () {
               MockDataService().removeFromCart(cartItemId);
@@ -222,7 +223,7 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.only(top: 8, bottom: 16),
                   itemCount: items.length,
-                  separatorBuilder: (_, __) => const Divider(
+                  separatorBuilder: (_, _) => const Divider(
                     color: AppColors.border,
                     height: 1,
                     indent: 16,

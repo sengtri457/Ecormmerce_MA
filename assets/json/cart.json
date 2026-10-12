@@ -2,11 +2,11 @@
   "items": [
     {
       "id": "cart_1",
-      "productId": "prod_1",
+      "productId": 5,
       "title": "Radical Graphic Oversized T-Shirt",
       "brand": "MA STUDIO",
-      "price": 45.00,
-      "originalPrice": 65.00,
+      "price": 45.0,
+      "originalPrice": 65.0,
       "color": "Washed Black",
       "size": "L",
       "quantity": 1,
@@ -14,11 +14,11 @@
     },
     {
       "id": "cart_2",
-      "productId": "prod_2",
+      "productId": 6,
       "title": "Essential Boxy Fit Pocket Tee",
       "brand": "ATELIER ÉPURE",
-      "price": 38.00,
-      "originalPrice": 55.00,
+      "price": 38.0,
+      "originalPrice": 55.0,
       "color": "Chalk White",
       "size": "M",
       "quantity": 2,
@@ -33,6 +33,6 @@
     "phone": "+855 12 345 678"
   },
   "promoCode": "FIRST20",
-  "discountAmount": 20.00,
-  "shippingFee": 15.00
+  "discountAmount": 20.0,
+  "shippingFee": 15.0
 }

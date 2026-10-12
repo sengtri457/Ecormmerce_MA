@@ -101,21 +101,23 @@ class ProductSizeSelector extends StatelessWidget {
           else
             // Sizing Chips Row
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: sizes.map((size) {
                 final isSelected = selectedSize == size;
                 return InkWell(
                   onTap: () => onSizeSelected(size),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
-                  child: Container(
-                    width: 48,
-                    height: 40,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    width: 46,
+                    height: 42,
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.black : AppColors.surfaceLight,
                       borderRadius: BorderRadius.circular(AppRadius.sm),
                       border: Border.all(
                         color: isSelected ? AppColors.black : AppColors.border,
+                        width: 1.0,
                       ),
                     ),
                     alignment: Alignment.center,
@@ -125,6 +127,7 @@ class ProductSizeSelector extends StatelessWidget {
                         color: isSelected ? AppColors.white : AppColors.textPrimary,
                         fontSize: 12,
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),

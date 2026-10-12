@@ -42,19 +42,52 @@ class ProductBottomBar extends StatelessWidget {
             Container(
               height: 48,
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.border),
+                color: AppColors.surfaceLight,
+                border: Border.all(color: AppColors.border, width: 1.0),
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove, size: 16),
-                    onPressed: onDecrement,
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.horizontal(
+                        left: Radius.circular(AppRadius.sm),
+                      ),
+                      onTap: onDecrement,
+                      child: Container(
+                        width: 38,
+                        height: 48,
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.remove, size: 16, color: AppColors.black),
+                      ),
+                    ),
                   ),
-                  Text('$quantity', style: AppTypography.headingSmall),
-                  IconButton(
-                    icon: const Icon(Icons.add, size: 16),
-                    onPressed: onIncrement,
+                  Container(
+                    width: 32,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '$quantity',
+                      style: AppTypography.headingSmall.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.horizontal(
+                        right: Radius.circular(AppRadius.sm),
+                      ),
+                      onTap: onIncrement,
+                      child: Container(
+                        width: 38,
+                        height: 48,
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.add, size: 16, color: AppColors.black),
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -6,6 +6,7 @@ import '../models/category.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
 import '../models/user_profile.dart';
+import 'home_service.dart';
 
 class MockDataService extends ChangeNotifier {
   static final MockDataService _instance = MockDataService._internal();
@@ -20,8 +21,9 @@ class MockDataService extends ChangeNotifier {
   List<PromoOffer> promoOffers = [];
   List<CategoryItem> categories = [];
   List<Product> products = [];
+  FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
-  Set<String> wishlistProductIds = {'prod_w1', 'prod_m1'};
+  Set<int> wishlistProductIds = {1, 5};
   UserProfile? userProfile;
   ShippingAddress? shippingAddress;
   String promoCode = 'FIRST20';
@@ -31,35 +33,41 @@ class MockDataService extends ChangeNotifier {
   Future<void> initialize() async {
     if (_isLoaded) return;
     try {
-      // 1. Load Banners & Onboarding
-      final bannersString = await rootBundle.loadString('assets/json/banners.json');
-      final bannersJson = json.decode(bannersString) as Map<String, dynamic>;
+      // Use dedicated HomeService loaders
+      const homeService = HomeService();
+      final bannersData = await homeService.getBannersData();
       
-      var rawOnboarding = bannersJson['onboarding'] as List? ?? [];
-      onboardingItems = rawOnboarding.map((x) => OnboardingItem.fromJson(x as Map<String, dynamic>)).toList();
+      final rawOnboarding = bannersData['onboarding'] as List? ?? const [];
+      onboardingItems = rawOnboarding
+          .whereType<Map<String, dynamic>>()
+          .map((x) => OnboardingItem.fromJson(x))
+          .toList();
 
-      var rawBanners = bannersJson['home_hero_banners'] as List? ?? [];
-      heroBanners = rawBanners.map((x) => HomeBannerItem.fromJson(x as Map<String, dynamic>)).toList();
+      final rawBanners = bannersData['home_hero_banners'] as List? ?? const [];
+      heroBanners = rawBanners
+          .whereType<Map<String, dynamic>>()
+          .map((x) => HomeBannerItem.fromJson(x))
+          .toList();
 
-      var rawOffers = bannersJson['promo_offers'] as List? ?? [];
-      promoOffers = rawOffers.map((x) => PromoOffer.fromJson(x as Map<String, dynamic>)).toList();
+      final rawOffers = bannersData['promo_offers'] as List? ?? const [];
+      promoOffers = rawOffers
+          .whereType<Map<String, dynamic>>()
+          .map((x) => PromoOffer.fromJson(x))
+          .toList();
 
-      // 2. Load Categories
-      final catString = await rootBundle.loadString('assets/json/categories.json');
-      final catJson = json.decode(catString) as List;
-      categories = catJson.map((x) => CategoryItem.fromJson(x as Map<String, dynamic>)).toList();
-
-      // 3. Load Products
-      final prodString = await rootBundle.loadString('assets/json/products.json');
-      final prodJson = json.decode(prodString) as List;
-      products = prodJson.map((x) => Product.fromJson(x as Map<String, dynamic>)).toList();
+      categories = await homeService.getCategories();
+      products = await homeService.getProducts();
+      featureProducts = await homeService.getFeatureProducts();
 
       // 4. Load Cart
       final cartString = await rootBundle.loadString('assets/json/cart.json');
       final cartJson = json.decode(cartString) as Map<String, dynamic>;
-      var rawCart = cartJson['items'] as List? ?? [];
-      cartItems = rawCart.map((x) => CartItem.fromJson(x as Map<String, dynamic>)).toList();
-      if (cartJson['shippingAddress'] != null) {
+      final rawCart = cartJson['items'] as List? ?? const [];
+      cartItems = rawCart
+          .whereType<Map<String, dynamic>>()
+          .map((x) => CartItem.fromJson(x))
+          .toList();
+      if (cartJson['shippingAddress'] != null && cartJson['shippingAddress'] is Map<String, dynamic>) {
         shippingAddress = ShippingAddress.fromJson(cartJson['shippingAddress'] as Map<String, dynamic>);
       }
       promoCode = cartJson['promoCode'] as String? ?? 'FIRST20';
@@ -152,9 +160,9 @@ class MockDataService extends ChangeNotifier {
   }
 
   // --- Wishlist Actions ---
-  bool isFavorite(String productId) => wishlistProductIds.contains(productId);
+  bool isFavorite(int productId) => wishlistProductIds.contains(productId);
 
-  void toggleFavorite(String productId) {
+  void toggleFavorite(int productId) {
     if (wishlistProductIds.contains(productId)) {
       wishlistProductIds.remove(productId);
     } else {
