@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
+import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 
@@ -42,9 +43,9 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl, vertical: AppSpacing.xl),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,11 +53,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           // Drag handle
           Center(
             child: Container(
-              width: 40,
+              width: 36,
               height: 4,
               decoration: BoxDecoration(
                 color: AppColors.borderDark,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(AppRadius.circular),
               ),
             ),
           ),
@@ -112,10 +113,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
 
           // Category Chips
           Text('CATEGORY', style: AppTypography.formLabel),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppSpacing.sm),
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
             children: _categories.map((cat) {
               final isSel = _selectedCategory == cat;
               return ChoiceChip(
@@ -130,8 +131,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 selectedColor: AppColors.black,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  side: BorderSide(color: isSel ? AppColors.black : AppColors.border),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  side: BorderSide(
+                    color: isSel ? AppColors.black : AppColors.border,
+                    width: 1.0,
+                  ),
                 ),
                 onSelected: (val) {
                   setState(() => _selectedCategory = val ? cat : null);
@@ -139,13 +143,14 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.xl),
 
           // Size Chips
           Text('SIZE', style: AppTypography.formLabel),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppSpacing.sm),
           Wrap(
-            spacing: 8,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
             children: _sizes.map((sz) {
               final isSel = _selectedSize == sz;
               return ChoiceChip(
@@ -160,8 +165,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 selectedColor: AppColors.black,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  side: BorderSide(color: isSel ? AppColors.black : AppColors.border),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  side: BorderSide(
+                    color: isSel ? AppColors.black : AppColors.border,
+                    width: 1.0,
+                  ),
                 ),
                 onSelected: (val) {
                   setState(() => _selectedSize = val ? sz : null);
@@ -169,7 +177,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxxl),
 
           // Apply Button
           AppButton(

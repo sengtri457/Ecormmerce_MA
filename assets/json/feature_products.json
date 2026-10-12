@@ -1,0 +1,400 @@
+﻿{
+  "exclusive_offers": [
+    {
+      "id": 1,
+      "title": "Structured Oversized Wool Blazer",
+      "brand": "MA STUDIO",
+      "category": "women",
+      "subcategory": "w_coats",
+      "price": 289.0,
+      "originalPrice": 385.0,
+      "discountPercent": 25,
+      "rating": 4.9,
+      "reviewCount": 128,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Tailored from Italian double-faced virgin wool, this structured blazer features structured peak lapels and a clean silhouette.",
+      "material": "100% Virgin Wool. Cupro lining.",
+      "care": "Specialist dry clean only.",
+      "colors": [
+        {
+          "name": "Noir",
+          "hex": "#1E1E1E"
+        },
+        {
+          "name": "Camel",
+          "hex": "#864433"
+        }
+      ],
+      "sizes": ["XS", "S", "M", "L"],
+      "images": [
+        "assets/images/products/product1.avif",
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Pleated Silk Maxi Dress",
+      "brand": "ATELIER Ã‰PURE",
+      "category": "women",
+      "subcategory": "w_dresses",
+      "price": 340.0,
+      "originalPrice": 450.0,
+      "discountPercent": 24,
+      "rating": 4.8,
+      "reviewCount": 94,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Fluid accordion pleating crafted from pure Mulberry silk. Fluid floor-length hem with delicate waist ties.",
+      "material": "100% Mulberry Silk.",
+      "care": "Hand wash cold or dry clean.",
+      "colors": [
+        {
+          "name": "Burgundy",
+          "hex": "#4A121A"
+        },
+        {
+          "name": "Champagne",
+          "hex": "#F4EBD9"
+        }
+      ],
+      "sizes": ["XS", "S", "M", "L"],
+      "images": [
+        "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800\u0026auto=format\u0026fit=crop\u0026q=80",
+        "assets/images/products/product1.avif"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Radical Graphic Oversized T-Shirt",
+      "brand": "MA STUDIO",
+      "category": "men",
+      "subcategory": "m_shirts",
+      "price": 45.0,
+      "originalPrice": 65.0,
+      "discountPercent": 30,
+      "rating": 4.9,
+      "reviewCount": 142,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Crafted from 280gsm heavyweight combed cotton. Features dropped shoulders and screen-printed graphic art.",
+      "material": "100% Organic Heavyweight Cotton.",
+      "care": "Machine wash cold inside out.",
+      "colors": [
+        {
+          "name": "Washed Black",
+          "hex": "#1F1F1F"
+        },
+        {
+          "name": "Vintage White",
+          "hex": "#F4F1EA"
+        }
+      ],
+      "sizes": ["S", "M", "L", "XL", "XXL"],
+      "images": [
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg",
+        "assets/images/products/image3.jpg"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Heavyweight Vintage Washed Hoodie",
+      "brand": "MA STUDIO",
+      "category": "men",
+      "subcategory": "m_jackets",
+      "price": 95.0,
+      "originalPrice": 135.0,
+      "discountPercent": 30,
+      "rating": 5.0,
+      "reviewCount": 215,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Custom 450gsm loopback French terry. Relaxed double-layered hood without drawstrings.",
+      "material": "100% French Terry Cotton.",
+      "care": "Cold gentle cycle.",
+      "colors": [
+        {
+          "name": "Faded Noir",
+          "hex": "#232323"
+        },
+        {
+          "name": "Ash Heather",
+          "hex": "#D1D5DB"
+        }
+      ],
+      "sizes": ["M", "L", "XL"],
+      "images": [
+        "assets/images/products/image3.jpg",
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg"
+      ]
+    }
+  ],
+  "features": [
+    {
+      "id": 1,
+      "title": "Structured Oversized Wool Blazer",
+      "brand": "MA STUDIO",
+      "category": "women",
+      "subcategory": "w_coats",
+      "price": 289.0,
+      "originalPrice": 385.0,
+      "discountPercent": 25,
+      "rating": 4.9,
+      "reviewCount": 128,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Tailored from Italian double-faced virgin wool, this structured blazer features structured peak lapels and a clean silhouette.",
+      "material": "100% Virgin Wool. Cupro lining.",
+      "care": "Specialist dry clean only.",
+      "colors": [
+        {
+          "name": "Noir",
+          "hex": "#1E1E1E"
+        },
+        {
+          "name": "Camel",
+          "hex": "#864433"
+        }
+      ],
+      "sizes": ["XS", "S", "M", "L"],
+      "images": [
+        "assets/images/products/product1.avif",
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Minimalist Calfskin Crossbody Bag",
+      "brand": "MAISON NORD",
+      "category": "women",
+      "subcategory": "w_bags",
+      "price": 240.0,
+      "originalPrice": 320.0,
+      "discountPercent": 25,
+      "rating": 4.8,
+      "reviewCount": 77,
+      "isNew": false,
+      "isFeatured": true,
+      "description": "Full-grain supple calfskin with matte black hardware and adjustable shoulder strap.",
+      "material": "100% Italian Calf Leather.",
+      "care": "Wipe with soft cloth. Store in dust bag.",
+      "colors": [
+        {
+          "name": "Pitch Black",
+          "hex": "#111111"
+        },
+        {
+          "name": "Terracotta",
+          "hex": "#864433"
+        }
+      ],
+      "sizes": ["One Size"],
+      "images": [
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image3.jpg"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Heavyweight Vintage Washed Hoodie",
+      "brand": "MA STUDIO",
+      "category": "men",
+      "subcategory": "m_jackets",
+      "price": 95.0,
+      "originalPrice": 135.0,
+      "discountPercent": 30,
+      "rating": 5.0,
+      "reviewCount": 215,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Custom 450gsm loopback French terry. Relaxed double-layered hood without drawstrings.",
+      "material": "100% French Terry Cotton.",
+      "care": "Cold gentle cycle.",
+      "colors": [
+        {
+          "name": "Faded Noir",
+          "hex": "#232323"
+        },
+        {
+          "name": "Ash Heather",
+          "hex": "#D1D5DB"
+        }
+      ],
+      "sizes": ["M", "L", "XL"],
+      "images": [
+        "assets/images/products/image3.jpg",
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Raw Hem Selvedge Denim Trouser",
+      "brand": "ATELIER Ã‰PURE",
+      "category": "men",
+      "subcategory": "m_suits",
+      "price": 110.0,
+      "originalPrice": 160.0,
+      "discountPercent": 31,
+      "rating": 4.7,
+      "reviewCount": 63,
+      "isNew": false,
+      "isFeatured": true,
+      "description": "13.5oz Japanese selvedge denim in a wide straight leg with raw hem detailing.",
+      "material": "100% Selvedge Cotton Denim.",
+      "care": "Wash inside out with cold water.",
+      "colors": [
+        {
+          "name": "Washed Indigo",
+          "hex": "#304352"
+        },
+        {
+          "name": "Black Wash",
+          "hex": "#222222"
+        }
+      ],
+      "sizes": ["30", "32", "34", "36"],
+      "images": [
+        "assets/images/products/image2.jpg",
+        "assets/images/products/image3.jpg"
+      ]
+    }
+  ],
+  "best_sellings": [
+    {
+      "id": 5,
+      "title": "Radical Graphic Oversized T-Shirt",
+      "brand": "MA STUDIO",
+      "category": "men",
+      "subcategory": "m_shirts",
+      "price": 45.0,
+      "originalPrice": 65.0,
+      "discountPercent": 30,
+      "rating": 4.9,
+      "reviewCount": 142,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Crafted from 280gsm heavyweight combed cotton. Features dropped shoulders and screen-printed graphic art.",
+      "material": "100% Organic Heavyweight Cotton.",
+      "care": "Machine wash cold inside out.",
+      "colors": [
+        {
+          "name": "Washed Black",
+          "hex": "#1F1F1F"
+        },
+        {
+          "name": "Vintage White",
+          "hex": "#F4F1EA"
+        }
+      ],
+      "sizes": ["S", "M", "L", "XL", "XXL"],
+      "images": [
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg",
+        "assets/images/products/image3.jpg"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Essential Boxy Fit Pocket Tee",
+      "brand": "ATELIER Ã‰PURE",
+      "category": "men",
+      "subcategory": "m_shirts",
+      "price": 38.0,
+      "originalPrice": 55.0,
+      "discountPercent": 30,
+      "rating": 4.8,
+      "reviewCount": 98,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Clean minimalist boxy cut with single chest welt pocket. Pre-shrunk premium jersey cotton.",
+      "material": "100% Combed Cotton.",
+      "care": "Machine wash cold.",
+      "colors": [
+        {
+          "name": "Chalk White",
+          "hex": "#FAFAFA"
+        },
+        {
+          "name": "Charcoal Grey",
+          "hex": "#3A3D40"
+        }
+      ],
+      "sizes": ["S", "M", "L", "XL"],
+      "images": [
+        "assets/images/products/image2.jpg",
+        "assets/images/products/image3.jpg",
+        "assets/images/products/image1.jpg"
+      ]
+    },
+    {
+      "id": 1,
+      "title": "Structured Oversized Wool Blazer",
+      "brand": "MA STUDIO",
+      "category": "women",
+      "subcategory": "w_coats",
+      "price": 289.0,
+      "originalPrice": 385.0,
+      "discountPercent": 25,
+      "rating": 4.9,
+      "reviewCount": 128,
+      "isNew": true,
+      "isFeatured": true,
+      "description": "Tailored from Italian double-faced virgin wool, this structured blazer features structured peak lapels and a clean silhouette.",
+      "material": "100% Virgin Wool. Cupro lining.",
+      "care": "Specialist dry clean only.",
+      "colors": [
+        {
+          "name": "Noir",
+          "hex": "#1E1E1E"
+        },
+        {
+          "name": "Camel",
+          "hex": "#864433"
+        }
+      ],
+      "sizes": ["XS", "S", "M", "L"],
+      "images": [
+        "assets/images/products/product1.avif",
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image2.jpg"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Minimalist Calfskin Crossbody Bag",
+      "brand": "MAISON NORD",
+      "category": "women",
+      "subcategory": "w_bags",
+      "price": 240.0,
+      "originalPrice": 320.0,
+      "discountPercent": 25,
+      "rating": 4.8,
+      "reviewCount": 77,
+      "isNew": false,
+      "isFeatured": true,
+      "description": "Full-grain supple calfskin with matte black hardware and adjustable shoulder strap.",
+      "material": "100% Italian Calf Leather.",
+      "care": "Wipe with soft cloth. Store in dust bag.",
+      "colors": [
+        {
+          "name": "Pitch Black",
+          "hex": "#111111"
+        },
+        {
+          "name": "Terracotta",
+          "hex": "#864433"
+        }
+      ],
+      "sizes": ["One Size"],
+      "images": [
+        "assets/images/products/image1.jpg",
+        "assets/images/products/image3.jpg"
+      ]
+    }
+  ]
+}

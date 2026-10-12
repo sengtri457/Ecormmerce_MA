@@ -42,8 +42,8 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     double? width,
     double height = 46.0,
-    double borderRadius = AppRadius.xs,
-    Color borderColor = AppColors.black,
+    double borderRadius = AppRadius.sm,
+    Color? borderColor,
     bool uppercase = false,
     Widget? icon,
     bool isLoading = false,
@@ -69,24 +69,29 @@ class AppButton extends StatelessWidget {
     Color textColor;
     BorderSide borderSide;
 
+    Color overlayColor;
+
     switch (variant) {
       case AppButtonVariant.primary:
         bgColor = AppColors.black;
         textColor = AppColors.white;
         borderSide = BorderSide.none;
+        overlayColor = AppColors.white.withValues(alpha: 0.12);
         break;
       case AppButtonVariant.secondary:
         bgColor = AppColors.surfaceLight;
         textColor = AppColors.black;
         borderSide = BorderSide.none;
+        overlayColor = AppColors.black.withValues(alpha: 0.05);
         break;
       case AppButtonVariant.outlined:
         bgColor = Colors.transparent;
         textColor = AppColors.black;
         borderSide = BorderSide(
-          color: borderColor ?? AppColors.black,
-          width: 1.2,
+          color: borderColor ?? AppColors.borderDark,
+          width: 1.0,
         );
+        overlayColor = AppColors.black.withValues(alpha: 0.04);
         break;
     }
 
@@ -101,6 +106,8 @@ class AppButton extends StatelessWidget {
           backgroundColor: bgColor,
           foregroundColor: textColor,
           elevation: 0,
+          shadowColor: Colors.transparent,
+          overlayColor: overlayColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
             side: borderSide,

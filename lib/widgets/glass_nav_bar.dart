@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../helpers/app_colors.dart';
+import '../helpers/app_dimensions.dart';
 
 class GlassFloatingNavBar extends StatelessWidget {
   final int currentIndex;
@@ -18,32 +19,36 @@ class GlassFloatingNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 16),
+        padding: const EdgeInsets.only(
+          left: AppSpacing.lg,
+          right: AppSpacing.lg,
+          bottom: AppSpacing.md,
+        ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(36),
+          borderRadius: BorderRadius.circular(AppRadius.circular),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
-              height: 68,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              height: 64,
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.white.withValues(alpha: 0.85),
-                borderRadius: BorderRadius.circular(36),
+                color: AppColors.white.withValues(alpha: 0.90),
+                borderRadius: BorderRadius.circular(AppRadius.circular),
                 border: Border.all(
                   color: AppColors.white.withValues(alpha: 0.8),
-                  width: 1.5,
+                  width: 1.0,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 24,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 8),
+                    color: Colors.black.withValues(alpha: 0.07),
+                    blurRadius: 20,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _navItem(
                     index: 0,
@@ -53,7 +58,7 @@ class GlassFloatingNavBar extends StatelessWidget {
                   _navItem(
                     index: 1,
                     icon: Icons.grid_view_rounded,
-                    outlineIcon: Icons.grid_view,
+                    outlineIcon: Icons.grid_view_outlined,
                   ),
                   _navItem(
                     index: 2,
@@ -90,14 +95,17 @@ class GlassFloatingNavBar extends StatelessWidget {
 
     Widget iconWidget = Icon(
       isSelected ? icon : outlineIcon,
-      size: 24,
+      size: 22,
       color: isSelected ? AppColors.white : AppColors.black,
     );
 
     if (badgeCount > 0 && !isSelected) {
       iconWidget = Badge(
-        label: Text('$badgeCount', style: const TextStyle(fontSize: 9, color: AppColors.white)),
-        backgroundColor: AppColors.alertRed,
+        label: Text(
+          '$badgeCount',
+          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.white),
+        ),
+        backgroundColor: AppColors.saleRed,
         child: iconWidget,
       );
     }
@@ -106,20 +114,20 @@ class GlassFloatingNavBar extends StatelessWidget {
       onTap: () => onTap(index),
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         padding: isSelected
-            ? const EdgeInsets.symmetric(horizontal: 22, vertical: 10)
+            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
             : const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.terracotta : Colors.transparent,
-          borderRadius: BorderRadius.circular(26),
+          color: isSelected ? AppColors.black : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.circular),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.terracotta.withValues(alpha: 0.35),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withValues(alpha: 0.18),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
                 ]
               : null,

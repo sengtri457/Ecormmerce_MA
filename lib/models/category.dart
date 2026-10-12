@@ -2,18 +2,21 @@ class Subcategory {
   final String id;
   final String name;
   final int count;
+  final String? icon;
 
   Subcategory({
     required this.id,
     required this.name,
     required this.count,
+    this.icon,
   });
 
   factory Subcategory.fromJson(Map<String, dynamic> json) {
     return Subcategory(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      count: json['count'] as int,
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      count: (json['count'] as num?)?.toInt() ?? 0,
+      icon: json['icon'] as String?,
     );
   }
 }
@@ -34,13 +37,16 @@ class CategoryItem {
   });
 
   factory CategoryItem.fromJson(Map<String, dynamic> json) {
-    var rawSub = json['subcategories'] as List? ?? [];
+    final rawSub = json['subcategories'] as List? ?? const [];
     return CategoryItem(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      slug: json['slug'] as String,
-      imageUrl: json['imageUrl'] as String,
-      subcategories: rawSub.map((s) => Subcategory.fromJson(s as Map<String, dynamic>)).toList(),
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      slug: json['slug'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String? ?? '',
+      subcategories: rawSub
+          .whereType<Map<String, dynamic>>()
+          .map((s) => Subcategory.fromJson(s))
+          .toList(),
     );
   }
 }

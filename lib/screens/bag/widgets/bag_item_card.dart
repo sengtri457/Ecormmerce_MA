@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../helpers/app_colors.dart';
+import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../helpers/currency_helper.dart';
 import '../../../models/cart_item.dart';
@@ -86,7 +87,7 @@ class BagItemCard extends StatelessWidget {
             children: [
               // Left: Product Image
               ClipRRect(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppRadius.card),
                 child: SizedBox(
                   width: 95,
                   height: 130,
