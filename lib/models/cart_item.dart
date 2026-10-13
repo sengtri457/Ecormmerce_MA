@@ -9,6 +9,7 @@ class CartItem {
   final String size;
   int quantity;
   final String imageUrl;
+  bool isSelected;
 
   CartItem({
     required this.id,
@@ -21,6 +22,7 @@ class CartItem {
     required this.size,
     required this.quantity,
     required this.imageUrl,
+    this.isSelected = true,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class CartItem {
       size: json['size'] as String? ?? '',
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       imageUrl: json['imageUrl'] as String? ?? '',
+      isSelected: json['isSelected'] as bool? ?? true,
     );
   }
 }

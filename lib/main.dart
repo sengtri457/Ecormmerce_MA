@@ -24,6 +24,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
+      defaultDevice: Devices.ios.iPhone16ProMax,
       builder: (context) => const EcormmerceApp(),
     ),
   );

@@ -27,22 +27,37 @@ class _ProductListScreenState extends State<ProductListScreen> {
   RangeValues _priceRange = const RangeValues(0, 600);
   String? _sizeFilter;
 
-  final List<Map<String, String>> _subcategories = [
-    {'id': 'all', 'name': 'All'},
-    {'id': 'w_coats', 'name': 'Coats & Jackets'},
-    {'id': 'w_dresses', 'name': 'Dresses'},
-    {'id': 'w_tops', 'name': 'Tops'},
-    {'id': 'w_bags', 'name': 'Bags'},
-    {'id': 'w_shoes', 'name': 'Shoes'},
-  ];
-
   @override
   Widget build(BuildContext context) {
     final mockService = MockDataService();
     final allProducts = mockService.products;
 
+    // Derive active subcategories dynamically for this category
+    final categoryProducts = allProducts.where((p) =>
+      widget.categorySlug == 'all' || p.category.toLowerCase() == widget.categorySlug.toLowerCase(),
+    ).toList();
+
+    final Set<String> availableSubIds = categoryProducts.map((p) => p.subcategory).where((s) => s.isNotEmpty).toSet();
+
+    final List<Map<String, String>> subcategories = [
+      {'id': 'all', 'name': 'All'},
+      ...availableSubIds.map((subId) {
+        // Clean up format, e.g. "w_coats" -> "Coats", "m_tees" -> "Tees"
+        final formatted = subId
+            .replaceFirst(RegExp(r'^[a-z]_'), '')
+            .replaceAll('_', ' ')
+            .split(' ')
+            .map((w) => w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1)}' : '')
+            .join(' ');
+        return {'id': subId, 'name': formatted};
+      }),
+    ];
+
     // Filter logic
     final filtered = allProducts.where((p) {
+      final matchesCategory = widget.categorySlug == 'all' ||
+          p.category.toLowerCase() == widget.categorySlug.toLowerCase();
+
       final matchesSearch = _searchController.text.isEmpty ||
           p.title.toLowerCase().contains(_searchController.text.toLowerCase()) ||
           p.brand.toLowerCase().contains(_searchController.text.toLowerCase());
@@ -51,7 +66,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       final matchesPrice = p.price >= _priceRange.start && p.price <= _priceRange.end;
       final matchesSize = _sizeFilter == null || p.sizes.contains(_sizeFilter);
 
-      return matchesSearch && matchesSub && matchesPrice && matchesSize;
+      return matchesCategory && matchesSearch && matchesSub && matchesPrice && matchesSize;
     }).toList();
 
     return Scaffold(
@@ -117,10 +132,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: _subcategories.length,
+              itemCount: subcategories.length,
               separatorBuilder: (_, index) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
-                final sub = _subcategories[index];
+                final sub = subcategories[index];
                 final isSel = _selectedSubcategory == sub['id'];
                 return ChoiceChip(
                   label: Text(
@@ -232,7 +247,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   )
                 : _isGridView
                     ? GridView.builder(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 110),
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 0.58,
@@ -254,22 +269,20 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         },
                       )
                     : ListView.separated(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 110),
+                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
                         itemCount: filtered.length,
-                        separatorBuilder: (_, index) => const SizedBox(height: 16),
+                        separatorBuilder: (_, index) => const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final prod = filtered[index];
-                          return SizedBox(
-                            height: 140,
-                            child: ProductCard(
-                              product: prod,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => ProductDetailScreen(product: prod)),
-                                );
-                              },
-                            ),
+                          return ProductCard(
+                            product: prod,
+                            isHorizontal: true,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => ProductDetailScreen(product: prod)),
+                              );
+                            },
                           );
                         },
                       ),

@@ -8,6 +8,7 @@ class AppColors {
   static const Color background = Color(0xFFFFFFFF);
   static const Color surfaceLight = Color(0xFFF9FAFB);
   static const Color surfaceSubtle = Color(0xFFF5F5F5);
+  static const Color activeNav = Color(0xFF864433);
 
   // Borders & Dividers
   static const Color border = Color(0xFFECECEC);
@@ -23,7 +24,9 @@ class AppColors {
   // Accents & Badges
   static const Color terracotta = Color(0xFF864433);
   static const Color alertRed = Color(0xFFE74C3C);
-  static const Color saleRed = Color(0xFFB43B2A); // Sophisticated editorial crimson for sale tags
+  static const Color saleRed = Color(
+    0xFFB43B2A,
+  ); // Sophisticated editorial crimson for sale tags
   static const Color softRose = Color(0xFFF9B8B8);
   static const Color tagBg = Color(0xFFFDF2F0);
 
