@@ -10,17 +10,23 @@ import 'app_image.dart';
 class ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback? onTap;
+  final bool isHorizontal;
 
   const ProductCard({
     super.key,
     required this.product,
     this.onTap,
+    this.isHorizontal = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final mockService = MockDataService();
     final firstImage = product.images.isNotEmpty ? product.images.first : '';
+
+    if (isHorizontal) {
+      return _buildHorizontalCard(context, mockService, firstImage);
+    }
 
     return GestureDetector(
       onTap: onTap,
@@ -191,6 +197,136 @@ class ProductCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHorizontalCard(BuildContext context, MockDataService mockService, String firstImage) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(color: AppColors.border, width: 1.0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Left: Square Image with Badges
+            ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+              child: SizedBox(
+                width: 95,
+                height: 110,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    AppImage(
+                      imagePath: firstImage,
+                      fallbackUrl: product.images.length > 1 ? product.images[1] : null,
+                      fit: BoxFit.cover,
+                    ),
+                    if (product.discountPercent > 0)
+                      Positioned(
+                        top: 4,
+                        left: 4,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.saleRed,
+                            borderRadius: BorderRadius.circular(AppRadius.xs),
+                          ),
+                          child: Text(
+                            '-${product.discountPercent}%',
+                            style: AppTypography.badge.copyWith(
+                              color: AppColors.white,
+                              fontSize: 9,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+
+            // Middle: Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    product.brand.toUpperCase(),
+                    style: AppTypography.bodySmall.copyWith(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.8,
+                      color: AppColors.textSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    product.title,
+                    style: AppTypography.headingSmall.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Text(
+                        product.price.toCurrency(),
+                        style: AppTypography.headingSmall.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      if (product.originalPrice > product.price) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          product.originalPrice.toCurrency(),
+                          style: AppTypography.bodySmall.copyWith(
+                            fontSize: 11,
+                            decoration: TextDecoration.lineThrough,
+                            color: AppColors.placeholder,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Right: Favorite Icon Button
+            ListenableBuilder(
+              listenable: mockService,
+              builder: (context, _) {
+                final activeFav = mockService.isFavorite(product.id);
+                return IconButton(
+                  icon: Icon(
+                    activeFav ? Icons.favorite : Icons.favorite_border,
+                    size: 20,
+                    color: activeFav ? AppColors.saleRed : AppColors.black,
+                  ),
+                  onPressed: () => mockService.toggleFavorite(product.id),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

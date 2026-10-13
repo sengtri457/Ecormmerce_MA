@@ -83,14 +83,41 @@ class BagItemCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Left: Product Image
+              // Left: Selection Checkbox / Toggle Box
+              InkWell(
+                onTap: () => onSelectedChanged?.call(!isSelected),
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.black : Colors.transparent,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isSelected ? AppColors.black : AppColors.borderDark,
+                        width: 1.4,
+                      ),
+                    ),
+                    child: isSelected
+                        ? const Icon(Icons.check, size: 15, color: AppColors.white)
+                        : null,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+
+              // Product Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 child: SizedBox(
-                  width: 95,
-                  height: 130,
+                  width: 90,
+                  height: 125,
                   child: AppImage(
                     imagePath: item.imageUrl,
                     fallbackUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
@@ -98,9 +125,9 @@ class BagItemCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 14),
 
-              // Center: Product Details
+              // Product Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +141,7 @@ class BagItemCard extends StatelessWidget {
                         letterSpacing: 0.8,
                         color: AppColors.textPrimary,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 3),
@@ -202,27 +229,6 @@ class BagItemCard extends StatelessWidget {
                       ],
                     ),
                   ],
-                ),
-              ),
-
-              // Right: Selection Checkbox / Toggle Box
-              InkWell(
-                onTap: () => onSelectedChanged?.call(!isSelected),
-                borderRadius: BorderRadius.circular(4),
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppColors.black : AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: isSelected ? AppColors.black : AppColors.borderDark,
-                      width: 1.2,
-                    ),
-                  ),
-                  child: isSelected
-                      ? const Icon(Icons.check, size: 16, color: AppColors.white)
-                      : null,
                 ),
               ),
             ],

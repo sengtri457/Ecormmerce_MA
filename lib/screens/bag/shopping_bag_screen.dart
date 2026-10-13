@@ -27,7 +27,6 @@ class ShoppingBagScreen extends StatefulWidget {
 
 class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
   final _promoController = TextEditingController(text: 'FIRST20');
-  final Set<String> _selectedItemIds = {};
 
   void _navigateToWishlist() {
     if (widget.onNavigateToWishlist != null) {
@@ -217,6 +216,65 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Select All Header Bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          mockService.selectAllCartItems(!mockService.isAllCartSelected);
+                        },
+                        borderRadius: BorderRadius.circular(4),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: mockService.isAllCartSelected ? AppColors.black : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: mockService.isAllCartSelected ? AppColors.black : AppColors.borderDark,
+                                    width: 1.4,
+                                  ),
+                                ),
+                                child: mockService.isAllCartSelected
+                                    ? const Icon(Icons.check, size: 14, color: AppColors.white)
+                                    : null,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                'SELECT ALL',
+                                style: AppTypography.badge.copyWith(
+                                  fontSize: 11,
+                                  letterSpacing: 1.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${mockService.selectedCartCount} OF ${items.length} SELECTED',
+                        style: AppTypography.bodySmall.copyWith(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(color: AppColors.border, height: 1),
+
                 // Cart Items List (with swipe to delete)
                 ListView.separated(
                   shrinkWrap: true,
@@ -231,19 +289,12 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final item = items[index];
-                    final isSelected = _selectedItemIds.contains(item.id);
 
                     return BagItemCard(
                       item: item,
-                      isSelected: isSelected,
+                      isSelected: item.isSelected,
                       onSelectedChanged: (val) {
-                        setState(() {
-                          if (val) {
-                            _selectedItemIds.add(item.id);
-                          } else {
-                            _selectedItemIds.remove(item.id);
-                          }
-                        });
+                        mockService.toggleCartItemSelection(item.id, val);
                       },
                       onQuantityChanged: (newQty) {
                         mockService.setCartQuantity(item.id, newQty);
@@ -291,12 +342,22 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Promo code applied successfully!'),
-                                backgroundColor: AppColors.black,
-                              ),
-                            );
+                            final success = mockService.applyPromoCode(_promoController.text);
+                            if (success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Promo code "${_promoController.text.trim().toUpperCase()}" applied!'),
+                                  backgroundColor: AppColors.black,
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Invalid promo code. Try FIRST20 or VIP10.'),
+                                  backgroundColor: AppColors.saleRed,
+                                ),
+                              );
+                            }
                           },
                           child: Container(
                             height: double.infinity,
@@ -331,11 +392,11 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                     children: [
                       _priceRow('Sub-Total', mockService.cartSubtotal.toCurrency()),
                       const SizedBox(height: 10),
-                      _priceRow('Delivery Fee', mockService.shippingFee.toCurrency()),
+                      _priceRow('Delivery Fee', mockService.effectiveShippingFee.toCurrency()),
                       const SizedBox(height: 10),
                       _priceRow(
                         'Discount',
-                        mockService.discountAmount.toDiscountCurrency(),
+                        mockService.effectiveDiscountAmount.toDiscountCurrency(),
                         isDiscount: true,
                       ),
                       const Padding(
@@ -357,9 +418,22 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: AppButton(
-                    text: 'PROCEED TO CHECKOUT • ${mockService.cartTotal.toCurrency()}',
-                    variant: AppButtonVariant.primary,
-                    onPressed: _showCheckoutDialog,
+                    text: mockService.selectedCartCount > 0
+                        ? 'PROCEED TO CHECKOUT • ${mockService.cartTotal.toCurrency()}'
+                        : 'SELECT ITEMS TO CHECKOUT',
+                    variant: mockService.selectedCartCount > 0
+                        ? AppButtonVariant.primary
+                        : AppButtonVariant.secondary,
+                    onPressed: mockService.selectedCartCount > 0
+                        ? _showCheckoutDialog
+                        : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Please select at least one item to proceed.'),
+                                backgroundColor: AppColors.black,
+                              ),
+                            );
+                          },
                   ),
                 ),
               ],

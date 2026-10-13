@@ -87,10 +87,68 @@ class MockDataService extends ChangeNotifier {
   }
 
   // --- Cart Actions ---
-  double get cartSubtotal => cartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  List<CartItem> get selectedCartItems =>
+      cartItems.where((item) => item.isSelected).toList();
+
+  int get selectedCartCount => selectedCartItems.length;
+
+  bool get isAllCartSelected =>
+      cartItems.isNotEmpty && cartItems.every((item) => item.isSelected);
+
+  void toggleCartItemSelection(String cartItemId, [bool? isSelected]) {
+    final index = cartItems.indexWhere((item) => item.id == cartItemId);
+    if (index != -1) {
+      cartItems[index].isSelected = isSelected ?? !cartItems[index].isSelected;
+      notifyListeners();
+    }
+  }
+
+  void selectAllCartItems(bool isSelected) {
+    for (final item in cartItems) {
+      item.isSelected = isSelected;
+    }
+    notifyListeners();
+  }
+
+  double get cartSubtotal =>
+      selectedCartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+
+  double get effectiveShippingFee => selectedCartItems.isEmpty ? 0.0 : shippingFee;
+
+  double get effectiveDiscountAmount {
+    if (selectedCartItems.isEmpty) return 0.0;
+    double discount = discountAmount;
+    if (promoCode == 'VIP10') {
+      discount = cartSubtotal * 0.10;
+    }
+    return discount > cartSubtotal ? cartSubtotal : discount;
+  }
+
   double get cartTotal {
-    double total = cartSubtotal + shippingFee - discountAmount;
-    return total > 0 ? total : 0;
+    if (selectedCartItems.isEmpty) return 0.0;
+    final total = cartSubtotal + effectiveShippingFee - effectiveDiscountAmount;
+    return total > 0 ? total : 0.0;
+  }
+
+  bool applyPromoCode(String code) {
+    final cleanCode = code.trim().toUpperCase();
+    if (cleanCode == 'FIRST20') {
+      promoCode = 'FIRST20';
+      discountAmount = 20.00;
+      notifyListeners();
+      return true;
+    } else if (cleanCode == 'VIP10') {
+      promoCode = 'VIP10';
+      discountAmount = cartSubtotal * 0.10;
+      notifyListeners();
+      return true;
+    } else if (cleanCode == 'SAVE100' && cartSubtotal >= 300) {
+      promoCode = 'SAVE100';
+      discountAmount = 100.00;
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
   void addToCart(Product product, {required String color, required String size, int quantity = 1}) {
