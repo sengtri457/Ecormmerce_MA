@@ -69,4 +69,23 @@ class HomeService {
     final map = json.decode(response) as Map<String, dynamic>;
     return FeatureProduct.fromJson(map);
   }
+
+  /// Loads visual category cards and accordion groups from categoryProducts.json
+  Future<List<VisualCategory>> getCategoryProducts() async {
+    String? rawData;
+    try {
+      rawData = await rootBundle.loadString('assets/json/categoryProducts.json');
+    } catch (_) {
+      try {
+        rawData = await rootBundle.loadString('assets/json/categoryProducs.json');
+      } catch (_) {
+        return const [];
+      }
+    }
+    final list = json.decode(rawData) as List? ?? const [];
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map((e) => VisualCategory.fromJson(e))
+        .toList();
+  }
 }
