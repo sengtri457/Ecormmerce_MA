@@ -39,14 +39,30 @@ class HomeSectionHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (onActionTap != null && subtitle == null)
-                GestureDetector(
-                  onTap: onActionTap,
-                  child: Text(
-                    actionText,
-                    style: AppTypography.badge.copyWith(
-                      decoration: TextDecoration.underline,
-                      color: AppColors.black,
+              if (onActionTap != null)
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: onActionTap,
+                    borderRadius: BorderRadius.circular(4),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            actionText,
+                            style: AppTypography.badge.copyWith(
+                              decoration: TextDecoration.underline,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.6,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          const Icon(Icons.arrow_forward_ios, size: 10, color: AppColors.black),
+                        ],
+                      ),
                     ),
                   ),
                 ),

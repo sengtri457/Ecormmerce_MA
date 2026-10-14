@@ -135,10 +135,11 @@ class ProductRecommendations extends StatelessWidget {
             }).toList(),
           ),
 
-          // Outlined Shop Now CTA
-          const SizedBox(height: AppSpacing.xl),
+          // Outlined Curated Edit CTA
+          const SizedBox(height: AppSpacing.lg),
           AppButton.outlined(
-            text: 'Shop Now',
+            text: 'EXPLORE CURATED EDIT',
+            uppercase: true,
             onPressed: () {
               Navigator.push(
                 context,

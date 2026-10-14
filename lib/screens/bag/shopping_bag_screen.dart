@@ -327,7 +327,7 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                               controller: _promoController,
                               style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
                               decoration: InputDecoration(
-                                hintText: 'PROMOTE CODE',
+                                hintText: 'PROMO CODE',
                                 hintStyle: AppTypography.formLabel.copyWith(
                                   color: AppColors.placeholder,
                                   fontSize: 12,
