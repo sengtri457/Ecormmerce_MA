@@ -20,6 +20,7 @@ class MockDataService extends ChangeNotifier {
   List<HomeBannerItem> heroBanners = [];
   List<PromoOffer> promoOffers = [];
   List<CategoryItem> categories = [];
+  List<VisualCategory> visualCategories = [];
   List<Product> products = [];
   FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
@@ -56,6 +57,7 @@ class MockDataService extends ChangeNotifier {
           .toList();
 
       categories = await homeService.getCategories();
+      visualCategories = await homeService.getCategoryProducts();
       products = await homeService.getProducts();
       featureProducts = await homeService.getFeatureProducts();
 
@@ -218,6 +220,8 @@ class MockDataService extends ChangeNotifier {
   }
 
   // --- Wishlist Actions ---
+  int get wishlistCount => wishlistProductIds.length;
+
   bool isFavorite(int productId) => wishlistProductIds.contains(productId);
 
   void toggleFavorite(int productId) {
@@ -231,5 +235,13 @@ class MockDataService extends ChangeNotifier {
 
   List<Product> get wishlistProducts {
     return products.where((p) => wishlistProductIds.contains(p.id)).toList();
+  }
+
+  Future<List<VisualCategory>> loadCategoryProducts() async {
+    if (visualCategories.isNotEmpty) return visualCategories;
+    const homeService = HomeService();
+    visualCategories = await homeService.getCategoryProducts();
+    notifyListeners();
+    return visualCategories;
   }
 }

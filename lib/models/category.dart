@@ -50,3 +50,38 @@ class CategoryItem {
     );
   }
 }
+
+class VisualCategory {
+  final String id;
+  final String title;
+  final String image;
+  final String fallback;
+  final List<String> subcategories;
+
+  const VisualCategory({
+    required this.id,
+    required this.title,
+    required this.image,
+    required this.fallback,
+    required this.subcategories,
+  });
+
+  factory VisualCategory.fromJson(Map<String, dynamic> json) {
+    final rawSub = json['subcategories'] as List? ?? const [];
+    return VisualCategory(
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      image: json['image'] as String? ?? '',
+      fallback: json['fallback'] as String? ?? '',
+      subcategories: rawSub.map((e) => e.toString()).toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'image': image,
+    'fallback': fallback,
+    'subcategories': subcategories,
+  };
+}

@@ -1,80 +1,69 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
+import '../../models/category.dart';
+import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_image.dart';
 import '../catalog/filter_bottom_sheet.dart';
 import '../catalog/product_list_screen.dart';
 
-/// Interactive Category Hub screen matching the latest Figma specifications.
-/// Supports single-column banner view and 2-column grid view switching,
-/// interactive category accordion menus, and editorial campaign drops.
 class CategoryScreen extends StatefulWidget {
   final VoidCallback? onNavigateToBag;
+  final VoidCallback? onBack;
 
-  const CategoryScreen({super.key, this.onNavigateToBag});
+  const CategoryScreen({super.key, this.onNavigateToBag, this.onBack});
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  // false = Single-column Card view (left mockup)
-  // true  = 2-Column Grid view (right mockup)
   bool _isGridView = false;
+  List<VisualCategory> _visualCategories = [];
+  bool _isLoading = true;
 
-  final List<Map<String, dynamic>> _visualCategories = [
-    {
-      'id': 'clothing',
-      'title': 'CLOTHING',
-      'image': 'assets/images/bannerMen.gif',
-      'fallback': 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&auto=format&fit=crop&q=80',
-      'subcategories': [
-        'All Clothing',
-        'T-Shirts & Tops',
-        'Hoodies & Sweatshirts',
-        'Jackets & Coats',
-        'Pants & Denim',
-        'Knitwear & Sweaters',
-      ],
-    },
-    {
-      'id': 'shoes',
-      'title': 'SHOES',
-      'image': 'assets/images/products/image2.jpg',
-      'fallback': 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80',
-      'subcategories': [
-        'All Shoes',
-        'Sneakers & Runners',
-        'Boots & Derbies',
-        'Loafers',
-        'Slides & Sandals',
-      ],
-    },
-    {
-      'id': 'accessories',
-      'title': 'ACCESSORIES',
-      'image': 'assets/images/BannerWomen.avif',
-      'fallback': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&auto=format&fit=crop&q=80',
-      'subcategories': [
-        'All Accessories',
-        'Bags & Backpacks',
-        'Belts & Small Leather',
-        'Jewelry & Chains',
-        'Eyewear & Sunglasses',
-        'Hats & Beanies',
-      ],
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    final mockService = MockDataService();
+    if (mockService.visualCategories.isNotEmpty) {
+      if (mounted) {
+        setState(() {
+          _visualCategories = mockService.visualCategories;
+          _isLoading = false;
+        });
+      }
+      return;
+    }
+
+    final items = await mockService.loadCategoryProducts();
+    if (mounted) {
+      setState(() {
+        _visualCategories = items;
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _handleBack() {
+    if (widget.onBack != null) {
+      widget.onBack!();
+    } else if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
 
   void _navigateToCategory(String slug, String title) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ProductListScreen(
-          categorySlug: slug,
-          categoryTitle: title,
-        ),
+        builder: (_) =>
+            ProductListScreen(categorySlug: slug, categoryTitle: title),
       ),
     );
   }
@@ -97,139 +86,218 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _handleBack();
+        }
+      },
+      child: Scaffold(
         backgroundColor: AppColors.background,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.tune_outlined, color: AppColors.black, size: 22),
-          onPressed: _openFilter,
-        ),
-        title: Image.asset(
-          'assets/images/logoDevs.png',
-          height: 32,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) => Text(
-            'MA STUDIO',
-            style: AppTypography.headingLarge.copyWith(
-              fontSize: 22,
-              letterSpacing: 3.5,
-              fontWeight: FontWeight.w700,
+        appBar: AppBar(
+          backgroundColor: AppColors.background,
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: AppColors.black,
+              size: 18,
+            ),
+            tooltip: 'Back',
+            onPressed: _handleBack,
+          ),
+          title: Image.asset(
+            'assets/images/logoDevs.png',
+            height: 32,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => Text(
+              'MA STUDIO',
+              style: AppTypography.headingLarge.copyWith(
+                fontSize: 22,
+                letterSpacing: 3.5,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_bag_outlined, color: AppColors.black, size: 22),
-            onPressed: widget.onNavigateToBag,
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 1. Header Title & View Toggle Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'CATEGORY',
-                  style: AppTypography.headingLarge.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                Row(
-                  children: [
-                    // Single column card view icon
-                    InkWell(
-                      onTap: () => setState(() => _isGridView = false),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: !_isGridView ? AppColors.surfaceLight : Colors.transparent,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Icon(
-                          Icons.crop_16_9_outlined,
-                          size: 22,
-                          color: !_isGridView ? AppColors.black : AppColors.placeholder,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    // 2-column grid view icon
-                    InkWell(
-                      onTap: () => setState(() => _isGridView = true),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: _isGridView ? AppColors.surfaceLight : Colors.transparent,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Icon(
-                          Icons.grid_view_sharp,
-                          size: 20,
-                          color: _isGridView ? AppColors.black : AppColors.placeholder,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.tune_outlined,
+                color: AppColors.black,
+                size: 22,
+              ),
+              tooltip: 'Filter',
+              onPressed: _openFilter,
             ),
-            const SizedBox(height: 16),
-
-            // 2. Visual Category Cards (List or Grid)
-            if (!_isGridView)
-              _buildSingleColumnList()
-            else
-              _buildTwoColumnGrid(),
-
-            const SizedBox(height: 24),
-
-            // 3. Category Accordion Expansion Tiles
-            ..._visualCategories.map((cat) => _buildAccordionTile(cat)),
-
-            const SizedBox(height: 28),
-
-            // 4. Minimal Wardrobe Edit Promo Box
-            _buildPromoBox(),
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_bag_outlined,
+                color: AppColors.black,
+                size: 22,
+              ),
+              tooltip: 'Shopping Bag',
+              onPressed: widget.onNavigateToBag,
+            ),
+            const SizedBox(width: 8),
           ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1. Header Title & View Toggle Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'CATEGORY',
+                    style: AppTypography.headingLarge.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      // Single column card view icon
+                      InkWell(
+                        onTap: () => setState(() => _isGridView = false),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: !_isGridView
+                                ? AppColors.surfaceLight
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.crop_16_9_outlined,
+                            size: 22,
+                            color: !_isGridView
+                                ? AppColors.black
+                                : AppColors.placeholder,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      // 2-column grid view icon
+                      InkWell(
+                        onTap: () => setState(() => _isGridView = true),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: _isGridView
+                                ? AppColors.surfaceLight
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(
+                            Icons.grid_view_sharp,
+                            size: 20,
+                            color: _isGridView
+                                ? AppColors.black
+                                : AppColors.placeholder,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // 2. Visual Category Cards (List or Grid)
+              if (_isLoading)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                    child: CircularProgressIndicator(color: AppColors.black),
+                  ),
+                )
+              else if (_visualCategories.isEmpty)
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                    child: Text('No categories available'),
+                  ),
+                )
+              else ...[
+                if (!_isGridView)
+                  _buildSingleColumnList()
+                else
+                  _buildTwoColumnGrid(),
+
+                const SizedBox(height: 24),
+
+                // 3. Category Accordion Expansion Tiles
+                ..._visualCategories.map((cat) => _buildAccordionTile(cat)),
+
+                const SizedBox(height: 28),
+
+                // 4. Minimal Wardrobe Edit Promo Box
+                _buildPromoBox(),
+              ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  /// Single-column view: 3 stacked full-width editorial cards
+  /// Single-column view: stacked full-width editorial cards
   Widget _buildSingleColumnList() {
     return Column(
       children: _visualCategories.map((cat) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: _buildBannerCard(
-            title: cat['title'] as String,
-            image: cat['image'] as String,
-            fallback: cat['fallback'] as String,
+            title: cat.title,
+            image: cat.image,
+            fallback: cat.fallback,
             height: 145,
-            onTap: () => _navigateToCategory(cat['id'] as String, cat['title'] as String),
+            onTap: () => _navigateToCategory(cat.id, cat.title),
           ),
         );
       }).toList(),
     );
   }
 
-  /// 2-column grid view: Clothing & Shoes side-by-side, Accessories full-width below
+  /// 2-column grid view: Pairs first two categories side-by-side, remaining categories full-width
   Widget _buildTwoColumnGrid() {
+    if (_visualCategories.isEmpty) return const SizedBox.shrink();
+    if (_visualCategories.length == 1) {
+      final single = _visualCategories.first;
+      return _buildBannerCard(
+        title: single.title,
+        image: single.image,
+        fallback: single.fallback,
+        height: 145,
+        onTap: () => _navigateToCategory(single.id, single.title),
+      );
+    }
+
     final catClothing = _visualCategories[0];
     final catShoes = _visualCategories[1];
-    final catAccessories = _visualCategories[2];
+
+    final remainingCards = <Widget>[];
+    for (int i = 2; i < _visualCategories.length; i++) {
+      final cat = _visualCategories[i];
+      remainingCards.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: _buildBannerCard(
+            title: cat.title,
+            image: cat.image,
+            fallback: cat.fallback,
+            height: 145,
+            onTap: () => _navigateToCategory(cat.id, cat.title),
+          ),
+        ),
+      );
+    }
 
     return Column(
       children: [
@@ -237,33 +305,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
           children: [
             Expanded(
               child: _buildBannerCard(
-                title: catClothing['title'] as String,
-                image: catClothing['image'] as String,
-                fallback: catClothing['fallback'] as String,
+                title: catClothing.title,
+                image: catClothing.image,
+                fallback: catClothing.fallback,
                 height: 145,
-                onTap: () => _navigateToCategory(catClothing['id'] as String, catClothing['title'] as String),
+                onTap: () =>
+                    _navigateToCategory(catClothing.id, catClothing.title),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildBannerCard(
-                title: catShoes['title'] as String,
-                image: catShoes['image'] as String,
-                fallback: catShoes['fallback'] as String,
+                title: catShoes.title,
+                image: catShoes.image,
+                fallback: catShoes.fallback,
                 height: 145,
-                onTap: () => _navigateToCategory(catShoes['id'] as String, catShoes['title'] as String),
+                onTap: () => _navigateToCategory(catShoes.id, catShoes.title),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        _buildBannerCard(
-          title: catAccessories['title'] as String,
-          image: catAccessories['image'] as String,
-          fallback: catAccessories['fallback'] as String,
-          height: 145,
-          onTap: () => _navigateToCategory(catAccessories['id'] as String, catAccessories['title'] as String),
-        ),
+        ...remainingCards,
       ],
     );
   }
@@ -281,9 +343,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       borderRadius: BorderRadius.circular(6),
       child: Container(
         height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -326,13 +386,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   /// Expansion accordion tile showing subcategories on tap
-  Widget _buildAccordionTile(Map<String, dynamic> cat) {
-    final subcategories = (cat['subcategories'] as List).cast<String>();
+  Widget _buildAccordionTile(VisualCategory cat) {
+    final subcategories = cat.subcategories;
 
     return Theme(
-      data: Theme.of(context).copyWith(
-        dividerColor: Colors.transparent,
-      ),
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -342,7 +400,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         child: ExpansionTile(
           tilePadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 2),
           title: Text(
-            cat['title'] as String,
+            cat.title,
             style: AppTypography.headingSmall.copyWith(
               fontSize: 13,
               fontWeight: FontWeight.w700,
@@ -354,9 +412,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
           collapsedIconColor: AppColors.black,
           children: subcategories.map((sub) {
             return InkWell(
-              onTap: () => _navigateToCategory(cat['id'] as String, sub),
+              onTap: () => _navigateToCategory(cat.id, sub),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 8,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -420,7 +481,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
             uppercase: true,
             width: 220,
             height: 42,
-            onPressed: () => _navigateToCategory('all', 'The Minimal Wardrobe Edit'),
+            onPressed: () =>
+                _navigateToCategory('all', 'The Minimal Wardrobe Edit'),
           ),
         ],
       ),

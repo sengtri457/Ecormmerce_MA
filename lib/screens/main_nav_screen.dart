@@ -29,33 +29,47 @@ class _MainNavScreenState extends State<MainNavScreen> {
 
     final screens = [
       HomeScreen(onNavigateTab: _onTabTapped),
-      CategoryScreen(onNavigateToBag: () => _onTabTapped(4)),
+      CategoryScreen(
+        onNavigateToBag: () => _onTabTapped(4),
+        onBack: () => _onTabTapped(0),
+      ),
       WishlistScreen(
         onNavigateToBag: () => _onTabTapped(4),
         onBack: () => _onTabTapped(0),
       ),
-      const UserProfileScreen(),
+      UserProfileScreen(
+        onBack: () => _onTabTapped(0),
+      ),
       ShoppingBagScreen(
         onNavigateToWishlist: () => _onTabTapped(2),
         onBack: () => _onTabTapped(0),
       ),
     ];
 
-    return Scaffold(
-      extendBody: true,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: ListenableBuilder(
-        listenable: mockService,
-        builder: (context, _) {
-          return GlassFloatingNavBar(
-            currentIndex: _currentIndex,
-            onTap: _onTabTapped,
-            bagBadgeCount: mockService.cartItems.length,
-          );
-        },
+    return PopScope(
+      canPop: _currentIndex == 0,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && _currentIndex != 0) {
+          _onTabTapped(0);
+        }
+      },
+      child: Scaffold(
+        extendBody: true,
+        body: IndexedStack(
+          index: _currentIndex,
+          children: screens,
+        ),
+        bottomNavigationBar: ListenableBuilder(
+          listenable: mockService,
+          builder: (context, _) {
+            return GlassFloatingNavBar(
+              currentIndex: _currentIndex,
+              onTap: _onTabTapped,
+              bagBadgeCount: mockService.cartItems.length,
+              wishlistBadgeCount: mockService.wishlistCount,
+            );
+          },
+        ),
       ),
     );
   }
