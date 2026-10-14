@@ -6,7 +6,6 @@ import '../../models/category.dart';
 import '../../models/product.dart';
 import '../../services/department_repository.dart';
 import '../../services/mock_data_service.dart';
-import '../../widgets/app_button.dart';
 import '../../widgets/trust_badges.dart';
 import '../catalog/product_list_screen.dart';
 import '../product/product_detail_screen.dart';
@@ -74,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final department = _deptRepo.getContent(_selectedGender);
     final allProducts = _mockService.products;
     final allCategories = _mockService.categories;
+    final fp = _mockService.featureProducts;
 
     final bool isHomeTab = _selectedGender == 'home';
     final bool isAccessoryTab = _selectedGender == 'accessory';
@@ -85,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Product> featuredProducts;
 
     if (isHomeTab) {
-      final fp = _mockService.featureProducts;
       displayProducts = (fp != null && fp.exclusiveOffers.isNotEmpty)
           ? fp.exclusiveOffers
           : allProducts;
@@ -150,19 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Dynamic titles
     final String newArrivalsTitle = isHomeTab
-        ? 'NEW ARRIVALS IN STORE'
+        ? (fp?.exclusiveOffersTitle ?? 'EXCLUSIVE OFFERS')
         : (isAccessoryTab
               ? 'NEW IN ACCESSORIES'
               : 'NEW IN ${_selectedGender.toUpperCase()}');
 
     final String trendingTitle = isHomeTab
-        ? 'TRENDING NOW'
+        ? (fp?.bestSellingsTitle ?? 'BEST SELLING')
         : (isAccessoryTab
               ? 'TRENDING ACCESSORIES'
               : 'TRENDING IN ${_selectedGender.toUpperCase()}');
 
     final String categoriesTitle = isHomeTab
-        ? 'EXPLORE CATEGORIES'
+        ? (fp?.featuresTitle ?? 'EXPLORE CATEGORIES')
         : (isAccessoryTab
               ? 'ACCESSORY CATEGORIES'
               : '${_selectedGender.toUpperCase()} CATEGORIES');
@@ -249,8 +248,8 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildProductSection(
               title: newArrivalsTitle,
               subtitle:
-                  'Headplacket daily from the world best brands and boutiques',
-              actionText: 'SWIPE TO VIEW',
+                  'Handpicked daily from the world\'s finest ateliers and boutiques',
+              actionText: 'VIEW ALL',
               products: displayProducts,
               onActionTap: () => _navigateToCatalog(
                 title: newArrivalsTitle,
@@ -338,11 +337,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ProductHorizontalList(
           products: products,
           onProductTap: _navigateToProductDetail,
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: AppButton.outlined(text: 'Shop Now', onPressed: onActionTap),
         ),
       ],
     );

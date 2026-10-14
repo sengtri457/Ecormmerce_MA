@@ -1,4 +1,7 @@
-﻿{
+{
+  "exclusive_offers_title": "EXCLUSIVE OFFERS",
+  "best_sellings_title": "BEST SELLING",
+  "features_title": "EXPLORE CATEGORIES",
   "exclusive_offers": [
     {
       "id": 1,

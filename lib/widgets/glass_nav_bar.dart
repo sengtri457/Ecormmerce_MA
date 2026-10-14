@@ -118,29 +118,37 @@ class GlassFloatingNavBar extends StatelessWidget {
       );
     }
 
-    return GestureDetector(
-      onTap: () => onTap(index),
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-        padding: isSelected
-            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
-            : const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.activeNav : Colors.transparent,
+    return Semantics(
+      label: item.label,
+      button: true,
+      selected: isSelected,
+      child: Tooltip(
+        message: item.label,
+        child: InkWell(
+          onTap: () => onTap(index),
           borderRadius: BorderRadius.circular(AppRadius.circular),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ]
-              : null,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            padding: isSelected
+                ? const EdgeInsets.symmetric(horizontal: 18, vertical: 10)
+                : const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.activeNav : Colors.transparent,
+              borderRadius: BorderRadius.circular(AppRadius.circular),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.activeNav.withValues(alpha: 0.22),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: iconWidget,
+          ),
         ),
-        child: iconWidget,
       ),
     );
   }

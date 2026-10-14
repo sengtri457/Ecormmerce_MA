@@ -21,37 +21,37 @@ class CategoryHorizontalList extends StatelessWidget {
     final lower = name.toLowerCase();
 
     if (lower.contains('discount') || lower.contains('sale')) {
-      return const Icon(Icons.percent_rounded, size: 24, color: AppColors.black);
+      return const Icon(Icons.percent_rounded, size: 22, color: AppColors.black);
     }
     if (lower.contains('t-shirt') || lower.contains('shirt') || lower.contains('tee')) {
-      return const Icon(Icons.checkroom_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.checkroom_outlined, size: 23, color: AppColors.black);
     }
     if (lower.contains('hoodie') || lower.contains('sweat')) {
-      return const Icon(Icons.dry_cleaning_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.dry_cleaning_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('hat') || lower.contains('cap')) {
-      return const Icon(Icons.wb_shade_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.face_retouching_natural_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('dress')) {
-      return const Icon(Icons.woman_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.woman_outlined, size: 23, color: AppColors.black);
     }
     if (lower.contains('jacket') || lower.contains('coat') || lower.contains('outerwear')) {
-      return const Icon(Icons.layers_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.layers_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('shoe') || lower.contains('footwear')) {
-      return const Icon(Icons.roller_skating_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.snowshoeing_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('bag') || lower.contains('leather')) {
-      return const Icon(Icons.shopping_bag_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.shopping_bag_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('pant') || lower.contains('trouser') || lower.contains('denim')) {
-      return const Icon(Icons.straighten_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.tune_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('decor') || lower.contains('home')) {
-      return const Icon(Icons.home_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.home_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('beauty') || lower.contains('fragrance')) {
-      return const Icon(Icons.spa_outlined, size: 24, color: AppColors.black);
+      return const Icon(Icons.spa_outlined, size: 22, color: AppColors.black);
     }
 
     return const Icon(Icons.grid_view_outlined, size: 22, color: AppColors.black);
@@ -72,44 +72,54 @@ class CategoryHorizontalList extends StatelessWidget {
         itemBuilder: (context, index) {
           final sub = subcategories[index];
 
-          return GestureDetector(
-            onTap: () => onSubCategoryTap(sub),
-            behavior: HitTestBehavior.opaque,
-            child: SizedBox(
-              width: 72,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Clean rounded container matching the design system
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                      border: Border.all(
-                        color: AppColors.borderLight,
-                        width: 1.2,
+          return SizedBox(
+            width: 72,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => onSubCategoryTap(sub),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Clean rounded container matching the design system
+                    Container(
+                      width: 58,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                        border: Border.all(
+                          color: AppColors.borderLight,
+                          width: 1.2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.03),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: _buildCategoryIcon(sub.name),
                       ),
                     ),
-                    child: Center(
-                      child: _buildCategoryIcon(sub.name),
+                    const SizedBox(height: 7),
+                    Text(
+                      sub.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodySmall.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textPrimary,
+                        letterSpacing: -0.2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    sub.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.bodySmall.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textPrimary,
-                      letterSpacing: -0.2,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

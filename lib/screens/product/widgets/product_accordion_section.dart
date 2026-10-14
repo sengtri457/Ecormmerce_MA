@@ -21,35 +21,28 @@ class ProductAccordionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Promo Banner Box
+        // Complimentary Delivery & Return Assurance
         Padding(
-          padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, 0),
+          padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(AppSpacing.lg),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.md),
             decoration: BoxDecoration(
-              color: AppColors.surfaceSubtle,
+              color: AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(AppRadius.sm),
+              border: Border.all(color: AppColors.border, width: 0.8),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  'EXPLORE OVER 3,500 LUXURY BRANDS',
-                  style: AppTypography.badge.copyWith(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                    color: AppColors.black,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Enjoy complimentary shipping on all orders. Free 14-day returns collected directly from your door.',
-                  style: AppTypography.bodySmall.copyWith(
-                    fontSize: 10,
-                    color: AppColors.textSecondary,
-                    height: 1.35,
+                const Icon(Icons.verified_outlined, size: 18, color: AppColors.textPrimary),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    'Complimentary express delivery & 14-day doorstep returns included.',
+                    style: AppTypography.bodySmall.copyWith(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 ),
               ],
@@ -57,7 +50,7 @@ class ProductAccordionSection extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.md),
 
         // 1. THE DETAIL
         _buildAccordionItem(
@@ -89,10 +82,10 @@ class ProductAccordionSection extends StatelessWidget {
           ),
         ),
 
-        // 2. SIZE & FITS
+        // 2. SIZE & FIT
         _buildAccordionItem(
           context,
-          title: 'SIZE & FITS',
+          title: 'SIZE & FIT',
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

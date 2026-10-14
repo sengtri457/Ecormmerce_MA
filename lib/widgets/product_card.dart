@@ -28,16 +28,18 @@ class ProductCard extends StatelessWidget {
       return _buildHorizontalCard(context, mockService, firstImage);
     }
 
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image Container
-          Expanded(
-            child: Stack(
-              children: [
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Container
+            Expanded(
+              child: Stack(
+                children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.card),
                   child: AppImage(
@@ -198,20 +200,23 @@ class ProductCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildHorizontalCard(BuildContext context, MockDataService mockService, String firstImage) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.sm),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: AppColors.border, width: 1.0),
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: AppColors.border, width: 1.0),
+          ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -328,6 +333,7 @@ class ProductCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

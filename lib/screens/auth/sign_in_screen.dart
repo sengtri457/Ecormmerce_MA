@@ -52,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
           height: 30,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) => Text(
-            'Clothes Dev',
+            'MA STUDIO',
             style: AppTypography.headingSmall.copyWith(letterSpacing: 2.0),
           ),
         ),
@@ -63,14 +63,6 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 12),
-              Image.asset(
-                'assets/images/logoDevs.png',
-                height: 48,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                    const SizedBox.shrink(),
-              ),
               const SizedBox(height: 16),
               // Brand Heading
               Text('Sign In', style: AppTypography.displayLarge),
@@ -153,7 +145,24 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   Expanded(
                     child: _SocialButton(
-                      icon: Icons.g_mobiledata,
+                      icon: Container(
+                        width: 22,
+                        height: 22,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.borderDark, width: 1.0),
+                        ),
+                        child: const Text(
+                          'G',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: 'sans-serif',
+                            color: AppColors.black,
+                          ),
+                        ),
+                      ),
                       label: 'Google',
                       onTap: _handleSignIn,
                     ),
@@ -161,7 +170,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _SocialButton(
-                      icon: Icons.apple,
+                      icon: const Icon(Icons.apple, color: AppColors.black, size: 22),
                       label: 'Apple',
                       onTap: _handleSignIn,
                     ),
@@ -210,7 +219,7 @@ class _SignInScreenState extends State<SignInScreen> {
 }
 
 class _SocialButton extends StatelessWidget {
-  final IconData icon;
+  final Widget icon;
   final String label;
   final VoidCallback onTap;
 
@@ -224,7 +233,7 @@ class _SocialButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: onTap,
-      icon: Icon(icon, color: AppColors.black, size: 22),
+      icon: icon,
       label: Text(
         label,
         style: AppTypography.bodySmall.copyWith(

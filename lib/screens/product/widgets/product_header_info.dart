@@ -37,19 +37,25 @@ class ProductHeaderInfo extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Icons.star,
-                    size: 16,
-                    color: Colors.amber,
+                    Icons.star_rounded,
+                    size: 15,
+                    color: AppColors.black,
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  const SizedBox(width: 3),
                   Text(
                     '${product.rating}',
-                    style: AppTypography.headingSmall.copyWith(fontSize: 13),
+                    style: AppTypography.headingSmall.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  const SizedBox(width: 3),
                   Text(
                     '(${product.reviewCount})',
-                    style: AppTypography.bodySmall.copyWith(fontSize: 12),
+                    style: AppTypography.bodySmall.copyWith(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
                   ),
                 ],
               ),
@@ -114,7 +120,7 @@ class ProductHeaderInfo extends StatelessWidget {
 
           // Descriptions header & body
           Text(
-            'DESCRIPTIONS',
+            'DETAILS & COMPOSITION',
             style: AppTypography.badge.copyWith(
               fontSize: 11,
               fontWeight: FontWeight.w700,

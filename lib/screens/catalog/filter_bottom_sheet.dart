@@ -74,7 +74,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               TextButton(
                 onPressed: () {
                   setState(() {
-                    _currentRange = const RangeValues(50, 500);
+                    _currentRange = const RangeValues(0, 600);
                     _selectedCategory = 'All';
                     _selectedSize = null;
                   });

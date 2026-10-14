@@ -151,33 +151,49 @@ class Product {
 }
 
 class FeatureProduct {
+  final String exclusiveOffersTitle;
+  final String bestSellingsTitle;
+  final String featuresTitle;
   final List<Product> exclusiveOffers;
   final List<Product> bestSellings;
   final List<Product> features;
 
   FeatureProduct({
+    this.exclusiveOffersTitle = 'EXCLUSIVE OFFERS',
+    this.bestSellingsTitle = 'BEST SELLING',
+    this.featuresTitle = 'EXPLORE CATEGORIES',
     this.exclusiveOffers = const [],
     this.bestSellings = const [],
     this.features = const [],
   });
 
+  String get newArrivalsTitle => exclusiveOffersTitle;
+  String get trendingTitle => bestSellingsTitle;
+  String get categoriesTitle => featuresTitle;
+
   factory FeatureProduct.fromJson(Map<String, dynamic> json) {
     return FeatureProduct(
-      exclusiveOffers: json['exclusive_offers'] == null
-          ? []
-          : (json['exclusive_offers'] as List)
-              .map((e) => Product.fromJson(e))
-              .toList(),
-      bestSellings: json['best_sellings'] == null
-          ? []
-          : (json['best_sellings'] as List)
-              .map((e) => Product.fromJson(e))
-              .toList(),
-      features: json['features'] == null
-          ? []
-          : (json['features'] as List)
-              .map((e) => Product.fromJson(e))
-              .toList(),
+      exclusiveOffersTitle: json['exclusive_offers_title'] as String? ??
+          json['new_arrivals_title'] as String? ??
+          'EXCLUSIVE OFFERS',
+      bestSellingsTitle: json['best_sellings_title'] as String? ??
+          json['trending_title'] as String? ??
+          'BEST SELLING',
+      featuresTitle: json['features_title'] as String? ??
+          json['categories_title'] as String? ??
+          'EXPLORE CATEGORIES',
+      exclusiveOffers: (json['exclusive_offers'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
+      bestSellings: (json['best_sellings'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
+      features: (json['features'] as List? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => Product.fromJson(e))
+          .toList(),
     );
   }
 }
