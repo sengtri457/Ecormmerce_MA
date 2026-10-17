@@ -32,7 +32,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final mockService = MockDataService();
     final allProducts = mockService.products;
 
-    // Derive active subcategories dynamically for this category
     final categoryProducts = allProducts.where((p) =>
       widget.categorySlug == 'all' || p.category.toLowerCase() == widget.categorySlug.toLowerCase(),
     ).toList();
@@ -42,7 +41,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final List<Map<String, String>> subcategories = [
       {'id': 'all', 'name': 'All'},
       ...availableSubIds.map((subId) {
-        // Clean up format, e.g. "w_coats" -> "Coats", "m_tees" -> "Tees"
         final formatted = subId
             .replaceFirst(RegExp(r'^[a-z]_'), '')
             .replaceAll('_', ' ')
@@ -53,7 +51,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       }),
     ];
 
-    // Filter logic
     final filtered = allProducts.where((p) {
       final matchesCategory = widget.categorySlug == 'all' ||
           p.category.toLowerCase() == widget.categorySlug.toLowerCase();
@@ -86,7 +83,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
       body: Column(
         children: [
-          // 1. Search Box
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Container(
@@ -126,7 +122,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
           ),
 
-          // 2. Subcategory Pills
           SizedBox(
             height: 44,
             child: ListView.separated(
@@ -161,7 +156,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
           const SizedBox(height: 8),
 
-          // 3. Toolbar (Found Count, Filter button, Grid/List toggle)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -176,7 +170,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ),
                 Row(
                   children: [
-                    // Layout Toggle
                     IconButton(
                       icon: Icon(
                         _isGridView ? Icons.view_agenda_outlined : Icons.grid_view,
@@ -186,7 +179,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       onPressed: () => setState(() => _isGridView = !_isGridView),
                     ),
                     const SizedBox(width: 4),
-                    // Filter Action Button
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -230,7 +222,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
           const Divider(height: 1, color: AppColors.border),
 
-          // 4. Products View
           Expanded(
             child: filtered.isEmpty
                 ? Center(

@@ -10,7 +10,6 @@ import 'services/mock_data_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -18,7 +17,6 @@ void main() async {
     ),
   );
 
-  // Initialize JSON mock data service
   await MockDataService().initialize();
 
   runApp(

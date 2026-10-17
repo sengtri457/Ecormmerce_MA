@@ -3,7 +3,7 @@
     "id": "cat_women",
     "name": "Women",
     "slug": "women",
-    "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80",
+    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_1093,c_limit/e4be7877-7355-4f0d-853b-0d3ac355527a/women-s-shoes-clothing-accessories.jpg",
     "subcategories": [
       { "id": "w_all", "name": "All Items", "count": 240 },
       { "id": "w_dresses", "name": "Dresses", "count": 68 },
@@ -17,7 +17,7 @@
     "id": "cat_men",
     "name": "Men",
     "slug": "men",
-    "imageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
+    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_658,c_limit/29c3b8fd-cb15-453f-9117-041e36fe4bd8/men-s-shoes-clothing-accessories.jpg",
     "subcategories": [
       { "id": "m_all", "name": "All Items", "count": 180 },
       { "id": "m_suits", "name": "Tailoring", "count": 32 },
@@ -31,7 +31,7 @@
     "id": "cat_kids",
     "name": "Kids",
     "slug": "kids",
-    "imageUrl": "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=600&auto=format&fit=crop&q=80",
+    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_2396,c_limit/b6e08a98-30ab-42ac-aefb-3eb192a832a7/nike-kids.png",
     "subcategories": [
       { "id": "k_all", "name": "All Items", "count": 95 },
       { "id": "k_girls", "name": "Girls", "count": 45 },

@@ -8,6 +8,7 @@ class GlassFloatingNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
   final int bagBadgeCount;
+  final int wishlistBadgeCount;
   final List<MenuItem>? items;
 
   const GlassFloatingNavBar({
@@ -15,6 +16,7 @@ class GlassFloatingNavBar extends StatelessWidget {
     required this.currentIndex,
     required this.onTap,
     this.bagBadgeCount = 0,
+    this.wishlistBadgeCount = 0,
     this.items,
   });
 
@@ -67,10 +69,17 @@ class GlassFloatingNavBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(navItems.length, (index) {
                   final item = navItems[index];
+                  int badgeCount = 0;
+                  final lowerLabel = item.label.toLowerCase();
+                  if (index == 2 || lowerLabel.contains('fav') || lowerLabel.contains('wish')) {
+                    badgeCount = wishlistBadgeCount;
+                  } else if (index == 4 || lowerLabel.contains('bag') || lowerLabel.contains('cart')) {
+                    badgeCount = bagBadgeCount;
+                  }
                   return _navItem(
                     index: index,
                     item: item,
-                    badgeCount: index == 4 ? bagBadgeCount : 0,
+                    badgeCount: badgeCount,
                   );
                 }),
               ),
@@ -103,10 +112,11 @@ class GlassFloatingNavBar extends StatelessWidget {
       },
     );
 
-    if (badgeCount > 0 && !isSelected) {
+    if (badgeCount > 0) {
+      final badgeText = badgeCount > 99 ? '99+' : '$badgeCount';
       iconWidget = Badge(
         label: Text(
-          '$badgeCount',
+          badgeText,
           style: const TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w700,

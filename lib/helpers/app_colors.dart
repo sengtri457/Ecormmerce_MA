@@ -26,7 +26,7 @@ class AppColors {
   static const Color alertRed = Color(0xFFE74C3C);
   static const Color saleRed = Color(
     0xFFB43B2A,
-  ); // Sophisticated editorial crimson for sale tags
+  );
   static const Color softRose = Color(0xFFF9B8B8);
   static const Color tagBg = Color(0xFFFDF2F0);
 

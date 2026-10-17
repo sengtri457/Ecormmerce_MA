@@ -9,23 +9,24 @@ import '../../../widgets/app_image.dart';
 import '../../catalog/product_list_screen.dart';
 import '../product_detail_screen.dart';
 
-/// Recommendations and Editorial styling section at the bottom of Product Detail.
 class ProductRecommendations extends StatelessWidget {
   final Product currentProduct;
   final List<Product> recommendedProducts;
-
   const ProductRecommendations({
     super.key,
     required this.currentProduct,
     required this.recommendedProducts,
   });
-
   @override
   Widget build(BuildContext context) {
     if (recommendedProducts.isEmpty) return const SizedBox.shrink();
-
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.xl, AppSpacing.lg, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.xl,
+        AppSpacing.lg,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,13 +48,13 @@ class ProductRecommendations extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-
-          // Two-column side-by-side recommended cards
           Row(
             children: recommendedProducts.take(2).map((rec) {
               return Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                  ),
                   child: InkWell(
                     onTap: () {
                       Navigator.push(
@@ -75,7 +76,9 @@ class ProductRecommendations extends StatelessWidget {
                                 color: AppColors.surfaceSubtle,
                                 width: double.infinity,
                                 child: AppImage(
-                                  imagePath: rec.images.isNotEmpty ? rec.images.first : '',
+                                  imagePath: rec.images.isNotEmpty
+                                      ? rec.images.first
+                                      : '',
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -135,7 +138,6 @@ class ProductRecommendations extends StatelessWidget {
             }).toList(),
           ),
 
-          // Outlined Curated Edit CTA
           const SizedBox(height: AppSpacing.lg),
           AppButton.outlined(
             text: 'EXPLORE CURATED EDIT',

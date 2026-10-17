@@ -36,7 +36,6 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Container
             Expanded(
               child: Stack(
                 children: [
@@ -51,7 +50,6 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
 
-                // Top Left Badges (NEW / SALE)
                 Positioned(
                   top: AppSpacing.sm,
                   left: AppSpacing.sm,
@@ -99,7 +97,6 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
 
-                // Top Right Favorite Button (Accessible 44x44 Touch Target)
                 Positioned(
                   top: 2,
                   right: 2,
@@ -147,7 +144,6 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
 
-          // Brand Label
           Text(
             product.brand.toUpperCase(),
             style: AppTypography.bodySmall.copyWith(
@@ -161,7 +157,6 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 3),
 
-          // Product Title
           Text(
             product.title,
             style: AppTypography.headingSmall.copyWith(
@@ -174,7 +169,6 @@ class ProductCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
 
-          // Price Row
           Row(
             children: [
               Text(
@@ -220,7 +214,6 @@ class ProductCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Left: Square Image with Badges
             ClipRRect(
               borderRadius: BorderRadius.circular(AppRadius.sm),
               child: SizedBox(
@@ -259,7 +252,6 @@ class ProductCard extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.md),
 
-            // Middle: Details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,7 +307,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            // Right: Favorite Icon Button
             ListenableBuilder(
               listenable: mockService,
               builder: (context, _) {

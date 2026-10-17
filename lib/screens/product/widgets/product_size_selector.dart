@@ -3,7 +3,7 @@ import '../../../helpers/app_colors.dart';
 import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 
-/// Interactive size chips, size guide button, and one-size indicator.
+/// Size selector matching the Wishlist dropdown pill aesthetic.
 class ProductSizeSelector extends StatelessWidget {
   final List<String> sizes;
   final String selectedSize;
@@ -26,115 +26,70 @@ class ProductSizeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              InkWell(
-                onTap: onOpenSizeSheet,
-                child: Text(
-                  isOneSize
-                      ? 'SELECT SIZE: ONE SIZE'
-                      : 'SELECT SIZE: ${selectedSize.toUpperCase()}',
-                  style: AppTypography.formLabel.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
-                  ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceLight,
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            Text(
+              'SIZE:',
+              style: AppTypography.formLabel.copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.8,
+              ),
+            ),
+            const SizedBox(width: 10),
+            InkWell(
+              onTap: onOpenSizeSheet,
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.borderDark),
                 ),
-              ),
-              GestureDetector(
-                onTap: onOpenSizeGuide,
-                child: Text(
-                  'Size Guide',
-                  style: AppTypography.bodySmall.copyWith(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-
-          // If One Size (Accessories & Bags)
-          if (isOneSize)
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceLight,
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.black,
-                      borderRadius: BorderRadius.circular(AppRadius.xs),
-                    ),
-                    child: Text(
-                      'OS',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isOneSize ? 'ONE SIZE' : selectedSize,
                       style: AppTypography.badge.copyWith(
-                        color: AppColors.white,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Text(
-                    'Standard proportions fit all.',
-                    style: AppTypography.bodySmall.copyWith(
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 16,
                       color: AppColors.textSecondary,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )
-          else
-            // Sizing Chips Row
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.sm,
-              children: sizes.map((size) {
-                final isSelected = selectedSize == size;
-                return InkWell(
-                  onTap: () => onSizeSelected(size),
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    width: 46,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.black : AppColors.surfaceLight,
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                      border: Border.all(
-                        color: isSelected ? AppColors.black : AppColors.border,
-                        width: 1.0,
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      size,
-                      style: AppTypography.badge.copyWith(
-                        color: isSelected ? AppColors.white : AppColors.textPrimary,
-                        fontSize: 12,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
             ),
-        ],
+            const Spacer(),
+            GestureDetector(
+              onTap: onOpenSizeGuide,
+              child: Text(
+                'Size Guide',
+                style: AppTypography.bodySmall.copyWith(
+                  fontSize: 12,
+                  decoration: TextDecoration.underline,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
