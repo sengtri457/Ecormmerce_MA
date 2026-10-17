@@ -67,5 +67,28 @@
       "title": "BUY 2 GET 1 AT 50% OFF",
       "condition": "Valid on selected summer collections"
     }
+  ],
+  "category_banners": [
+    {
+      "id": "tees",
+      "title": "T-SHIRT",
+      "imagePath": "assets/images/categories/t_shirt.jpg",
+      "fallbackUrl": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=1000&auto=format&fit=crop&q=80",
+      "slug": "tees"
+    },
+    {
+      "id": "hoodies",
+      "title": "HOODIES",
+      "imagePath": "assets/images/categories/hoodies.jpg",
+      "fallbackUrl": "https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=1000&auto=format&fit=crop&q=80",
+      "slug": "hoodies"
+    },
+    {
+      "id": "hat",
+      "title": "HAT",
+      "imagePath": "assets/images/categories/hat.jpg",
+      "fallbackUrl": "https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=1000&auto=format&fit=crop&q=80",
+      "slug": "hats"
+    }
   ]
 }

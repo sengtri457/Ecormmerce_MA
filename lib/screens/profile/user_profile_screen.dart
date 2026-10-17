@@ -54,7 +54,6 @@ class UserProfileScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // Profile Card Header
               Container(
                 color: AppColors.white,
                 padding: const EdgeInsets.symmetric(
@@ -63,7 +62,6 @@ class UserProfileScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // Avatar with Camera Badge
                     Center(
                       child: Stack(
                         children: [
@@ -99,7 +97,6 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
 
-                    // Name & Email
                     Text(
                       profile?.fullName ?? 'Sengtri Chan',
                       style: AppTypography.headingMedium.copyWith(fontSize: 18),
@@ -111,7 +108,6 @@ class UserProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // VIP Badge
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -133,7 +129,6 @@ class UserProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Quick Stats Row
               Container(
                 color: AppColors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -149,7 +144,6 @@ class UserProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // Settings & Options List
               Container(
                 color: AppColors.white,
                 child: Column(
@@ -194,7 +188,6 @@ class UserProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // Log Out Button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: OutlinedButton(

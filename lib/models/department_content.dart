@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Represents a single slide in the home hero carousel.
 class HeroBannerSlide {
   final bool isRedSplit;
   final String tag;
@@ -25,7 +24,7 @@ class HeroBannerSlide {
   });
 }
 
-/// Represents the high-conversion split promo card.
+/// Promo card configuration.
 class PromoBoxConfig {
   final String title;
   final String subtitle;
@@ -44,7 +43,7 @@ class PromoBoxConfig {
   });
 }
 
-/// Represents the editorial lookbook banner.
+/// Lookbook banner configuration.
 class LookbookConfig {
   final String tag;
   final String title;
@@ -59,7 +58,6 @@ class LookbookConfig {
   });
 }
 
-/// Strongly typed container holding all department-specific curated content.
 class DepartmentContent {
   final String departmentId;
   final String departmentName;

@@ -6,8 +6,6 @@ import '../../../models/product.dart';
 import '../../../widgets/app_image.dart';
 import 'size_picker_bottom_sheet.dart';
 
-/// Single item row card for the Wishlist screen matching the luxury visual design.
-/// Supports swipe-left to remove, size selection overlay, and selection toggle.
 class WishlistItemCard extends StatelessWidget {
   final Product product;
   final String? selectedSize;
@@ -17,6 +15,7 @@ class WishlistItemCard extends StatelessWidget {
   final ValueChanged<String>? onSizeChanged;
   final VoidCallback? onGoToBag;
   final VoidCallback? onRemove;
+  final VoidCallback? onMoveToBag;
 
   const WishlistItemCard({
     super.key,
@@ -28,6 +27,7 @@ class WishlistItemCard extends StatelessWidget {
     this.onSizeChanged,
     this.onGoToBag,
     this.onRemove,
+    this.onMoveToBag,
   });
 
   void _openSizePicker(BuildContext context) async {
@@ -44,8 +44,6 @@ class WishlistItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayPrice = product.price.toCurrency();
-
     return Dismissible(
       key: ValueKey(product.id),
       direction: DismissDirection.endToStart,
@@ -53,11 +51,7 @@ class WishlistItemCard extends StatelessWidget {
         color: AppColors.alertRed,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: IconButton(
-          icon: const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
-          tooltip: 'Remove',
-          onPressed: onRemove,
-        ),
+        child: const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
       ),
       confirmDismiss: (direction) async {
         if (onRemove != null) {
@@ -73,130 +67,210 @@ class WishlistItemCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Left: Product Image
+              Padding(
+                padding: const EdgeInsets.only(top: 50, right: 12),
+                child: InkWell(
+                  onTap: () => onSelectedChanged?.call(!isSelected),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.black : Colors.transparent,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isSelected ? AppColors.black : AppColors.borderDark,
+                        width: 1.4,
+                      ),
+                    ),
+                    child: isSelected
+                        ? const Icon(Icons.check, size: 14, color: AppColors.white)
+                        : null,
+                  ),
+                ),
+              ),
+
               ClipRRect(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(6),
                 child: SizedBox(
                   width: 95,
                   height: 130,
                   child: AppImage(
                     imagePath: product.images.isNotEmpty ? product.images.first : '',
-                    fallbackUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
+                    fallbackUrl:
+                        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 14),
 
-              // Center: Product Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
-                    Text(
-                      product.title.toUpperCase(),
-                      style: AppTypography.headingSmall.copyWith(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                        color: AppColors.textPrimary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            product.brand.toUpperCase(),
+                            style: AppTypography.badge.copyWith(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.0,
+                              color: AppColors.textSecondary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (onRemove != null)
+                          InkWell(
+                            onTap: onRemove,
+                            borderRadius: BorderRadius.circular(12),
+                            child: const Padding(
+                              padding: EdgeInsets.all(4),
+                              child: Icon(
+                                Icons.close,
+                                size: 16,
+                                color: AppColors.placeholder,
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 3),
 
-                    // Subtitle / Brand
                     Text(
-                      product.brand.toUpperCase(),
-                      style: AppTypography.bodySmall.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textSecondary,
+                      product.title,
+                      style: AppTypography.headingSmall.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
-
-                    // Price
-                    Text(
-                      displayPrice,
-                      style: AppTypography.headingSmall.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
                     const SizedBox(height: 6),
 
-                    // Descriptions label
-                    Text(
-                      'DESCRIPTIONS',
-                      style: AppTypography.badge.copyWith(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.8,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Size selector dropdown pill
-                    InkWell(
-                      onTap: () => _openSizePicker(context),
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceSubtle,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: AppColors.border),
+                    Row(
+                      children: [
+                        Text(
+                          product.price.toCurrency(),
+                          style: AppTypography.headingSmall.copyWith(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              selectedSize != null ? selectedSize! : 'No size',
-                              style: AppTypography.bodySmall.copyWith(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
+                        if (product.originalPrice > product.price) ...[
+                          const SizedBox(width: 6),
+                          Text(
+                            product.originalPrice.toCurrency(),
+                            style: AppTypography.bodySmall.copyWith(
+                              fontSize: 12,
+                              decoration: TextDecoration.lineThrough,
+                              color: AppColors.placeholder,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.tagBg,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: Text(
+                              '-${product.discountPercent}%',
+                              style: AppTypography.badge.copyWith(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.saleRed,
                               ),
                             ),
-                            const SizedBox(width: 6),
-                            const Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 16,
-                              color: AppColors.textSecondary,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () => _openSizePicker(context),
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.surfaceLight,
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppColors.border),
                             ),
-                          ],
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  selectedSize != null ? 'SIZE: ${selectedSize!}' : 'SIZE',
+                                  style: AppTypography.badge.copyWith(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textPrimary,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 14,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        const Spacer(),
+
+                        InkWell(
+                          onTap: () {
+                            if (onMoveToBag != null) {
+                              onMoveToBag!();
+                            } else {
+                              _openSizePicker(context);
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(4),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.black,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.shopping_bag_outlined,
+                                  size: 13,
+                                  color: AppColors.white,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  'MOVE TO BAG',
+                                  style: AppTypography.badge.copyWith(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.white,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ),
-
-              // Right: Selection Checkbox / Toggle Box
-              InkWell(
-                onTap: () => onSelectedChanged?.call(!isSelected),
-                borderRadius: BorderRadius.circular(4),
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppColors.black : AppColors.surfaceSubtle,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: isSelected ? AppColors.black : AppColors.borderDark,
-                      width: 1.2,
-                    ),
-                  ),
-                  child: isSelected
-                      ? const Icon(Icons.check, size: 16, color: AppColors.white)
-                      : null,
                 ),
               ),
             ],

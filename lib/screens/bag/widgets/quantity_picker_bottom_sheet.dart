@@ -4,8 +4,7 @@ import '../../../helpers/app_colors.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../widgets/app_button.dart';
 
-/// Modal bottom sheet for selecting product quantity in the Shopping Bag.
-/// Matches the luxury Cupertino wheel picker aesthetic used across the app.
+/// Quantity picker bottom sheet with wheel selector.
 class QuantityPickerBottomSheet extends StatefulWidget {
   final int initialQuantity;
   final int maxQuantity;
@@ -67,7 +66,6 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header: Title centered with close button on right
             Stack(
               alignment: Alignment.center,
               children: [
@@ -95,7 +93,6 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
             ),
             const SizedBox(height: 20),
 
-            // Cupertino Picker for smooth wheel selection
             SizedBox(
               height: 140,
               child: CupertinoPicker(
@@ -135,7 +132,6 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Confirm Button
             AppButton(
               text: 'CONFIRM QUANTITY',
               variant: AppButtonVariant.primary,

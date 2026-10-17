@@ -19,6 +19,7 @@ class MockDataService extends ChangeNotifier {
   List<OnboardingItem> onboardingItems = [];
   List<HomeBannerItem> heroBanners = [];
   List<PromoOffer> promoOffers = [];
+  List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
   List<VisualCategory> visualCategories = [];
   List<Product> products = [];
@@ -34,7 +35,6 @@ class MockDataService extends ChangeNotifier {
   Future<void> initialize() async {
     if (_isLoaded) return;
     try {
-      // Use dedicated HomeService loaders
       const homeService = HomeService();
       final bannersData = await homeService.getBannersData();
       
@@ -56,12 +56,12 @@ class MockDataService extends ChangeNotifier {
           .map((x) => PromoOffer.fromJson(x))
           .toList();
 
+      categoryBanners = await homeService.getCategoryBanners();
       categories = await homeService.getCategories();
       visualCategories = await homeService.getCategoryProducts();
       products = await homeService.getProducts();
       featureProducts = await homeService.getFeatureProducts();
 
-      // 4. Load Cart
       final cartString = await rootBundle.loadString('assets/json/cart.json');
       final cartJson = json.decode(cartString) as Map<String, dynamic>;
       final rawCart = cartJson['items'] as List? ?? const [];
@@ -76,19 +76,15 @@ class MockDataService extends ChangeNotifier {
       discountAmount = (cartJson['discountAmount'] as num?)?.toDouble() ?? 50.0;
       shippingFee = (cartJson['shippingFee'] as num?)?.toDouble() ?? 15.0;
 
-      // 5. Load User Profile
       final profileString = await rootBundle.loadString('assets/json/user_profile.json');
       final profileJson = json.decode(profileString) as Map<String, dynamic>;
       userProfile = UserProfile.fromJson(profileJson);
 
       _isLoaded = true;
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading JSON mock data: $e');
-    }
+    } catch (_) {}
   }
 
-  // --- Cart Actions ---
   List<CartItem> get selectedCartItems =>
       cartItems.where((item) => item.isSelected).toList();
 
@@ -219,7 +215,6 @@ class MockDataService extends ChangeNotifier {
     }
   }
 
-  // --- Wishlist Actions ---
   int get wishlistCount => wishlistProductIds.length;
 
   bool isFavorite(int productId) => wishlistProductIds.contains(productId);

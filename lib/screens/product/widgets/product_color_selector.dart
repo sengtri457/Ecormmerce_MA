@@ -5,7 +5,6 @@ import '../../../helpers/app_typography.dart';
 import '../../../helpers/color_extensions.dart';
 import '../../../models/product.dart';
 
-/// Clean color swatch selector for Product Detail screen.
 class ProductColorSelector extends StatelessWidget {
   final List<ProductColor> colors;
   final String selectedColor;
@@ -23,7 +22,12 @@ class ProductColorSelector extends StatelessWidget {
     if (colors.isEmpty) return const SizedBox.shrink();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.lg,
+        AppSpacing.lg,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -75,7 +75,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Full Name
               AppTextField(
                 label: 'Full Name',
                 hint: 'Sengtri Chan',
@@ -83,7 +82,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Email Address
               AppTextField(
                 label: 'Email Address',
                 hint: 'name@example.com',
@@ -92,7 +90,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Password
               AppTextField(
                 label: 'Password',
                 hint: '••••••••',
@@ -101,7 +98,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Confirm Password
               AppTextField(
                 label: 'Confirm Password',
                 hint: '••••••••',
@@ -110,7 +106,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Agree to terms checkbox
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -141,7 +136,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Register Button
               AppButton(
                 text: 'CREATE ACCOUNT',
                 isLoading: _isLoading,
@@ -149,7 +143,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Footer Sign In link
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
