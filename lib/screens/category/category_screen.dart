@@ -148,7 +148,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Header Title & View Toggle Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -162,7 +161,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   ),
                   Row(
                     children: [
-                      // Single column card view icon
                       InkWell(
                         onTap: () => setState(() => _isGridView = false),
                         child: Container(
@@ -183,7 +181,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         ),
                       ),
                       const SizedBox(width: 4),
-                      // 2-column grid view icon
                       InkWell(
                         onTap: () => setState(() => _isGridView = true),
                         child: Container(
@@ -209,7 +206,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
               const SizedBox(height: 16),
 
-              // 2. Visual Category Cards (List or Grid)
               if (_isLoading)
                 const Center(
                   child: Padding(
@@ -232,12 +228,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
                 const SizedBox(height: 24),
 
-                // 3. Category Accordion Expansion Tiles
                 ..._visualCategories.map((cat) => _buildAccordionTile(cat)),
 
                 const SizedBox(height: 28),
 
-                // 4. Minimal Wardrobe Edit Promo Box
                 _buildPromoBox(),
               ],
             ],
@@ -247,7 +241,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  /// Single-column view: stacked full-width editorial cards
   Widget _buildSingleColumnList() {
     return Column(
       children: _visualCategories.map((cat) {
@@ -265,7 +258,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  /// 2-column grid view: Pairs first two categories side-by-side, remaining categories full-width
   Widget _buildTwoColumnGrid() {
     if (_visualCategories.isEmpty) return const SizedBox.shrink();
     if (_visualCategories.length == 1) {
@@ -330,7 +322,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  /// Visual category card with dark gradient and bottom-left bold label
   Widget _buildBannerCard({
     required String title,
     required String image,
@@ -385,7 +376,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  /// Expansion accordion tile showing subcategories on tap
   Widget _buildAccordionTile(VisualCategory cat) {
     final subcategories = cat.subcategories;
 
@@ -443,7 +433,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  /// Editorial promo box at the bottom
   Widget _buildPromoBox() {
     return Container(
       width: double.infinity,

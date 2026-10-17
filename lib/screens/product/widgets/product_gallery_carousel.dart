@@ -6,8 +6,6 @@ import '../../../models/product.dart';
 import '../../../services/mock_data_service.dart';
 import '../../../widgets/app_image.dart';
 
-/// Horizontal multi-card image gallery for Product Detail screen.
-/// Includes badges for discounts, new-in status, and favorite toggle button.
 class ProductGalleryCarousel extends StatelessWidget {
   final Product product;
   final List<String> images;
@@ -46,14 +44,10 @@ class ProductGalleryCarousel extends StatelessWidget {
                     color: AppColors.surfaceSubtle,
                     width: double.infinity,
                     height: double.infinity,
-                    child: AppImage(
-                      imagePath: img,
-                      fit: BoxFit.cover,
-                    ),
+                    child: AppImage(imagePath: img, fit: BoxFit.cover),
                   ),
                 ),
 
-                // Discount & New In Badges on First Card
                 if (index == 0)
                   Positioned(
                     top: 14,
@@ -67,7 +61,9 @@ class ProductGalleryCarousel extends StatelessWidget {
                               horizontal: AppSpacing.sm,
                               vertical: AppSpacing.xs,
                             ),
-                            margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+                            margin: const EdgeInsets.only(
+                              bottom: AppSpacing.xs,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.alertRed,
                               borderRadius: BorderRadius.circular(3),
@@ -102,7 +98,6 @@ class ProductGalleryCarousel extends StatelessWidget {
                     ),
                   ),
 
-                // Favorite Heart Icon at Top Right of Image Card
                 Positioned(
                   top: 14,
                   right: 14,

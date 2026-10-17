@@ -50,7 +50,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 36,
@@ -63,7 +62,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 16),
 
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,7 +86,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 16),
 
-          // Price Range
           Text('PRICE RANGE', style: AppTypography.formLabel),
           const SizedBox(height: 8),
           Row(
@@ -111,7 +108,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 20),
 
-          // Category Chips
           Text('CATEGORY', style: AppTypography.formLabel),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -145,7 +141,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xl),
 
-          // Size Chips
           Text('SIZE', style: AppTypography.formLabel),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -179,7 +174,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xxxl),
 
-          // Apply Button
           AppButton(
             text: 'APPLY FILTERS',
             onPressed: () {

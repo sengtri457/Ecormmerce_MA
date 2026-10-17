@@ -75,3 +75,40 @@ class PromoOffer {
     );
   }
 }
+
+class CategoryBannerItem {
+  final String id;
+  final String title;
+  final String imagePath;
+  final String fallbackUrl;
+  final String slug;
+
+  const CategoryBannerItem({
+    required this.id,
+    required this.title,
+    required this.imagePath,
+    required this.fallbackUrl,
+    required this.slug,
+  });
+
+  factory CategoryBannerItem.fromJson(Map<String, dynamic> json) {
+    return CategoryBannerItem(
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      imagePath: (json['imagePath'] ?? json['image_path']) as String? ?? '',
+      fallbackUrl: (json['fallbackUrl'] ?? json['fallback_url']) as String? ?? '',
+      slug: json['slug'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'imagePath': imagePath,
+      'fallbackUrl': fallbackUrl,
+      'slug': slug,
+    };
+  }
+}
+

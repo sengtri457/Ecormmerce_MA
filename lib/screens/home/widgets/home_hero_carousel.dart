@@ -4,7 +4,7 @@ import '../../../helpers/app_typography.dart';
 import '../../../models/department_content.dart';
 import '../../../widgets/app_image.dart';
 
-/// Department hero banner carousel with split typography and full-bleed editorial slides.
+/// Department hero banner carousel.
 class HomeHeroCarousel extends StatelessWidget {
   final PageController controller;
   final List<HeroBannerSlide> slides;
@@ -49,7 +49,6 @@ class HomeHeroCarousel extends StatelessWidget {
             },
           ),
 
-          // Indicator Dots
           Positioned(
             bottom: 12,
             right: 32,
@@ -82,7 +81,6 @@ class HomeHeroCarousel extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Left Typography Box
           Expanded(
             flex: 11,
             child: Padding(
@@ -140,7 +138,6 @@ class HomeHeroCarousel extends StatelessWidget {
               ),
             ),
           ),
-          // Right Photo Box
           Expanded(
             flex: 10,
             child: ClipRRect(

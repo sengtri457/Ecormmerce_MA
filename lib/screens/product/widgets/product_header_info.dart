@@ -5,23 +5,24 @@ import '../../../helpers/app_typography.dart';
 import '../../../helpers/currency_helper.dart';
 import '../../../models/product.dart';
 
-/// Product title, brand, rating, price, and description for Product Detail screen.
+/// Product title, brand, rating, price, and description.
 class ProductHeaderInfo extends StatelessWidget {
   final Product product;
 
-  const ProductHeaderInfo({
-    super.key,
-    required this.product,
-  });
+  const ProductHeaderInfo({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.xl, AppSpacing.lg, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.xl,
+        AppSpacing.lg,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Brand and Rating Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -62,8 +63,6 @@ class ProductHeaderInfo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.xs + 2),
-
-          // Title
           Text(
             product.title.toUpperCase(),
             style: AppTypography.headingLarge.copyWith(
@@ -74,8 +73,6 @@ class ProductHeaderInfo extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.sm),
-
-          // Price Row with Strikethrough & Discount Tag
           Row(
             children: [
               Text(
@@ -117,8 +114,6 @@ class ProductHeaderInfo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-
-          // Descriptions header & body
           Text(
             'DETAILS & COMPOSITION',
             style: AppTypography.badge.copyWith(

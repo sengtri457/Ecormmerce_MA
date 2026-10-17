@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../helpers/app_colors.dart';
 
-/// A production-ready, memory-optimized image widget that intelligently
-/// handles both local assets and network URLs with graceful fallbacks.
+/// Image widget that handles both local assets and network URLs with fallbacks.
 class AppImage extends StatelessWidget {
   final String imagePath;
   final String? fallbackUrl;

@@ -4,8 +4,6 @@ import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../models/category.dart';
 
-/// Clean, human-crafted horizontal category selector.
-/// Uses sharp, minimal line-art icons and balanced padding inspired by modern luxury e-commerce.
 class CategoryHorizontalList extends StatelessWidget {
   final List<Subcategory> subcategories;
   final ValueChanged<Subcategory> onSubCategoryTap;
@@ -16,35 +14,68 @@ class CategoryHorizontalList extends StatelessWidget {
     required this.onSubCategoryTap,
   });
 
-  /// Maps category name to a clean, crisp outlined vector icon.
   static Widget _buildCategoryIcon(String name) {
     final lower = name.toLowerCase();
 
     if (lower.contains('discount') || lower.contains('sale')) {
-      return const Icon(Icons.percent_rounded, size: 22, color: AppColors.black);
+      return const Icon(
+        Icons.percent_rounded,
+        size: 22,
+        color: AppColors.black,
+      );
     }
-    if (lower.contains('t-shirt') || lower.contains('shirt') || lower.contains('tee')) {
-      return const Icon(Icons.checkroom_outlined, size: 23, color: AppColors.black);
+    if (lower.contains('t-shirt') ||
+        lower.contains('shirt') ||
+        lower.contains('tee')) {
+      return const Icon(
+        Icons.checkroom_outlined,
+        size: 23,
+        color: AppColors.black,
+      );
     }
     if (lower.contains('hoodie') || lower.contains('sweat')) {
-      return const Icon(Icons.dry_cleaning_outlined, size: 22, color: AppColors.black);
+      return const Icon(
+        Icons.dry_cleaning_outlined,
+        size: 22,
+        color: AppColors.black,
+      );
     }
     if (lower.contains('hat') || lower.contains('cap')) {
-      return const Icon(Icons.face_retouching_natural_outlined, size: 22, color: AppColors.black);
+      return const Icon(
+        Icons.face_retouching_natural_outlined,
+        size: 22,
+        color: AppColors.black,
+      );
     }
     if (lower.contains('dress')) {
       return const Icon(Icons.woman_outlined, size: 23, color: AppColors.black);
     }
-    if (lower.contains('jacket') || lower.contains('coat') || lower.contains('outerwear')) {
-      return const Icon(Icons.layers_outlined, size: 22, color: AppColors.black);
+    if (lower.contains('jacket') ||
+        lower.contains('coat') ||
+        lower.contains('outerwear')) {
+      return const Icon(
+        Icons.layers_outlined,
+        size: 22,
+        color: AppColors.black,
+      );
     }
     if (lower.contains('shoe') || lower.contains('footwear')) {
-      return const Icon(Icons.snowshoeing_outlined, size: 22, color: AppColors.black);
+      return const Icon(
+        Icons.snowshoeing_outlined,
+        size: 22,
+        color: AppColors.black,
+      );
     }
     if (lower.contains('bag') || lower.contains('leather')) {
-      return const Icon(Icons.shopping_bag_outlined, size: 22, color: AppColors.black);
+      return const Icon(
+        Icons.shopping_bag_outlined,
+        size: 22,
+        color: AppColors.black,
+      );
     }
-    if (lower.contains('pant') || lower.contains('trouser') || lower.contains('denim')) {
+    if (lower.contains('pant') ||
+        lower.contains('trouser') ||
+        lower.contains('denim')) {
       return const Icon(Icons.tune_outlined, size: 22, color: AppColors.black);
     }
     if (lower.contains('decor') || lower.contains('home')) {
@@ -54,7 +85,11 @@ class CategoryHorizontalList extends StatelessWidget {
       return const Icon(Icons.spa_outlined, size: 22, color: AppColors.black);
     }
 
-    return const Icon(Icons.grid_view_outlined, size: 22, color: AppColors.black);
+    return const Icon(
+      Icons.grid_view_outlined,
+      size: 22,
+      color: AppColors.black,
+    );
   }
 
   @override
@@ -82,7 +117,6 @@ class CategoryHorizontalList extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Clean rounded container matching the design system
                     Container(
                       width: 58,
                       height: 58,
@@ -101,9 +135,7 @@ class CategoryHorizontalList extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Center(
-                        child: _buildCategoryIcon(sub.name),
-                      ),
+                      child: Center(child: _buildCategoryIcon(sub.name)),
                     ),
                     const SizedBox(height: 7),
                     Text(

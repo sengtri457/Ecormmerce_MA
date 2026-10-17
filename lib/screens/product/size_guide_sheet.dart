@@ -50,7 +50,6 @@ class SizeGuideSheet extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Mannequin Measurement Visual Box (Matching Figma size-guide node)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -96,7 +95,6 @@ class SizeGuideSheet extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Sizing Table
             Table(
               border: TableBorder.all(color: AppColors.border, width: 1),
               children: [
