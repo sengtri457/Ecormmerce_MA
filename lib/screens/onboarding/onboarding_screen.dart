@@ -31,7 +31,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // Background PageView with Images
           PageView.builder(
             controller: _pageController,
             itemCount: items.length,
@@ -48,9 +47,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Image.network(
                     item.image,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(color: AppColors.surfaceSubtle),
+                    errorBuilder: (context, error, stackTrace) =>
+                        Container(color: AppColors.surfaceSubtle),
                   ),
-                  // Dark Vignette Gradient
                   DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -69,8 +68,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             },
           ),
-
-          // Top Bar with Skip Button
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -108,8 +105,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-
-          // Bottom Content & Navigation
           Positioned(
             left: 24,
             right: 24,
@@ -118,7 +113,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Step Indicator Dots
                 Row(
                   children: List.generate(items.length, (index) {
                     final isActive = _currentIndex == index;
@@ -128,15 +122,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 4,
                       width: isActive ? 32 : 12,
                       decoration: BoxDecoration(
-                        color: isActive ? AppColors.white : AppColors.white.withValues(alpha: 0.4),
+                        color: isActive
+                            ? AppColors.white
+                            : AppColors.white.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     );
                   }),
                 ),
                 const SizedBox(height: 24),
-
-                // Title
                 Text(
                   items[_currentIndex].title,
                   style: AppTypography.displayMedium.copyWith(
@@ -145,8 +139,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                // Subtitle
                 Text(
                   items[_currentIndex].subtitle,
                   style: AppTypography.bodyMedium.copyWith(
@@ -154,10 +146,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-
-                // CTA Button
                 AppButton(
-                  text: _currentIndex == items.length - 1 ? 'GET STARTED' : 'CONTINUE',
+                  text: _currentIndex == items.length - 1
+                      ? 'GET STARTED'
+                      : 'CONTINUE',
                   variant: AppButtonVariant.primary,
                   onPressed: () {
                     if (_currentIndex < items.length - 1) {

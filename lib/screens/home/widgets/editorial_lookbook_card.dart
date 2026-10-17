@@ -5,7 +5,7 @@ import '../../../models/department_content.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_image.dart';
 
-/// Full-width editorial lookbook showcase card.
+/// Lookbook showcase card.
 class EditorialLookbookCard extends StatelessWidget {
   final LookbookConfig lookbook;
   final VoidCallback onViewLookbook;

@@ -4,7 +4,7 @@ import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../models/product.dart';
 
-/// Clean editorial expansion accordion sections (Details, Size & Fit, Delivery & Returns).
+/// Expansion accordion sections (Details, Size & Fit, Delivery & Returns).
 class ProductAccordionSection extends StatelessWidget {
   final Product product;
   final VoidCallback onOpenSizeGuide;
@@ -21,7 +21,6 @@ class ProductAccordionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Complimentary Delivery & Return Assurance
         Padding(
           padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.lg, AppSpacing.lg, AppSpacing.sm),
           child: Container(
@@ -52,7 +51,6 @@ class ProductAccordionSection extends StatelessWidget {
 
         const SizedBox(height: AppSpacing.md),
 
-        // 1. THE DETAIL
         _buildAccordionItem(
           context,
           title: 'THE DETAIL',
@@ -82,7 +80,6 @@ class ProductAccordionSection extends StatelessWidget {
           ),
         ),
 
-        // 2. SIZE & FIT
         _buildAccordionItem(
           context,
           title: 'SIZE & FIT',
@@ -119,7 +116,6 @@ class ProductAccordionSection extends StatelessWidget {
           ),
         ),
 
-        // 3. DELIVERY & RETURNS
         _buildAccordionItem(
           context,
           title: 'DELIVERY & RETURNS',
@@ -144,7 +140,6 @@ class ProductAccordionSection extends StatelessWidget {
           ),
         ),
 
-        // 4. CUSTOMER CARE
         _buildAccordionItem(
           context,
           title: 'CUSTOMER CARE',

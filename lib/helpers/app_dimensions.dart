@@ -1,5 +1,3 @@
-/// Clean, standard design tokens for spacing and radii across the MA Studio app.
-/// Eliminates hardcoded numbers and enforces consistent visual cadence.
 class AppSpacing {
   AppSpacing._();
 

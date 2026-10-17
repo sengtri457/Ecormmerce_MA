@@ -6,13 +6,14 @@ import '../../../models/product.dart';
 import '../../../services/mock_data_service.dart';
 import '../../../widgets/app_button.dart';
 
-/// Modal bottom sheet for selecting product size from the Wishlist screen.
-/// Matches the high-end luxury aesthetic in the design specifications.
+/// Size picker bottom sheet with wheel selector.
 class SizePickerBottomSheet extends StatefulWidget {
   final Product product;
   final String? initialSize;
   final ValueChanged<String>? onSizeSelected;
   final VoidCallback? onGoToBag;
+  final bool addToBagOnConfirm;
+  final String? confirmButtonText;
 
   const SizePickerBottomSheet({
     super.key,
@@ -20,6 +21,8 @@ class SizePickerBottomSheet extends StatefulWidget {
     this.initialSize,
     this.onSizeSelected,
     this.onGoToBag,
+    this.addToBagOnConfirm = true,
+    this.confirmButtonText,
   });
 
   static Future<String?> show(
@@ -27,6 +30,8 @@ class SizePickerBottomSheet extends StatefulWidget {
     required Product product,
     String? initialSize,
     VoidCallback? onGoToBag,
+    bool addToBagOnConfirm = true,
+    String? confirmButtonText,
   }) {
     return showModalBottomSheet<String>(
       context: context,
@@ -36,6 +41,8 @@ class SizePickerBottomSheet extends StatefulWidget {
         product: product,
         initialSize: initialSize,
         onGoToBag: onGoToBag,
+        addToBagOnConfirm: addToBagOnConfirm,
+        confirmButtonText: confirmButtonText,
       ),
     );
   }
@@ -63,39 +70,44 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
     }
   }
 
-  void _handleAddToBag() {
+  void _handleConfirm() {
     final selectedSize = _sizes[_selectedIndex];
-    final selectedColor = widget.product.colors.isNotEmpty
-        ? widget.product.colors.first.name
-        : 'Standard';
+    if (widget.addToBagOnConfirm) {
+      final selectedColor = widget.product.colors.isNotEmpty
+          ? widget.product.colors.first.name
+          : 'Standard';
 
-    MockDataService().addToCart(
-      widget.product,
-      color: selectedColor,
-      size: selectedSize,
-      quantity: 1,
-    );
+      MockDataService().addToCart(
+        widget.product,
+        color: selectedColor,
+        size: selectedSize,
+        quantity: 1,
+      );
 
-    widget.onSizeSelected?.call(selectedSize);
-    Navigator.pop(context, selectedSize);
+      widget.onSizeSelected?.call(selectedSize);
+      Navigator.pop(context, selectedSize);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Added "${widget.product.title}" ($selectedSize) to bag',
-          style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Added "${widget.product.title}" ($selectedSize) to bag',
+            style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+          ),
+          backgroundColor: AppColors.black,
+          duration: const Duration(seconds: 2),
+          action: widget.onGoToBag != null
+              ? SnackBarAction(
+                  label: 'GO TO BAG',
+                  textColor: AppColors.white,
+                  onPressed: widget.onGoToBag!,
+                )
+              : null,
         ),
-        backgroundColor: AppColors.black,
-        duration: const Duration(seconds: 2),
-        action: widget.onGoToBag != null
-            ? SnackBarAction(
-                label: 'GO TO BAG',
-                textColor: AppColors.white,
-                onPressed: widget.onGoToBag!,
-              )
-            : null,
-      ),
-    );
+      );
+    } else {
+      widget.onSizeSelected?.call(selectedSize);
+      Navigator.pop(context, selectedSize);
+    }
   }
 
   @override
@@ -111,7 +123,6 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header: Title centered with close button on right
             Stack(
               alignment: Alignment.center,
               children: [
@@ -139,7 +150,6 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
             ),
             const SizedBox(height: 20),
 
-            // Cupertino Picker for interactive luxury wheel selection
             SizedBox(
               height: 140,
               child: CupertinoPicker(
@@ -179,11 +189,11 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Action Button
             AppButton(
-              text: 'ADD TO BAG',
+              text: widget.confirmButtonText ??
+                  (widget.addToBagOnConfirm ? 'ADD TO BAG' : 'SELECT SIZE'),
               variant: AppButtonVariant.primary,
-              onPressed: _handleAddToBag,
+              onPressed: _handleConfirm,
             ),
           ],
         ),

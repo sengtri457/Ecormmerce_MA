@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../models/product.dart';
 import '../../../widgets/product_card.dart';
 
-/// Horizontally scrollable product feed with fixed item sizing for 60fps scrolling.
+/// Horizontally scrollable product feed.
 class ProductHorizontalList extends StatelessWidget {
   final List<Product> products;
   final ValueChanged<Product> onProductTap;

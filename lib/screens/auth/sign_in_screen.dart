@@ -64,7 +64,6 @@ class _SignInScreenState extends State<SignInScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              // Brand Heading
               Text('Sign In', style: AppTypography.displayLarge),
               const SizedBox(height: 8),
               Text(
@@ -73,7 +72,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 36),
 
-              // Email Address
               AppTextField(
                 label: 'Email Address',
                 hint: 'name@example.com',
@@ -82,7 +80,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Password with Forgot Action
               AppTextField(
                 label: 'Password',
                 hint: '••••••••',
@@ -109,7 +106,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Primary Sign In Button
               AppButton(
                 text: 'SIGN IN',
                 isLoading: _isLoading,
@@ -117,7 +113,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Or Continue With Divider
               Row(
                 children: [
                   const Expanded(
@@ -140,7 +135,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Social Auth Options
               Row(
                 children: [
                   Expanded(
@@ -179,7 +173,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 48),
 
-              // Bottom Sign Up Link
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

@@ -5,8 +5,7 @@ import '../helpers/app_typography.dart';
 
 enum AppButtonVariant { primary, secondary, outlined }
 
-/// Design-system button adhering to the MA Studio luxury aesthetic.
-/// Supports standard filled, subtle secondary, and outlined borders.
+/// Button widget with primary, secondary, and outlined variants.
 class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -35,7 +34,7 @@ class AppButton extends StatelessWidget {
     this.fontSize,
   });
 
-  /// Factory constructor for clean, luxury outlined buttons (e.g. "Shop Now").
+  /// Factory constructor for outlined buttons.
   factory AppButton.outlined({
     Key? key,
     required String text,

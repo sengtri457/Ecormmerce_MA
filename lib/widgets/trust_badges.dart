@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_typography.dart';
 
-/// Reusable luxury service guarantee strip (express delivery, returns, concierge).
+/// Service guarantee strip (delivery, returns, security).
 class TrustBadges extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final bool showTopBorder;

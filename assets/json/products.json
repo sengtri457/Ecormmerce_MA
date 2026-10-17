@@ -27,9 +27,10 @@
     ],
     "sizes": ["XS", "S", "M", "L"],
     "images": [
-      "assets/images/products/product1.avif",
-      "assets/images/products/image1.jpg",
-      "assets/images/products/image2.jpg"
+      "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/872e7bf2-7baa-433a-94a6-bcae4fc283f6/M+ACG+CLOUD+TREKKER+PNT.png",
+      "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/3373d20a-31fe-49ff-af29-5233379598c9/M+ACG+CLOUD+TREKKER+PNT.png",
+      "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/1cedff5f-d641-45f0-ab6e-ec3eee350cfe/M+ACG+CLOUD+TREKKER+PNT.png",
+      "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/faa628ed-7571-4a0c-af16-9e40b9c5fcc1/M+ACG+CLOUD+TREKKER+PNT.png"
     ]
   },
   {
