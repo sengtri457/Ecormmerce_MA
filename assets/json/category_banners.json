@@ -1,14 +1,42 @@
 [
   {
-    "id": "tees",
-    "title": "T-SHIRT",
-    "imagePath": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvn8NXLX3qsFNq0XfRqDPjROCHZm84qP7Lv6XgQzRTnsJ98BGHD-XcH9vZ&s=100",
-    "slug": "tees"
+    "id": "accessories",
+    "title": "ACCESSORIES",
+    "image": "assets/images/category/banner1.jpg",
+    "subcategories": [
+      "All Accessories",
+      "Bags & Backpacks",
+      "Belts & Small Leather",
+      "Jewelry & Chains",
+      "Eyewear & Sunglasses",
+      "Hats & Beanies"
+    ]
   },
   {
-    "id": "hoodies",
-    "title": "HOODIES",
-    "imagePath": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6zpXrOntCX5NjvZ0HcQYjF8vBkIZLJQ5IoOvQRYMH71W6LFDjVUDv1SA&s=10g",
-    "slug": "hoodies"
+    "id": "clothing",
+    "title": "CLOTHING",
+    "image": "assets/images/category/banner3.jpg",
+
+    "subcategories": [
+      "All Clothing",
+      "T-Shirts & Tops",
+      "Hoodies & Sweatshirts",
+      "Jackets & Coats",
+      "Pants & Denim",
+      "Knitwear & Sweaters"
+    ]
+  },
+  {
+    "id": "shoes",
+    "title": "SHOES",
+    "image": "assets/images/category/banner2.jpg",
+
+    "subcategories": [
+      "All Shoes",
+      "Sneakers & Runners",
+      "Boots & Derbies",
+      "Loafers",
+      "Slides & Sandals"
+    ]
   }
 ]

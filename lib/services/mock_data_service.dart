@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../models/banner_item.dart';
 import '../models/category.dart';
@@ -16,9 +15,14 @@ class MockDataService extends ChangeNotifier {
   bool _isLoaded = false;
   bool get isLoaded => _isLoaded;
 
+  List<VisualCategory> getCategoriesForDepartment(String department) {
+    final dept = department.toLowerCase().trim();
+    return visualCategories
+        .where((c) => c.department.toLowerCase() == dept)
+        .toList();
+  }
+
   List<OnboardingItem> onboardingItems = [];
-  List<HomeBannerItem> heroBanners = [];
-  List<PromoOffer> promoOffers = [];
   List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
   List<VisualCategory> visualCategories = [];
@@ -36,53 +40,41 @@ class MockDataService extends ChangeNotifier {
     if (_isLoaded) return;
     try {
       const homeService = HomeService();
-      final bannersData = await homeService.getBannersData();
-      
-      final rawOnboarding = bannersData['onboarding'] as List? ?? const [];
-      onboardingItems = rawOnboarding
-          .whereType<Map<String, dynamic>>()
-          .map((x) => OnboardingItem.fromJson(x))
-          .toList();
-
-      final rawBanners = bannersData['home_hero_banners'] as List? ?? const [];
-      heroBanners = rawBanners
-          .whereType<Map<String, dynamic>>()
-          .map((x) => HomeBannerItem.fromJson(x))
-          .toList();
-
-      final rawOffers = bannersData['promo_offers'] as List? ?? const [];
-      promoOffers = rawOffers
-          .whereType<Map<String, dynamic>>()
-          .map((x) => PromoOffer.fromJson(x))
-          .toList();
-
+      onboardingItems = await homeService.getOnboardingItems();
       categoryBanners = await homeService.getCategoryBanners();
       categories = await homeService.getCategories();
       visualCategories = await homeService.getCategoryProducts();
       products = await homeService.getProducts();
       featureProducts = await homeService.getFeatureProducts();
 
-      final cartString = await rootBundle.loadString('assets/json/cart.json');
+      final cartString = await HomeService.loadString('assets/json/cart.json');
       final cartJson = json.decode(cartString) as Map<String, dynamic>;
       final rawCart = cartJson['items'] as List? ?? const [];
       cartItems = rawCart
           .whereType<Map<String, dynamic>>()
           .map((x) => CartItem.fromJson(x))
           .toList();
-      if (cartJson['shippingAddress'] != null && cartJson['shippingAddress'] is Map<String, dynamic>) {
-        shippingAddress = ShippingAddress.fromJson(cartJson['shippingAddress'] as Map<String, dynamic>);
+      if (cartJson['shippingAddress'] != null &&
+          cartJson['shippingAddress'] is Map<String, dynamic>) {
+        shippingAddress = ShippingAddress.fromJson(
+          cartJson['shippingAddress'] as Map<String, dynamic>,
+        );
       }
       promoCode = cartJson['promoCode'] as String? ?? 'FIRST20';
       discountAmount = (cartJson['discountAmount'] as num?)?.toDouble() ?? 50.0;
       shippingFee = (cartJson['shippingFee'] as num?)?.toDouble() ?? 15.0;
 
-      final profileString = await rootBundle.loadString('assets/json/user_profile.json');
+      final profileString = await HomeService.loadString(
+        'assets/json/user_profile.json',
+      );
       final profileJson = json.decode(profileString) as Map<String, dynamic>;
       userProfile = UserProfile.fromJson(profileJson);
 
       _isLoaded = true;
       notifyListeners();
-    } catch (_) {}
+    } catch (e, stackTrace) {
+      debugPrint('MockDataService initialization error: $e\n$stackTrace');
+    }
   }
 
   List<CartItem> get selectedCartItems =>
@@ -108,10 +100,13 @@ class MockDataService extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get cartSubtotal =>
-      selectedCartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  double get cartSubtotal => selectedCartItems.fold(
+    0.0,
+    (sum, item) => sum + (item.price * item.quantity),
+  );
 
-  double get effectiveShippingFee => selectedCartItems.isEmpty ? 0.0 : shippingFee;
+  double get effectiveShippingFee =>
+      selectedCartItems.isEmpty ? 0.0 : shippingFee;
 
   double get effectiveDiscountAmount {
     if (selectedCartItems.isEmpty) return 0.0;
@@ -149,9 +144,17 @@ class MockDataService extends ChangeNotifier {
     return false;
   }
 
-  void addToCart(Product product, {required String color, required String size, int quantity = 1}) {
+  void addToCart(
+    Product product, {
+    required String color,
+    required String size,
+    int quantity = 1,
+  }) {
     final existingIndex = cartItems.indexWhere(
-      (item) => item.productId == product.id && item.color == color && item.size == size,
+      (item) =>
+          item.productId == product.id &&
+          item.color == color &&
+          item.size == size,
     );
 
     if (existingIndex != -1) {

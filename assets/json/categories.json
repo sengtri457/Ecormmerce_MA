@@ -3,7 +3,6 @@
     "id": "cat_women",
     "name": "Women",
     "slug": "women",
-    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_1093,c_limit/e4be7877-7355-4f0d-853b-0d3ac355527a/women-s-shoes-clothing-accessories.jpg",
     "subcategories": [
       { "id": "w_all", "name": "All Items", "count": 240 },
       { "id": "w_dresses", "name": "Dresses", "count": 68 },
@@ -17,10 +16,8 @@
     "id": "cat_men",
     "name": "Men",
     "slug": "men",
-    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_658,c_limit/29c3b8fd-cb15-453f-9117-041e36fe4bd8/men-s-shoes-clothing-accessories.jpg",
     "subcategories": [
       { "id": "m_all", "name": "All Items", "count": 180 },
-      { "id": "m_suits", "name": "Tailoring", "count": 32 },
       { "id": "m_shirts", "name": "Shirts", "count": 48 },
       { "id": "m_jackets", "name": "Outerwear", "count": 36 },
       { "id": "m_shoes", "name": "Shoes", "count": 28 },
@@ -31,7 +28,6 @@
     "id": "cat_kids",
     "name": "Kids",
     "slug": "kids",
-    "imageUrl": "https://static.nike.com/a/images/f_auto/dpr_1.2,cs_srgb/h_2396,c_limit/b6e08a98-30ab-42ac-aefb-3eb192a832a7/nike-kids.png",
     "subcategories": [
       { "id": "k_all", "name": "All Items", "count": 95 },
       { "id": "k_girls", "name": "Girls", "count": 45 },
@@ -43,7 +39,6 @@
     "id": "cat_home",
     "name": "Home",
     "slug": "home",
-    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80",
     "subcategories": [
       { "id": "h_all", "name": "All Items", "count": 64 },
       { "id": "h_decor", "name": "Interior Decor", "count": 28 },
@@ -55,7 +50,6 @@
     "id": "cat_beauty",
     "name": "Beauty",
     "slug": "beauty",
-    "imageUrl": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80",
     "subcategories": [
       { "id": "b_all", "name": "All Beauty", "count": 82 },
       { "id": "b_fragrance", "name": "Fragrance", "count": 30 },
