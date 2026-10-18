@@ -21,6 +21,12 @@ class ShoppingBagScreen extends StatefulWidget {
 class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
   final _promoController = TextEditingController(text: 'FIRST20');
 
+  @override
+  void dispose() {
+    _promoController.dispose();
+    super.dispose();
+  }
+
   void _navigateToWishlist() {
     if (widget.onNavigateToWishlist != null) {
       widget.onNavigateToWishlist!();

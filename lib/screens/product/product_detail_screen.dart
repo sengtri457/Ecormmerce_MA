@@ -4,6 +4,7 @@ import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../models/product.dart';
 import '../../services/mock_data_service.dart';
+import '../bag/shopping_bag_screen.dart';
 import '../wishlist/widgets/size_picker_bottom_sheet.dart';
 import 'size_guide_sheet.dart';
 import 'widgets/product_accordion_section.dart';
@@ -112,7 +113,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         action: SnackBarAction(
           label: 'VIEW BAG',
           textColor: AppColors.white,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ShoppingBagScreen()),
+            );
+          },
         ),
       ),
     );

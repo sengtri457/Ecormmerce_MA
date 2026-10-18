@@ -18,6 +18,13 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController(text: 'password123');
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void _handleSignIn() {
     setState(() => _isLoading = true);
     Future.delayed(const Duration(milliseconds: 600), () {
