@@ -1,4 +1,4 @@
-﻿{
+{
   "exclusive_offers_title": "EXCLUSIVE OFFERS",
   "best_sellings_title": "BEST SELLING",
   "features_title": "EXPLORE CATEGORIES",
@@ -40,7 +40,7 @@
     {
       "id": 2,
       "title": "Pleated Silk Maxi Dress",
-      "brand": "ATELIER Ã‰PURE",
+      "brand": "ATELIER ÉPURE",
       "category": "women",
       "subcategory": "w_dresses",
       "price": 340.0,
@@ -169,7 +169,7 @@
       ],
       "sizes": ["XS", "S", "M", "L"],
       "images": [
-        "assets/images/products/product1.avif",
+        "assets/images/products/product1.jpg",
         "assets/images/products/image1.jpg",
         "assets/images/products/image2.jpg"
       ]
@@ -242,7 +242,7 @@
     {
       "id": 8,
       "title": "Raw Hem Selvedge Denim Trouser",
-      "brand": "ATELIER Ã‰PURE",
+      "brand": "ATELIER ÉPURE",
       "category": "men",
       "subcategory": "m_suits",
       "price": 110.0,
@@ -309,7 +309,7 @@
     {
       "id": 6,
       "title": "Essential Boxy Fit Pocket Tee",
-      "brand": "ATELIER Ã‰PURE",
+      "brand": "ATELIER ÉPURE",
       "category": "men",
       "subcategory": "m_shirts",
       "price": 38.0,
@@ -367,7 +367,7 @@
       ],
       "sizes": ["XS", "S", "M", "L"],
       "images": [
-        "assets/images/products/product1.avif",
+        "assets/images/products/product1.jpg",
         "assets/images/products/image1.jpg",
         "assets/images/products/image2.jpg"
       ]

@@ -32,7 +32,7 @@ class CategoryItem {
     required this.id,
     required this.name,
     required this.slug,
-    required this.imageUrl,
+    this.imageUrl = '',
     required this.subcategories,
   });
 
@@ -53,16 +53,20 @@ class CategoryItem {
 
 class VisualCategory {
   final String id;
+  final String department;
   final String title;
   final String image;
   final String fallback;
+  final int itemCount;
   final List<String> subcategories;
 
   const VisualCategory({
     required this.id,
+    this.department = 'women',
     required this.title,
     required this.image,
-    required this.fallback,
+    this.fallback = '',
+    this.itemCount = 0,
     required this.subcategories,
   });
 
@@ -70,18 +74,22 @@ class VisualCategory {
     final rawSub = json['subcategories'] as List? ?? const [];
     return VisualCategory(
       id: json['id'] as String? ?? '',
+      department: json['department'] as String? ?? 'women',
       title: json['title'] as String? ?? '',
       image: json['image'] as String? ?? '',
       fallback: json['fallback'] as String? ?? '',
+      itemCount: (json['itemCount'] as num?)?.toInt() ?? 0,
       subcategories: rawSub.map((e) => e.toString()).toList(),
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'department': department,
     'title': title,
     'image': image,
     'fallback': fallback,
+    'itemCount': itemCount,
     'subcategories': subcategories,
   };
 }

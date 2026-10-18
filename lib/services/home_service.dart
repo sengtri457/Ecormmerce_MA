@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import '../models/banner_item.dart';
 import '../models/category.dart';
@@ -7,8 +8,22 @@ import '../models/product.dart';
 class HomeService {
   const HomeService();
 
+  static Future<String> loadString(String path) async {
+    try {
+      return await rootBundle.loadString(path);
+    } catch (_) {
+      try {
+        final file = File(path);
+        if (await file.exists()) {
+          return await file.readAsString();
+        }
+      } catch (_) {}
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>> getBannersData() async {
-    final response = await rootBundle.loadString('assets/json/banners.json');
+    final response = await loadString('assets/json/banners.json');
     return json.decode(response) as Map<String, dynamic>;
   }
 
@@ -21,26 +36,8 @@ class HomeService {
         .toList();
   }
 
-  Future<List<HomeBannerItem>> getHeroBanners() async {
-    final data = await getBannersData();
-    final list = data['home_hero_banners'] as List? ?? const [];
-    return list
-        .whereType<Map<String, dynamic>>()
-        .map((e) => HomeBannerItem.fromJson(e))
-        .toList();
-  }
-
-  Future<List<PromoOffer>> getPromoOffers() async {
-    final data = await getBannersData();
-    final list = data['promo_offers'] as List? ?? const [];
-    return list
-        .whereType<Map<String, dynamic>>()
-        .map((e) => PromoOffer.fromJson(e))
-        .toList();
-  }
-
   Future<List<CategoryItem>> getCategories() async {
-    final response = await rootBundle.loadString('assets/json/categories.json');
+    final response = await loadString('assets/json/categories.json');
     final list = json.decode(response) as List? ?? const [];
     return list
         .whereType<Map<String, dynamic>>()
@@ -49,7 +46,7 @@ class HomeService {
   }
 
   Future<List<Product>> getProducts() async {
-    final response = await rootBundle.loadString('assets/json/products.json');
+    final response = await loadString('assets/json/products.json');
     final list = json.decode(response) as List? ?? const [];
     return list
         .whereType<Map<String, dynamic>>()
@@ -58,7 +55,7 @@ class HomeService {
   }
 
   Future<FeatureProduct> getFeatureProducts() async {
-    final response = await rootBundle.loadString(
+    final response = await loadString(
       'assets/json/feature_products.json',
     );
     final map = json.decode(response) as Map<String, dynamic>;
@@ -66,43 +63,28 @@ class HomeService {
   }
 
   Future<List<VisualCategory>> getCategoryProducts() async {
-    String? rawData;
     try {
-      rawData = await rootBundle.loadString('assets/json/categoryProducts.json');
+      final rawData = await loadString('assets/json/categoryProducts.json');
+      final list = json.decode(rawData) as List? ?? const [];
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map((e) => VisualCategory.fromJson(e))
+          .toList();
     } catch (_) {
-      try {
-        rawData = await rootBundle.loadString('assets/json/categoryProducs.json');
-      } catch (_) {
-        return const [];
-      }
+      return const [];
     }
-    final list = json.decode(rawData) as List? ?? const [];
-    return list
-        .whereType<Map<String, dynamic>>()
-        .map((e) => VisualCategory.fromJson(e))
-        .toList();
   }
 
   Future<List<CategoryBannerItem>> getCategoryBanners() async {
     try {
-      final response = await rootBundle.loadString('assets/json/category_banners.json');
+      final response = await loadString('assets/json/category_banners.json');
       final list = json.decode(response) as List? ?? const [];
       return list
           .whereType<Map<String, dynamic>>()
           .map((e) => CategoryBannerItem.fromJson(e))
           .toList();
     } catch (_) {
-      try {
-        final data = await getBannersData();
-        final list = data['category_banners'] as List? ?? const [];
-        return list
-            .whereType<Map<String, dynamic>>()
-            .map((e) => CategoryBannerItem.fromJson(e))
-            .toList();
-      } catch (_) {
-        return const [];
-      }
+      return const [];
     }
   }
 }
-

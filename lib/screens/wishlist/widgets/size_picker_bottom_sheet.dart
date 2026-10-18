@@ -54,6 +54,7 @@ class SizePickerBottomSheet extends StatefulWidget {
 class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
   late List<String> _sizes;
   late int _selectedIndex;
+  late final FixedExtentScrollController _scrollController;
 
   @override
   void initState() {
@@ -68,6 +69,15 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
     } else {
       _selectedIndex = 0;
     }
+    _scrollController = FixedExtentScrollController(
+      initialItem: _selectedIndex,
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _handleConfirm() {
@@ -154,9 +164,7 @@ class _SizePickerBottomSheetState extends State<SizePickerBottomSheet> {
               height: 140,
               child: CupertinoPicker(
                 itemExtent: 44,
-                scrollController: FixedExtentScrollController(
-                  initialItem: _selectedIndex,
-                ),
+                scrollController: _scrollController,
                 selectionOverlay: Container(
                   decoration: const BoxDecoration(
                     border: Border(

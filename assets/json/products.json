@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "id": 1,
     "title": "Structured Oversized Wool Blazer",
@@ -36,7 +36,7 @@
   {
     "id": 2,
     "title": "Pleated Silk Maxi Dress",
-    "brand": "ATELIER Ã‰PURE",
+    "brand": "ATELIER ÉPURE",
     "category": "women",
     "subcategory": "w_dresses",
     "price": 340.0,
@@ -62,7 +62,7 @@
     "sizes": ["XS", "S", "M", "L"],
     "images": [
       "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800\u0026auto=format\u0026fit=crop\u0026q=80",
-      "assets/images/products/product1.avif"
+      "assets/images/products/product1.jpg"
     ]
   },
   {
@@ -165,7 +165,7 @@
   {
     "id": 6,
     "title": "Essential Boxy Fit Pocket Tee",
-    "brand": "ATELIER Ã‰PURE",
+    "brand": "ATELIER ÉPURE",
     "category": "men",
     "subcategory": "m_shirts",
     "price": 38.0,
@@ -231,7 +231,7 @@
   {
     "id": 8,
     "title": "Raw Hem Selvedge Denim Trouser",
-    "brand": "ATELIER Ã‰PURE",
+    "brand": "ATELIER ÉPURE",
     "category": "men",
     "subcategory": "m_suits",
     "price": 110.0,
@@ -391,7 +391,7 @@
   {
     "id": 13,
     "title": "Botanical Restorative Face Elixir",
-    "brand": "MA BEAUTÃ‰",
+    "brand": "MA BEAUTÉ",
     "category": "beauty",
     "subcategory": "b_skincare",
     "price": 68.0,
@@ -419,7 +419,7 @@
   {
     "id": 14,
     "title": "Archival Santal Eau de Parfum",
-    "brand": "MA BEAUTÃ‰",
+    "brand": "MA BEAUTÉ",
     "category": "beauty",
     "subcategory": "b_fragrance",
     "price": 125.0,
