@@ -68,8 +68,23 @@ class UserProfileScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 46,
                             backgroundColor: AppColors.surfaceSubtle,
-                            backgroundImage: profile != null
+                            backgroundImage:
+                                (profile != null &&
+                                    profile.avatarUrl.isNotEmpty)
                                 ? NetworkImage(profile.avatarUrl)
+                                : null,
+                            onBackgroundImageError:
+                                (profile != null &&
+                                    profile.avatarUrl.isNotEmpty)
+                                ? (_, _) {}
+                                : null,
+                            child:
+                                (profile == null || profile.avatarUrl.isEmpty)
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 46,
+                                    color: AppColors.textSecondary,
+                                  )
                                 : null,
                           ),
                           Positioned(
@@ -98,7 +113,7 @@ class UserProfileScreen extends StatelessWidget {
                     const SizedBox(height: 14),
 
                     Text(
-                      profile?.fullName ?? 'Sengtri Chan',
+                      profile?.fullName ?? 'Sengtri bun',
                       style: AppTypography.headingMedium.copyWith(fontSize: 18),
                     ),
                     const SizedBox(height: 4),

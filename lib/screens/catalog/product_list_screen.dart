@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
+import '../../models/product.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/product_card.dart';
 import '../product/product_detail_screen.dart';
@@ -9,11 +10,15 @@ import 'filter_bottom_sheet.dart';
 class ProductListScreen extends StatefulWidget {
   final String categorySlug;
   final String categoryTitle;
+  final String? initialSubcategory;
+  final String? initialPillar;
 
   const ProductListScreen({
     super.key,
     this.categorySlug = 'women',
     this.categoryTitle = 'Women Collection',
+    this.initialSubcategory,
+    this.initialPillar,
   });
 
   @override
@@ -23,18 +28,58 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isGridView = true;
-  String _selectedSubcategory = 'all';
+  late String _selectedSubcategory;
   RangeValues _priceRange = const RangeValues(0, 600);
   String? _sizeFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedSubcategory = widget.initialSubcategory ?? 'all';
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  bool _matchesPillar(Product p, String pillar) {
+    final sub = p.subcategory.toLowerCase();
+    final title = p.title.toLowerCase();
+    if (pillar == 'clothes' || pillar == 'clothing') {
+      return sub.contains('coat') || sub.contains('dress') || sub.contains('top') ||
+             sub.contains('shirt') || sub.contains('jacket') || sub.contains('suit') ||
+             sub.contains('pant') || sub.contains('hoodie') || sub.contains('knit') ||
+             sub.contains('boy') || sub.contains('girl');
+    } else if (pillar == 'shoes') {
+      return sub.contains('shoe') || sub.contains('footwear') || title.contains('shoe') ||
+             title.contains('boot') || title.contains('sneaker') || title.contains('derby');
+    } else if (pillar == 'accessories') {
+      return sub.contains('bag') || sub.contains('leather') || sub.contains('accessory') ||
+             sub.contains('hat') || sub.contains('belt') || title.contains('bag') ||
+             title.contains('candle');
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     final mockService = MockDataService();
     final allProducts = mockService.products;
 
-    final categoryProducts = allProducts.where((p) =>
-      widget.categorySlug == 'all' || p.category.toLowerCase() == widget.categorySlug.toLowerCase(),
-    ).toList();
+    final String slug = widget.categorySlug.toLowerCase();
+    final bool isGeneric = slug == 'all' || slug == 'clothes' || slug == 'clothing' || slug == 'shoes' || slug == 'accessories';
+
+    final categoryProducts = allProducts.where((p) {
+      if (isGeneric) {
+        if (slug != 'all') {
+          return _matchesPillar(p, slug);
+        }
+        return true;
+      }
+      return p.category.toLowerCase() == slug;
+    }).toList();
 
     final Set<String> availableSubIds = categoryProducts.map((p) => p.subcategory).where((s) => s.isNotEmpty).toSet();
 
@@ -52,18 +97,25 @@ class _ProductListScreenState extends State<ProductListScreen> {
     ];
 
     final filtered = allProducts.where((p) {
-      final matchesCategory = widget.categorySlug == 'all' ||
-          p.category.toLowerCase() == widget.categorySlug.toLowerCase();
+      final matchesCategory = isGeneric
+          ? (slug == 'all' ? true : _matchesPillar(p, slug))
+          : p.category.toLowerCase() == slug;
+
+      final matchesPillarConstraint = widget.initialPillar == null ||
+          _matchesPillar(p, widget.initialPillar!.toLowerCase());
 
       final matchesSearch = _searchController.text.isEmpty ||
           p.title.toLowerCase().contains(_searchController.text.toLowerCase()) ||
           p.brand.toLowerCase().contains(_searchController.text.toLowerCase());
 
-      final matchesSub = _selectedSubcategory == 'all' || p.subcategory == _selectedSubcategory;
+      final matchesSub = _selectedSubcategory == 'all' ||
+          p.subcategory.toLowerCase() == _selectedSubcategory.toLowerCase() ||
+          p.subcategory.toLowerCase().contains(_selectedSubcategory.toLowerCase());
+
       final matchesPrice = p.price >= _priceRange.start && p.price <= _priceRange.end;
       final matchesSize = _sizeFilter == null || p.sizes.contains(_sizeFilter);
 
-      return matchesCategory && matchesSearch && matchesSub && matchesPrice && matchesSize;
+      return matchesCategory && matchesPillarConstraint && matchesSearch && matchesSub && matchesPrice && matchesSize;
     }).toList();
 
     return Scaffold(
@@ -188,6 +240,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           builder: (_) => FilterBottomSheet(
                             initialPrice: _priceRange,
                             initialSize: _sizeFilter,
+                            availableCategories: subcategories.map((s) => s['name']!).toList(),
                             onApply: (price, cat, size) {
                               setState(() {
                                 _priceRange = price;

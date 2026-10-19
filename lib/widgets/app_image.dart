@@ -24,25 +24,32 @@ class AppImage extends StatelessWidget {
     this.errorWidget,
   });
 
-  bool get isAsset => imagePath.startsWith('assets/');
+  String get _cleanPath =>
+      imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+
+  bool get isAsset => _cleanPath.startsWith('assets/');
 
   @override
   Widget build(BuildContext context) {
     Widget image;
+    final path = _cleanPath;
 
-    if (imagePath.isEmpty) {
+    if (path.isEmpty) {
       image = _buildPlaceholder();
     } else if (isAsset) {
       image = Image.asset(
-        imagePath,
+        path,
         width: width,
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
           if (fallbackUrl != null && fallbackUrl!.isNotEmpty) {
-            if (fallbackUrl!.startsWith('assets/')) {
+            final cleanFallback = fallbackUrl!.startsWith('/')
+                ? fallbackUrl!.substring(1)
+                : fallbackUrl!;
+            if (cleanFallback.startsWith('assets/')) {
               return Image.asset(
-                fallbackUrl!,
+                cleanFallback,
                 width: width,
                 height: height,
                 fit: fit,
@@ -55,7 +62,7 @@ class AppImage extends StatelessWidget {
         },
       );
     } else {
-      image = _buildNetworkImage(imagePath);
+      image = _buildNetworkImage(path);
     }
 
     if (borderRadius != null) {

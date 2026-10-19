@@ -39,11 +39,21 @@ class QuantityPickerBottomSheet extends StatefulWidget {
 
 class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
   late int _selectedQuantity;
+  late final FixedExtentScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _selectedQuantity = widget.initialQuantity.clamp(1, widget.maxQuantity);
+    _scrollController = FixedExtentScrollController(
+      initialItem: _selectedQuantity - 1,
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _handleConfirm() {
@@ -97,9 +107,7 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
               height: 140,
               child: CupertinoPicker(
                 itemExtent: 44,
-                scrollController: FixedExtentScrollController(
-                  initialItem: _selectedQuantity - 1,
-                ),
+                scrollController: _scrollController,
                 selectionOverlay: Container(
                   decoration: const BoxDecoration(
                     border: Border(

@@ -20,6 +20,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _agreeTerms = true;
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   void _handleSignUp() {
     setState(() => _isLoading = true);
     Future.delayed(const Duration(milliseconds: 600), () {
