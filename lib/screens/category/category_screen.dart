@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
-import '../../models/category.dart';
+import '../../models/category_item.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_image.dart';
@@ -61,7 +61,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void _openFilter() {
     final mockService = MockDataService();
-    final currentDeptCategories = mockService.getCategoriesForDepartment(_selectedDepartment);
+    final currentDeptCategories = mockService.getCategoriesForDepartment(
+      _selectedDepartment,
+    );
     final categoryNames = currentDeptCategories.isNotEmpty
         ? currentDeptCategories.map((c) => c.title).toList()
         : const ['CLOTHES', 'SHOES', 'ACCESSORIES'];
@@ -344,7 +346,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  Widget _buildPillarsList(List<VisualCategory> categories) {
+  Widget _buildPillarsList(List<CategoryItem> categories) {
     return Column(
       children: categories.map((cat) {
         return Container(
@@ -470,12 +472,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   spacing: 8,
                   runSpacing: 8,
                   children: cat.subcategories.map((sub) {
-                    final isAll = sub.startsWith('All');
+                    final subName = sub.name;
+                    final isAll = subName.startsWith('All');
                     return InkWell(
                       onTap: () => _navigateToCatalog(
                         slug: _selectedDepartment,
-                        title: sub,
-                        subcategory: isAll ? null : sub,
+                        title: subName,
+                        subcategory: isAll ? null : subName,
                         pillar: cat.id,
                       ),
                       borderRadius: BorderRadius.circular(4),
@@ -492,7 +495,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         ),
                         child: Text(
-                          sub,
+                          subName,
                           style: AppTypography.bodySmall.copyWith(
                             fontSize: 11,
                             fontWeight: isAll
@@ -515,7 +518,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  Widget _buildPillarsGrid(List<VisualCategory> categories) {
+  Widget _buildPillarsGrid(List<CategoryItem> categories) {
     // Symmetrical 2x2 layout: 3 Category Pillars + 1 Editorial New Arrival Card
     final cards = <Widget>[
       ...categories.take(3).map((cat) {

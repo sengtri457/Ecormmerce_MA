@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
-import '../../models/category.dart';
+import '../../models/category_item.dart';
 import '../../models/product.dart';
 import '../../services/department_repository.dart';
 import '../../services/mock_data_service.dart';
@@ -137,13 +137,21 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (isAccessoryTab) {
           activeCategoryTitle = 'ACCESSORY STYLES';
           final cat = allCategories
-              .where((c) => c.slug.contains('bag') || c.slug.contains('women'))
+              .where(
+                (c) =>
+                    c.id == 'accessories' ||
+                    c.slug.contains('bag') ||
+                    c.slug.contains('women'),
+              )
               .firstOrNull;
           subcategories = cat?.subcategories ?? const [];
         } else {
           final cat = allCategories
               .where(
-                (c) => c.slug.toLowerCase() == _selectedGender.toLowerCase(),
+                (c) =>
+                    c.department.toLowerCase() ==
+                        _selectedGender.toLowerCase() ||
+                    c.slug.toLowerCase() == _selectedGender.toLowerCase(),
               )
               .firstOrNull;
           activeCategoryTitle = cat?.name ?? _selectedGender.toUpperCase();

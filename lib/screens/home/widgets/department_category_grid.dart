@@ -50,7 +50,9 @@ class DepartmentCategoryGrid extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Icon(
                               Icons.image_not_supported_outlined,
-                              color: AppColors.placeholder.withValues(alpha: 0.5),
+                              color: AppColors.placeholder.withValues(
+                                alpha: 0.5,
+                              ),
                               size: 32,
                             ),
                           );

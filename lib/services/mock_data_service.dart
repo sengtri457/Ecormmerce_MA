@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../models/banner_item.dart';
-import '../models/category.dart';
+import '../models/category_item.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
 import '../models/user_profile.dart';
@@ -15,17 +15,15 @@ class MockDataService extends ChangeNotifier {
   bool _isLoaded = false;
   bool get isLoaded => _isLoaded;
 
-  List<VisualCategory> getCategoriesForDepartment(String department) {
+  List<CategoryItem> getCategoriesForDepartment(String department) {
     final dept = department.toLowerCase().trim();
-    return visualCategories
-        .where((c) => c.department.toLowerCase() == dept)
-        .toList();
+    return categories.where((c) => c.department.toLowerCase() == dept).toList();
   }
 
   List<OnboardingItem> onboardingItems = [];
   List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
-  List<VisualCategory> visualCategories = [];
+  List<CategoryItem> get visualCategories => categories;
   List<Product> products = [];
   FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
@@ -43,7 +41,6 @@ class MockDataService extends ChangeNotifier {
       onboardingItems = await homeService.getOnboardingItems();
       categoryBanners = await homeService.getCategoryBanners();
       categories = await homeService.getCategories();
-      visualCategories = await homeService.getCategoryProducts();
       products = await homeService.getProducts();
       featureProducts = await homeService.getFeatureProducts();
 
@@ -235,11 +232,11 @@ class MockDataService extends ChangeNotifier {
     return products.where((p) => wishlistProductIds.contains(p.id)).toList();
   }
 
-  Future<List<VisualCategory>> loadCategoryProducts() async {
-    if (visualCategories.isNotEmpty) return visualCategories;
+  Future<List<CategoryItem>> loadCategoryProducts() async {
+    if (categories.isNotEmpty) return categories;
     const homeService = HomeService();
-    visualCategories = await homeService.getCategoryProducts();
+    categories = await homeService.getCategories();
     notifyListeners();
-    return visualCategories;
+    return categories;
   }
 }
