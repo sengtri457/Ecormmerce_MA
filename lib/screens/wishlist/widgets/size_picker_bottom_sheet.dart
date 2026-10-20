@@ -6,7 +6,6 @@ import '../../../models/product.dart';
 import '../../../services/mock_data_service.dart';
 import '../../../widgets/app_button.dart';
 
-/// Size picker bottom sheet with wheel selector.
 class SizePickerBottomSheet extends StatefulWidget {
   final Product product;
   final String? initialSize;

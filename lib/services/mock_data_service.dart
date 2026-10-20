@@ -23,7 +23,6 @@ class MockDataService extends ChangeNotifier {
   List<OnboardingItem> onboardingItems = [];
   List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
-  List<CategoryItem> get visualCategories => categories;
   List<Product> products = [];
   FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
@@ -104,13 +103,11 @@ class MockDataService extends ChangeNotifier {
 
   double get effectiveShippingFee =>
       selectedCartItems.isEmpty ? 0.0 : shippingFee;
-
   double get effectiveDiscountAmount {
     if (selectedCartItems.isEmpty) return 0.0;
-    double discount = discountAmount;
-    if (promoCode == 'VIP10') {
-      discount = cartSubtotal * 0.10;
-    }
+    final discount = promoCode == 'VIP10'
+        ? cartSubtotal * 0.10
+        : discountAmount;
     return discount > cartSubtotal ? cartSubtotal : discount;
   }
 
@@ -129,7 +126,6 @@ class MockDataService extends ChangeNotifier {
       return true;
     } else if (cleanCode == 'VIP10') {
       promoCode = 'VIP10';
-      discountAmount = cartSubtotal * 0.10;
       notifyListeners();
       return true;
     } else if (cleanCode == 'SAVE100' && cartSubtotal >= 300) {

@@ -4,7 +4,6 @@ import '../../../helpers/app_colors.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../widgets/app_button.dart';
 
-/// Quantity picker bottom sheet with wheel selector.
 class QuantityPickerBottomSheet extends StatefulWidget {
   final int initialQuantity;
   final int maxQuantity;
@@ -34,7 +33,8 @@ class QuantityPickerBottomSheet extends StatefulWidget {
   }
 
   @override
-  State<QuantityPickerBottomSheet> createState() => _QuantityPickerBottomSheetState();
+  State<QuantityPickerBottomSheet> createState() =>
+      _QuantityPickerBottomSheetState();
 }
 
 class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
@@ -95,7 +95,11 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.close, size: 22, color: AppColors.black),
+                    icon: const Icon(
+                      Icons.close,
+                      size: 22,
+                      color: AppColors.black,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -128,7 +132,9 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
                       '$qty',
                       style: AppTypography.headingMedium.copyWith(
                         fontSize: 18,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w400,
                         color: isSelected
                             ? AppColors.textPrimary
                             : AppColors.placeholder,

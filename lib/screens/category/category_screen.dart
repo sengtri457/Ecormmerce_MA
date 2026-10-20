@@ -27,7 +27,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
-    if (MockDataService().visualCategories.isEmpty) {
+    if (MockDataService().categories.isEmpty) {
       MockDataService().loadCategoryProducts();
     }
   }
@@ -373,10 +373,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      AppImage(
-                        imagePath: cat.image,
-                        fit: BoxFit.cover,
-                      ),
+                      AppImage(imagePath: cat.image, fit: BoxFit.cover),
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
