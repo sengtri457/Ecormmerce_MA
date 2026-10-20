@@ -16,6 +16,28 @@ class MainNavScreen extends StatefulWidget {
 
 class _MainNavScreenState extends State<MainNavScreen> {
   int _currentIndex = 0;
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      HomeScreen(onNavigateTab: _onTabTapped),
+      CategoryScreen(
+        onNavigateToBag: () => _onTabTapped(4),
+        onBack: () => _onTabTapped(0),
+      ),
+      WishlistScreen(
+        onNavigateToBag: () => _onTabTapped(4),
+        onBack: () => _onTabTapped(0),
+      ),
+      UserProfileScreen(onBack: () => _onTabTapped(0)),
+      ShoppingBagScreen(
+        onNavigateToWishlist: () => _onTabTapped(2),
+        onBack: () => _onTabTapped(0),
+      ),
+    ];
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -27,25 +49,6 @@ class _MainNavScreenState extends State<MainNavScreen> {
   Widget build(BuildContext context) {
     final mockService = MockDataService();
 
-    final screens = [
-      HomeScreen(onNavigateTab: _onTabTapped),
-      CategoryScreen(
-        onNavigateToBag: () => _onTabTapped(4),
-        onBack: () => _onTabTapped(0),
-      ),
-      WishlistScreen(
-        onNavigateToBag: () => _onTabTapped(4),
-        onBack: () => _onTabTapped(0),
-      ),
-      UserProfileScreen(
-        onBack: () => _onTabTapped(0),
-      ),
-      ShoppingBagScreen(
-        onNavigateToWishlist: () => _onTabTapped(2),
-        onBack: () => _onTabTapped(0),
-      ),
-    ];
-
     return PopScope(
       canPop: _currentIndex == 0,
       onPopInvokedWithResult: (didPop, result) {
@@ -55,10 +58,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
       },
       child: Scaffold(
         extendBody: true,
-        body: IndexedStack(
-          index: _currentIndex,
-          children: screens,
-        ),
+        body: IndexedStack(index: _currentIndex, children: _screens),
         bottomNavigationBar: ListenableBuilder(
           listenable: mockService,
           builder: (context, _) {

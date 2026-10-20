@@ -77,9 +77,12 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
               ),
             ),
             onPressed: () {
+              // Capture messenger before closing the dialog to avoid
+              // using context across an async gap after Navigator.pop.
+              final messenger = ScaffoldMessenger.of(context);
               MockDataService().removeFromCart(cartItemId);
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 SnackBar(
                   content: Text(
                     'Removed "$title" from your bag',

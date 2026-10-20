@@ -5,8 +5,6 @@ import '../../helpers/app_typography.dart';
 import '../../services/mock_data_service.dart';
 import '../onboarding/onboarding_screen.dart';
 
-/// Clean, editorial splash screen for MA Studio.
-/// Adheres to minimalist luxury aesthetics with subtle, restrained motion.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -25,7 +23,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Subtle, restrained animation controller (800ms)
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
@@ -36,33 +33,25 @@ class _SplashScreenState extends State<SplashScreen>
       curve: Curves.easeOut,
     );
 
-    // Subtle scale from 0.96 to 1.0 to give a gentle breath
-    _scaleAnimation = Tween<double>(begin: 0.96, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.96,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
     _controller.forward();
     _startInitialization();
   }
 
-  /// Preload core data and navigate cleanly after minimum display time.
   Future<void> _startInitialization() async {
     final startTime = DateTime.now();
 
-    // Warm up critical mock repository data in parallel
     try {
       await Future.wait([
         MockDataService().initialize(),
         MockDataService().loadCategoryProducts(),
       ]);
-    } catch (_) {
-      // Gracefully continue even if async preload encounters an error
-    }
+    } catch (_) {}
 
-    // Ensure splash remains visible for at least 1800ms for brand presence
     final elapsed = DateTime.now().difference(startTime);
     final remainingDelay = const Duration(milliseconds: 1800) - elapsed;
     if (remainingDelay > Duration.zero) {
@@ -75,7 +64,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (!mounted) return;
 
-    // Smooth fade transition to Onboarding
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 400),

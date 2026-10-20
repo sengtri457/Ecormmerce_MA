@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-/// Represents a customer trust badge with an icon, title, and descriptive subtitle.
 class TrustBadgeItem {
   final IconData icon;
   final String title;
