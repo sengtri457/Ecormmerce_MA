@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
 import '../../models/product.dart';
+import '../../models/subcategory.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/product_card.dart';
 import '../product/product_detail_screen.dart';
@@ -48,17 +49,32 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final sub = p.subcategory.toLowerCase();
     final title = p.title.toLowerCase();
     if (pillar == 'clothes' || pillar == 'clothing') {
-      return sub.contains('coat') || sub.contains('dress') || sub.contains('top') ||
-             sub.contains('shirt') || sub.contains('jacket') || sub.contains('suit') ||
-             sub.contains('pant') || sub.contains('hoodie') || sub.contains('knit') ||
-             sub.contains('boy') || sub.contains('girl');
+      return sub.contains('coat') ||
+          sub.contains('dress') ||
+          sub.contains('top') ||
+          sub.contains('shirt') ||
+          sub.contains('jacket') ||
+          sub.contains('suit') ||
+          sub.contains('pant') ||
+          sub.contains('hoodie') ||
+          sub.contains('knit') ||
+          sub.contains('boy') ||
+          sub.contains('girl');
     } else if (pillar == 'shoes') {
-      return sub.contains('shoe') || sub.contains('footwear') || title.contains('shoe') ||
-             title.contains('boot') || title.contains('sneaker') || title.contains('derby');
+      return sub.contains('shoe') ||
+          sub.contains('footwear') ||
+          title.contains('shoe') ||
+          title.contains('boot') ||
+          title.contains('sneaker') ||
+          title.contains('derby');
     } else if (pillar == 'accessories') {
-      return sub.contains('bag') || sub.contains('leather') || sub.contains('accessory') ||
-             sub.contains('hat') || sub.contains('belt') || title.contains('bag') ||
-             title.contains('candle');
+      return sub.contains('bag') ||
+          sub.contains('leather') ||
+          sub.contains('accessory') ||
+          sub.contains('hat') ||
+          sub.contains('belt') ||
+          title.contains('bag') ||
+          title.contains('candle');
     }
     return true;
   }
@@ -69,7 +85,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final allProducts = mockService.products;
 
     final String slug = widget.categorySlug.toLowerCase();
-    final bool isGeneric = slug == 'all' || slug == 'clothes' || slug == 'clothing' || slug == 'shoes' || slug == 'accessories';
+    final bool isGeneric =
+        slug == 'all' ||
+        slug == 'clothes' ||
+        slug == 'clothing' ||
+        slug == 'shoes' ||
+        slug == 'accessories';
 
     final categoryProducts = allProducts.where((p) {
       if (isGeneric) {
@@ -81,18 +102,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
       return p.category.toLowerCase() == slug;
     }).toList();
 
-    final Set<String> availableSubIds = categoryProducts.map((p) => p.subcategory).where((s) => s.isNotEmpty).toSet();
+    final Set<String> availableSubIds = categoryProducts
+        .map((p) => p.subcategory)
+        .where((s) => s.isNotEmpty)
+        .toSet();
 
-    final List<Map<String, String>> subcategories = [
-      {'id': 'all', 'name': 'All'},
+    final List<Subcategory> subcategories = [
+      const Subcategory(id: 'all', name: 'All'),
       ...availableSubIds.map((subId) {
         final formatted = subId
             .replaceFirst(RegExp(r'^[a-z]_'), '')
             .replaceAll('_', ' ')
             .split(' ')
-            .map((w) => w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1)}' : '')
+            .map(
+              (w) =>
+                  w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1)}' : '',
+            )
             .join(' ');
-        return {'id': subId, 'name': formatted};
+        return Subcategory(id: subId, name: formatted);
       }),
     ];
 
@@ -101,21 +128,34 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ? (slug == 'all' ? true : _matchesPillar(p, slug))
           : p.category.toLowerCase() == slug;
 
-      final matchesPillarConstraint = widget.initialPillar == null ||
+      final matchesPillarConstraint =
+          widget.initialPillar == null ||
           _matchesPillar(p, widget.initialPillar!.toLowerCase());
 
-      final matchesSearch = _searchController.text.isEmpty ||
-          p.title.toLowerCase().contains(_searchController.text.toLowerCase()) ||
+      final matchesSearch =
+          _searchController.text.isEmpty ||
+          p.title.toLowerCase().contains(
+            _searchController.text.toLowerCase(),
+          ) ||
           p.brand.toLowerCase().contains(_searchController.text.toLowerCase());
 
-      final matchesSub = _selectedSubcategory == 'all' ||
+      final matchesSub =
+          _selectedSubcategory == 'all' ||
           p.subcategory.toLowerCase() == _selectedSubcategory.toLowerCase() ||
-          p.subcategory.toLowerCase().contains(_selectedSubcategory.toLowerCase());
+          p.subcategory.toLowerCase().contains(
+            _selectedSubcategory.toLowerCase(),
+          );
 
-      final matchesPrice = p.price >= _priceRange.start && p.price <= _priceRange.end;
+      final matchesPrice =
+          p.price >= _priceRange.start && p.price <= _priceRange.end;
       final matchesSize = _sizeFilter == null || p.sizes.contains(_sizeFilter);
 
-      return matchesCategory && matchesPillarConstraint && matchesSearch && matchesSub && matchesPrice && matchesSize;
+      return matchesCategory &&
+          matchesPillarConstraint &&
+          matchesSearch &&
+          matchesSub &&
+          matchesPrice &&
+          matchesSize;
     }).toList();
 
     return Scaffold(
@@ -124,7 +164,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: AppColors.black),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: AppColors.black,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -147,7 +191,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
               child: Row(
                 children: [
                   const SizedBox(width: 12),
-                  const Icon(Icons.search, size: 20, color: AppColors.textSecondary),
+                  const Icon(
+                    Icons.search,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
@@ -163,7 +211,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   if (_searchController.text.isNotEmpty)
                     IconButton(
-                      icon: const Icon(Icons.close, size: 18, color: AppColors.textMuted),
+                      icon: const Icon(
+                        Icons.close,
+                        size: 18,
+                        color: AppColors.textMuted,
+                      ),
                       onPressed: () {
                         _searchController.clear();
                         setState(() {});
@@ -183,10 +235,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
               separatorBuilder: (_, index) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final sub = subcategories[index];
-                final isSel = _selectedSubcategory == sub['id'];
+                final isSel = _selectedSubcategory == sub.id;
                 return ChoiceChip(
                   label: Text(
-                    sub['name']!,
+                    sub.name,
                     style: AppTypography.bodySmall.copyWith(
                       color: isSel ? AppColors.white : AppColors.textPrimary,
                       fontWeight: isSel ? FontWeight.w600 : FontWeight.w400,
@@ -197,10 +249,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   backgroundColor: AppColors.surfaceLight,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
-                    side: BorderSide(color: isSel ? AppColors.black : AppColors.border),
+                    side: BorderSide(
+                      color: isSel ? AppColors.black : AppColors.border,
+                    ),
                   ),
                   onSelected: (val) {
-                    if (val) setState(() => _selectedSubcategory = sub['id']!);
+                    if (val) setState(() => _selectedSubcategory = sub.id);
                   },
                 );
               },
@@ -224,11 +278,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   children: [
                     IconButton(
                       icon: Icon(
-                        _isGridView ? Icons.view_agenda_outlined : Icons.grid_view,
+                        _isGridView
+                            ? Icons.view_agenda_outlined
+                            : Icons.grid_view,
                         size: 20,
                         color: AppColors.black,
                       ),
-                      onPressed: () => setState(() => _isGridView = !_isGridView),
+                      onPressed: () =>
+                          setState(() => _isGridView = !_isGridView),
                     ),
                     const SizedBox(width: 4),
                     InkWell(
@@ -240,7 +297,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           builder: (_) => FilterBottomSheet(
                             initialPrice: _priceRange,
                             initialSize: _sizeFilter,
-                            availableCategories: subcategories.map((s) => s['name']!).toList(),
+                            availableCategories: subcategories
+                                .map((s) => s.name)
+                                .toList(),
                             onApply: (price, cat, size) {
                               setState(() {
                                 _priceRange = price;
@@ -251,18 +310,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         );
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 7,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.border),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.tune, size: 16, color: AppColors.black),
+                            const Icon(
+                              Icons.tune,
+                              size: 16,
+                              color: AppColors.black,
+                            ),
                             const SizedBox(width: 6),
                             Text(
                               'FILTER',
-                              style: AppTypography.badge.copyWith(letterSpacing: 0.8),
+                              style: AppTypography.badge.copyWith(
+                                letterSpacing: 0.8,
+                              ),
                             ),
                           ],
                         ),
@@ -281,55 +349,82 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.search_off, size: 48, color: AppColors.placeholder),
+                        const Icon(
+                          Icons.search_off,
+                          size: 48,
+                          color: AppColors.placeholder,
+                        ),
                         const SizedBox(height: 12),
-                        Text('NO PRODUCTS MATCH YOUR FILTER', style: AppTypography.headingSmall),
+                        Text(
+                          'NO PRODUCTS MATCH YOUR FILTER',
+                          style: AppTypography.headingSmall,
+                        ),
                         const SizedBox(height: 6),
-                        Text('Try resetting filters or adjusting search term.', style: AppTypography.bodySmall),
+                        Text(
+                          'Try resetting filters or adjusting search term.',
+                          style: AppTypography.bodySmall,
+                        ),
                       ],
                     ),
                   )
                 : _isGridView
-                    ? GridView.builder(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                ? GridView.builder(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 16,
+                      bottom: 24,
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 0.58,
                           crossAxisSpacing: 14,
                           mainAxisSpacing: 20,
                         ),
-                        itemCount: filtered.length,
-                        itemBuilder: (context, index) {
-                          final prod = filtered[index];
-                          return ProductCard(
-                            product: prod,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => ProductDetailScreen(product: prod)),
-                              );
-                            },
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) {
+                      final prod = filtered[index];
+                      return ProductCard(
+                        product: prod,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ProductDetailScreen(product: prod),
+                            ),
                           );
                         },
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 24),
-                        itemCount: filtered.length,
-                        separatorBuilder: (_, index) => const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final prod = filtered[index];
-                          return ProductCard(
-                            product: prod,
-                            isHorizontal: true,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => ProductDetailScreen(product: prod)),
-                              );
-                            },
+                      );
+                    },
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 16,
+                      bottom: 24,
+                    ),
+                    itemCount: filtered.length,
+                    separatorBuilder: (_, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      final prod = filtered[index];
+                      return ProductCard(
+                        product: prod,
+                        isHorizontal: true,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ProductDetailScreen(product: prod),
+                            ),
                           );
                         },
-                      ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

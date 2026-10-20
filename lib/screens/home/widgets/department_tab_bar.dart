@@ -22,10 +22,10 @@ class DepartmentTabBar extends StatelessWidget {
       ),
       child: Row(
         children: DepartmentRepository.departments.map((dept) {
-          final isSelected = selectedDepartmentId == dept['id'];
+          final isSelected = selectedDepartmentId == dept.id;
           return Expanded(
             child: InkWell(
-              onTap: () => onDepartmentSelected(dept['id']!),
+              onTap: () => onDepartmentSelected(dept.id),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 11),
                 alignment: Alignment.center,
@@ -33,7 +33,7 @@ class DepartmentTabBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      dept['name']!,
+                      dept.name,
                       style: AppTypography.badge.copyWith(
                         fontSize: 12,
                         letterSpacing: 1.1,

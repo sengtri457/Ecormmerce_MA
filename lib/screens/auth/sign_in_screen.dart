@@ -71,11 +71,16 @@ class _SignInScreenState extends State<SignInScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text('Sign In', style: AppTypography.displayLarge),
+              Text(
+                'Sign In',
+                style: AppTypography.displayLarge,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 8),
               Text(
                 'Enter your credentials to continue',
                 style: AppTypography.bodyMedium,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 36),
 
@@ -152,7 +157,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.borderDark, width: 1.0),
+                          border: Border.all(
+                            color: AppColors.borderDark,
+                            width: 1.0,
+                          ),
                         ),
                         child: const Text(
                           'G',
@@ -171,7 +179,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _SocialButton(
-                      icon: const Icon(Icons.apple, color: AppColors.black, size: 22),
+                      icon: const Icon(
+                        Icons.apple,
+                        color: AppColors.black,
+                        size: 22,
+                      ),
                       label: 'Apple',
                       onTap: _handleSignIn,
                     ),

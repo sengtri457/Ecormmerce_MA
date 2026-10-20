@@ -76,17 +76,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text('Create Account', style: AppTypography.displayLarge),
+              Text(
+                'Create Account',
+                style: AppTypography.displayLarge,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 8),
               Text(
                 'Join MA STUDIO for exclusive privileges and curated edits',
                 style: AppTypography.bodyMedium,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
 
               AppTextField(
                 label: 'Full Name',
-                hint: 'Sengtri Chan',
+                hint: 'Sengtri bun',
                 controller: _nameController,
               ),
               const SizedBox(height: 20),

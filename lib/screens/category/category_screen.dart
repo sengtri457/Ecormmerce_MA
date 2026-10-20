@@ -375,7 +375,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     children: [
                       AppImage(
                         imagePath: cat.image,
-                        fallbackUrl: cat.fallback,
                         fit: BoxFit.cover,
                       ),
                       Container(
@@ -526,7 +525,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           title: cat.title,
           subtitle: '${cat.itemCount > 0 ? cat.itemCount : 35}+ Items',
           image: cat.image,
-          fallback: cat.fallback,
           onTap: () => _navigateToCatalog(
             slug: _selectedDepartment,
             title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
@@ -538,8 +536,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         title: 'NEW IN',
         subtitle: 'Curated SS26 Edit',
         image: 'assets/images/products/image1.jpg',
-        fallback:
-            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&auto=format&fit=crop&q=80',
         badge: 'LIMITED',
         onTap: () => _navigateToCatalog(
           slug: _selectedDepartment,
@@ -563,7 +559,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     required String title,
     required String subtitle,
     required String image,
-    required String fallback,
+    String? fallback,
     required VoidCallback onTap,
     String? badge,
   }) {
