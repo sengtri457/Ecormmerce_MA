@@ -5,7 +5,6 @@ import '../helpers/app_typography.dart';
 
 enum AppButtonVariant { primary, secondary, outlined }
 
-/// Button widget with primary, secondary, and outlined variants.
 class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -34,7 +33,6 @@ class AppButton extends StatelessWidget {
     this.fontSize,
   });
 
-  /// Factory constructor for outlined buttons.
   factory AppButton.outlined({
     Key? key,
     required String text,
