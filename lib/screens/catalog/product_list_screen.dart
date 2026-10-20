@@ -261,7 +261,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
           ),
           const SizedBox(height: 8),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
