@@ -30,7 +30,6 @@ Run from the repo root:
 - `analysis_options.yaml` applies stock `package:flutter_lints/flutter.yaml` — no custom rules; verification is `flutter analyze`.
 - `supabase/` exists but is empty — no backend wiring yet; do not assume APIs.
 - No CI is configured; use the commands above directly.
-- `lib/screens/catalog/product_list_screen.dart` currently has uncommitted local edits — coordinate before overwriting.
 
 ## Skills
 
