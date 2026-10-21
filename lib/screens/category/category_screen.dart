@@ -5,6 +5,7 @@ import '../../helpers/app_typography.dart';
 import '../../models/category_item.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/app_wireframe.dart';
 import '../../widgets/app_image.dart';
 import '../catalog/filter_bottom_sheet.dart';
 import '../catalog/product_list_screen.dart';
@@ -280,7 +281,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   const SizedBox(height: 18),
 
                   // Content: List Mode or Symmetrical 2x2 Grid Mode
-                  if (!_isGridView)
+                  if (categories.isEmpty)
+                    _buildWireframeContent()
+                  else if (!_isGridView)
                     _buildPillarsList(categories)
                   else
                     _buildPillarsGrid(categories),
@@ -295,6 +298,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildWireframeContent() {
+    return Column(
+      children: [
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+      ],
     );
   }
 

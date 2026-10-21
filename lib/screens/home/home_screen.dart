@@ -7,6 +7,7 @@ import '../../models/product.dart';
 import '../../services/department_repository.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/app_wireframe.dart';
 import '../../widgets/trust_badges.dart';
 import '../catalog/product_list_screen.dart';
 import '../product/product_detail_screen.dart';
@@ -193,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             title: Image.asset(
               'assets/images/logoDevs.png',
-              height: 32,
+              height: 40,
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) => Text(
                 'MA STUDIO',
@@ -323,7 +324,31 @@ class _HomeScreenState extends State<HomeScreen> {
     required VoidCallback onActionTap,
     String buttonText = 'Shop Now',
   }) {
-    if (products.isEmpty) return const SizedBox.shrink();
+    if (products.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          HomeSectionHeader(
+            title: title,
+            subtitle: subtitle,
+            actionText: actionText,
+            onActionTap: onActionTap,
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 240,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 3,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (_, _) => AppWireframe.productCard(width: 150),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

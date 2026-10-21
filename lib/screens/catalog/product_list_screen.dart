@@ -246,6 +246,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   ),
                   selected: isSel,
                   selectedColor: AppColors.black,
+                  checkmarkColor: AppColors.white,
                   backgroundColor: AppColors.surfaceLight,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
