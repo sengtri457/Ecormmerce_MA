@@ -28,6 +28,7 @@ class MockDataService extends ChangeNotifier {
   List<CartItem> cartItems = [];
   Set<int> wishlistProductIds = {1, 5};
   UserProfile? userProfile;
+  bool isLoggedIn = false;
   ShippingAddress? shippingAddress;
   String promoCode = 'FIRST20';
   double discountAmount = 50.00;
@@ -209,6 +210,22 @@ class MockDataService extends ChangeNotifier {
       cartItems.removeAt(itemIndex);
       notifyListeners();
     }
+  }
+
+  void clearSelectedCart() {
+    cartItems.removeWhere((item) => item.isSelected);
+    notifyListeners();
+  }
+
+  void login({UserProfile? profile}) {
+    isLoggedIn = true;
+    if (profile != null) userProfile = profile;
+    notifyListeners();
+  }
+
+  void logout() {
+    isLoggedIn = false;
+    notifyListeners();
   }
 
   int get wishlistCount => wishlistProductIds.length;

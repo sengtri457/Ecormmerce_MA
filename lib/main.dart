@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_preview/device_preview.dart';
@@ -21,11 +20,12 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode,
+      enabled: true,
       defaultDevice: Devices.ios.iPhone16ProMax,
       builder: (context) => const EcormmerceApp(),
     ),
   );
+  // runApp(const EcormmerceApp());
 }
 
 class EcormmerceApp extends StatelessWidget {
@@ -57,6 +57,7 @@ class EcormmerceApp extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
+        chipTheme: const ChipThemeData(checkmarkColor: AppColors.white),
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       home: const SplashScreen(),

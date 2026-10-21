@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
 import '../../services/mock_data_service.dart';
-import '../onboarding/onboarding_screen.dart';
+import '../main_nav_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,36 +43,25 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _startInitialization() async {
-    final startTime = DateTime.now();
-
     try {
       await Future.wait([
         MockDataService().initialize(),
         MockDataService().loadCategoryProducts(),
       ]);
     } catch (_) {}
-
-    final elapsed = DateTime.now().difference(startTime);
-    final remainingDelay = const Duration(milliseconds: 1800) - elapsed;
-    if (remainingDelay > Duration.zero) {
-      final completer = Completer<void>();
-      _timer = Timer(remainingDelay, () {
-        if (!completer.isCompleted) completer.complete();
-      });
-      await completer.future;
-    }
-
-    if (!mounted) return;
-
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (_, __, ___) => const OnboardingScreen(),
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-      ),
-    );
+    _timer = Timer(const Duration(milliseconds: 2000), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const MainNavScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+        ),
+      );
+    });
   }
 
   @override
@@ -101,8 +90,6 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             children: [
               const Spacer(flex: 3),
-
-              // Centered Brandmark & Identity
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -113,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
                       height: 52,
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) => Text(
-                        'MA',
+                        'DEV',
                         style: AppTypography.displayLarge.copyWith(
                           fontSize: 44,
                           fontWeight: FontWeight.w700,
@@ -123,10 +110,8 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 16),
-
-                    // Typographic Wordmark & Tagline
                     Text(
-                      'MA STUDIO',
+                      'Dev Clothes',
                       style: AppTypography.headingSmall.copyWith(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -145,8 +130,6 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // Subtle Accent Indicator (Warm Terracotta)
                     Container(
                       width: 24,
                       height: 2,
@@ -158,10 +141,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ],
                 ),
               ),
-
               const Spacer(flex: 3),
-
-              // Bottom Editorial Edition Mark
               Padding(
                 padding: const EdgeInsets.only(bottom: 24),
                 child: Text(

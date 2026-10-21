@@ -4,10 +4,13 @@ import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../main_nav_screen.dart';
+import '../../services/mock_data_service.dart';
 import 'sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  final bool returnOnSuccess;
+
+  const SignInScreen({super.key, this.returnOnSuccess = false});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -30,6 +33,11 @@ class _SignInScreenState extends State<SignInScreen> {
     Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() => _isLoading = false);
+        MockDataService().login();
+        if (widget.returnOnSuccess && Navigator.canPop(context)) {
+          Navigator.pop(context, true);
+          return;
+        }
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const MainNavScreen()),
@@ -56,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
         centerTitle: true,
         title: Image.asset(
           'assets/images/logoDevs.png',
-          height: 30,
+          height: 40,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) => Text(
             'MA STUDIO',
@@ -71,19 +79,25 @@ class _SignInScreenState extends State<SignInScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text(
-                'Sign In',
-                style: AppTypography.displayLarge,
-                textAlign: TextAlign.center,
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text(
+                      'Sign In',
+                      style: AppTypography.displayLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Enter your credentials to continue',
+                      style: AppTypography.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 36),
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Enter your credentials to continue',
-                style: AppTypography.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 36),
-
               AppTextField(
                 label: 'Email Address',
                 hint: 'name@example.com',
