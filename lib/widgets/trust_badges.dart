@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_typography.dart';
+import '../models/trust_badge_item.dart';
 
-/// Service guarantee strip (delivery, returns, security).
+export '../models/trust_badge_item.dart';
+
 class TrustBadges extends StatelessWidget {
+  final List<TrustBadgeItem> items;
   final EdgeInsetsGeometry padding;
   final bool showTopBorder;
 
   const TrustBadges({
     super.key,
+    this.items = defaultBadges,
     this.padding = const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
     this.showTopBorder = true,
   });
+
+  static const List<TrustBadgeItem> defaultBadges = [
+    TrustBadgeItem(
+      icon: Icons.local_shipping_outlined,
+      title: 'GLOBAL EXPRESS',
+      subtitle: 'Complimentary on all orders',
+    ),
+    TrustBadgeItem(
+      icon: Icons.assignment_return_outlined,
+      title: '14-DAY RETURNS',
+      subtitle: 'Doorstep pickup available',
+    ),
+    TrustBadgeItem(
+      icon: Icons.shield_outlined,
+      title: 'AUTHENTIC & SECURE',
+      subtitle: 'Direct from verified ateliers',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +43,26 @@ class TrustBadges extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceLight,
         border: showTopBorder
-            ? const Border(
-                top: BorderSide(color: AppColors.border, width: 0.8),
-              )
+            ? const Border(top: BorderSide(color: AppColors.border, width: 0.8))
             : null,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          _TrustItem(
-            icon: Icons.local_shipping_outlined,
-            title: 'GLOBAL EXPRESS',
-            subtitle: 'Complimentary on all orders',
-          ),
-          SizedBox(width: 8),
-          _TrustItem(
-            icon: Icons.assignment_return_outlined,
-            title: '14-DAY RETURNS',
-            subtitle: 'Doorstep pickup available',
-          ),
-          SizedBox(width: 8),
-          _TrustItem(
-            icon: Icons.shield_outlined,
-            title: 'AUTHENTIC & SECURE',
-            subtitle: 'Direct from verified ateliers',
-          ),
+        children: [
+          for (int i = 0; i < items.length; i++) ...[
+            if (i > 0) const SizedBox(width: 8),
+            _TrustBadgeTile(item: items[i]),
+          ],
         ],
       ),
     );
   }
 }
 
-class _TrustItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
+class _TrustBadgeTile extends StatelessWidget {
+  final TrustBadgeItem item;
 
-  const _TrustItem({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
+  const _TrustBadgeTile({required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +70,10 @@ class _TrustItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 22,
-            color: AppColors.textPrimary,
-          ),
+          Icon(item.icon, size: 22, color: AppColors.textPrimary),
           const SizedBox(height: 8),
           Text(
-            title,
+            item.title,
             textAlign: TextAlign.center,
             style: AppTypography.badge.copyWith(
               fontSize: 10,
@@ -88,7 +85,7 @@ class _TrustItem extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            subtitle,
+            item.subtitle,
             textAlign: TextAlign.center,
             style: AppTypography.bodySmall.copyWith(
               fontSize: 10,

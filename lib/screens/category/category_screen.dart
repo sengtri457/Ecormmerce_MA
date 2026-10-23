@@ -5,6 +5,7 @@ import '../../helpers/app_typography.dart';
 import '../../models/category_item.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
+import '../../widgets/app_wireframe.dart';
 import '../../widgets/app_image.dart';
 import '../catalog/filter_bottom_sheet.dart';
 import '../catalog/product_list_screen.dart';
@@ -27,7 +28,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
-    if (MockDataService().visualCategories.isEmpty) {
+    if (MockDataService().categories.isEmpty) {
       MockDataService().loadCategoryProducts();
     }
   }
@@ -280,7 +281,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   const SizedBox(height: 18),
 
                   // Content: List Mode or Symmetrical 2x2 Grid Mode
-                  if (!_isGridView)
+                  if (categories.isEmpty)
+                    _buildWireframeContent()
+                  else if (!_isGridView)
                     _buildPillarsList(categories)
                   else
                     _buildPillarsGrid(categories),
@@ -295,6 +298,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildWireframeContent() {
+    return Column(
+      children: [
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+      ],
     );
   }
 
@@ -373,11 +388,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      AppImage(
-                        imagePath: cat.image,
-                        fallbackUrl: cat.fallback,
-                        fit: BoxFit.cover,
-                      ),
+                      AppImage(imagePath: cat.image, fit: BoxFit.cover),
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -526,7 +537,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           title: cat.title,
           subtitle: '${cat.itemCount > 0 ? cat.itemCount : 35}+ Items',
           image: cat.image,
-          fallback: cat.fallback,
           onTap: () => _navigateToCatalog(
             slug: _selectedDepartment,
             title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
@@ -538,8 +548,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         title: 'NEW IN',
         subtitle: 'Curated SS26 Edit',
         image: 'assets/images/products/image1.jpg',
-        fallback:
-            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&auto=format&fit=crop&q=80',
         badge: 'LIMITED',
         onTap: () => _navigateToCatalog(
           slug: _selectedDepartment,
@@ -563,7 +571,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     required String title,
     required String subtitle,
     required String image,
-    required String fallback,
+    String? fallback,
     required VoidCallback onTap,
     String? badge,
   }) {

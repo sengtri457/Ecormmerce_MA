@@ -8,7 +8,6 @@ class CategoryItem {
   final String slug;
   final String icon;
   final String image;
-  final String fallback;
   final int itemCount;
   final List<Subcategory> subcategories;
 
@@ -19,7 +18,6 @@ class CategoryItem {
     this.slug = '',
     this.icon = '',
     this.image = '',
-    this.fallback = '',
     this.itemCount = 0,
     required this.subcategories,
   });
@@ -44,8 +42,6 @@ class CategoryItem {
       slug: json['slug'] as String? ?? json['id'] as String? ?? '',
       icon: json['icon'] as String? ?? '',
       image: json['image'] as String? ?? json['imageUrl'] as String? ?? '',
-      fallback:
-          json['fallback'] as String? ?? json['fallbackUrl'] as String? ?? '',
       itemCount: (json['itemCount'] ?? json['count'] as num?)?.toInt() ?? 0,
       subcategories: rawSub
           .whereType<Map<String, dynamic>>()
@@ -61,7 +57,6 @@ class CategoryItem {
     'slug': slug,
     'icon': icon,
     'image': image,
-    'fallback': fallback,
     'itemCount': itemCount,
     'subcategories': subcategories.map((s) => s.toJson()).toList(),
   };

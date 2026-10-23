@@ -7,8 +7,8 @@ void main() {
 
     test('should contain 5 major departments with home first', () {
       expect(DepartmentRepository.departments.length, 5);
-      expect(DepartmentRepository.departments.first['id'], 'home');
-      final ids = DepartmentRepository.departments.map((d) => d['id']).toList();
+      expect(DepartmentRepository.departments.first.id, 'home');
+      final ids = DepartmentRepository.departments.map((d) => d.id).toList();
       expect(ids, containsAll(['home', 'women', 'men', 'kids', 'accessory']));
     });
 

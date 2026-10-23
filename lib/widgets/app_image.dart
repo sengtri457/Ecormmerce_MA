@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../helpers/app_colors.dart';
 
-/// Image widget that handles both local assets and network URLs with fallbacks.
 class AppImage extends StatelessWidget {
   final String imagePath;
   final String? fallbackUrl;
@@ -66,10 +65,7 @@ class AppImage extends StatelessWidget {
     }
 
     if (borderRadius != null) {
-      return ClipRRect(
-        borderRadius: borderRadius!,
-        child: image,
-      );
+      return ClipRRect(borderRadius: borderRadius!, child: image);
     }
 
     return image;

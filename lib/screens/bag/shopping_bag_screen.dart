@@ -6,6 +6,7 @@ import '../../helpers/currency_helper.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../wishlist/wishlist_screen.dart';
+import '../auth/sign_in_screen.dart';
 import 'widgets/bag_item_card.dart';
 
 class ShoppingBagScreen extends StatefulWidget {
@@ -77,9 +78,10 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
               ),
             ),
             onPressed: () {
+              final messenger = ScaffoldMessenger.of(context);
               MockDataService().removeFromCart(cartItemId);
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 SnackBar(
                   content: Text(
                     'Removed "$title" from your bag',
@@ -119,7 +121,25 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
     );
   }
 
+  Future<void> _handleCheckout() async {
+    final mockService = MockDataService();
+    if (!mockService.isLoggedIn) {
+      final loggedIn = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SignInScreen(returnOnSuccess: true),
+        ),
+      );
+      if (loggedIn == true && mounted) {
+        _showCheckoutDialog();
+      }
+      return;
+    }
+    _showCheckoutDialog();
+  }
+
   void _showCheckoutDialog() {
+    MockDataService().clearSelectedCart();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -482,7 +502,7 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                         ? AppButtonVariant.primary
                         : AppButtonVariant.secondary,
                     onPressed: mockService.selectedCartCount > 0
-                        ? _showCheckoutDialog
+                        ? _handleCheckout
                         : () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

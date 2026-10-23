@@ -142,6 +142,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 selected: isSel,
                 selectedColor: AppColors.black,
+                checkmarkColor: AppColors.white,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -175,6 +176,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 selected: isSel,
                 selectedColor: AppColors.black,
+                checkmarkColor: AppColors.white,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.sm),

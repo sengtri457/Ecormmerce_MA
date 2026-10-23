@@ -4,6 +4,7 @@ import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../main_nav_screen.dart';
+import '../../services/mock_data_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -34,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() => _isLoading = false);
+        MockDataService().login();
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const MainNavScreen()),
@@ -61,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         centerTitle: true,
         title: Image.asset(
           'assets/images/logoDevs.png',
-          height: 30,
+          height: 40,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) => Text(
             'MA STUDIO',
@@ -76,17 +78,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text('Create Account', style: AppTypography.displayLarge),
-              const SizedBox(height: 8),
-              Text(
-                'Join MA STUDIO for exclusive privileges and curated edits',
-                style: AppTypography.bodyMedium,
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text(
+                      'Create Account',
+                      style: AppTypography.displayLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Join MA STUDIO for exclusive privileges and curated edits',
+                      style: AppTypography.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+                  ],
+                ),
               ),
-              const SizedBox(height: 32),
-
               AppTextField(
                 label: 'Full Name',
-                hint: 'Sengtri Chan',
+                hint: 'Sengtri bun',
                 controller: _nameController,
               ),
               const SizedBox(height: 20),

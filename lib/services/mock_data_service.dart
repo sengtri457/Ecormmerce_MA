@@ -23,12 +23,12 @@ class MockDataService extends ChangeNotifier {
   List<OnboardingItem> onboardingItems = [];
   List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
-  List<CategoryItem> get visualCategories => categories;
   List<Product> products = [];
   FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
   Set<int> wishlistProductIds = {1, 5};
   UserProfile? userProfile;
+  bool isLoggedIn = false;
   ShippingAddress? shippingAddress;
   String promoCode = 'FIRST20';
   double discountAmount = 50.00;
@@ -104,13 +104,11 @@ class MockDataService extends ChangeNotifier {
 
   double get effectiveShippingFee =>
       selectedCartItems.isEmpty ? 0.0 : shippingFee;
-
   double get effectiveDiscountAmount {
     if (selectedCartItems.isEmpty) return 0.0;
-    double discount = discountAmount;
-    if (promoCode == 'VIP10') {
-      discount = cartSubtotal * 0.10;
-    }
+    final discount = promoCode == 'VIP10'
+        ? cartSubtotal * 0.10
+        : discountAmount;
     return discount > cartSubtotal ? cartSubtotal : discount;
   }
 
@@ -129,7 +127,6 @@ class MockDataService extends ChangeNotifier {
       return true;
     } else if (cleanCode == 'VIP10') {
       promoCode = 'VIP10';
-      discountAmount = cartSubtotal * 0.10;
       notifyListeners();
       return true;
     } else if (cleanCode == 'SAVE100' && cartSubtotal >= 300) {
@@ -213,6 +210,22 @@ class MockDataService extends ChangeNotifier {
       cartItems.removeAt(itemIndex);
       notifyListeners();
     }
+  }
+
+  void clearSelectedCart() {
+    cartItems.removeWhere((item) => item.isSelected);
+    notifyListeners();
+  }
+
+  void login({UserProfile? profile}) {
+    isLoggedIn = true;
+    if (profile != null) userProfile = profile;
+    notifyListeners();
+  }
+
+  void logout() {
+    isLoggedIn = false;
+    notifyListeners();
   }
 
   int get wishlistCount => wishlistProductIds.length;
