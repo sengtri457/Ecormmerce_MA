@@ -8,8 +8,16 @@ import 'package:ecormmerce_ma/screens/wishlist/wishlist_screen.dart';
 import 'package:ecormmerce_ma/models/product.dart';
 import 'package:ecormmerce_ma/screens/product/product_detail_screen.dart';
 import 'package:ecormmerce_ma/widgets/trust_badges.dart';
+import 'package:ecormmerce_ma/services/mock_data_service.dart';
+import 'package:ecormmerce_ma/screens/home/widgets/category_horizontal_list.dart';
+import 'package:ecormmerce_ma/screens/home/widgets/department_category_grid.dart';
 
 void main() {
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    await MockDataService().initialize();
+  });
+
   group('Home Modular Widgets Tests', () {
     testWidgets('DepartmentTabBar renders all 5 department tabs and handles taps', (tester) async {
       String selected = 'women';
@@ -59,6 +67,55 @@ void main() {
       expect(actionTapped, true);
     });
 
+    testWidgets('CategoryHorizontalList renders pill items and triggers tap callback', (tester) async {
+      CategoryPillItem? tappedItem;
+      final items = [
+        const CategoryPillItem(id: 'dresses', label: 'Dresses', icon: 'assets/icons/category-horizental/dress.png'),
+        const CategoryPillItem(id: 'shoes', label: 'Shoes', icon: 'assets/icons/category-horizental/shoes.png'),
+      ];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: CategoryHorizontalList(
+              items: items,
+              onItemTap: (item) => tappedItem = item,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Dresses'), findsOneWidget);
+      expect(find.text('Shoes'), findsOneWidget);
+
+      await tester.tap(find.text('Dresses'));
+      await tester.pump();
+      expect(tappedItem?.id, 'dresses');
+    });
+
+    testWidgets('DepartmentCategoryGrid renders category banners and handles tap', (tester) async {
+      CategoryBannerItem? tapped;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: DepartmentCategoryGrid(
+                onBannerTap: (banner) => tapped = banner,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('ACCESSORIES'), findsOneWidget);
+      expect(find.text('CLOTHING'), findsOneWidget);
+      expect(find.text('SHOES'), findsOneWidget);
+
+      await tester.tap(find.text('ACCESSORIES'));
+      await tester.pump();
+      expect(tapped?.id, 'accessories');
+    });
+
     testWidgets('TrustBadges renders 3 guarantee columns', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -68,9 +125,9 @@ void main() {
         ),
       );
 
-      expect(find.text('GLOBAL SHIPPING'), findsOneWidget);
-      expect(find.text('14-DAY RETURN'), findsOneWidget);
-      expect(find.text('SECURE PAYMENT'), findsOneWidget);
+      expect(find.text('GLOBAL EXPRESS'), findsOneWidget);
+      expect(find.text('14-DAY RETURNS'), findsOneWidget);
+      expect(find.text('AUTHENTIC & SECURE'), findsOneWidget);
     });
 
     testWidgets('CategoryScreen renders category cards, accordions and switches grid/list', (tester) async {
@@ -82,8 +139,14 @@ void main() {
         ),
       );
 
-      // Verify category title and cards
+      // Verify category title, department tabs, and the 3 pillars
       expect(find.text('CATEGORY'), findsOneWidget);
+      expect(find.text('WOMEN'), findsOneWidget);
+      expect(find.text('MEN'), findsOneWidget);
+      expect(find.text('KIDS'), findsOneWidget);
+      expect(find.text('CLOTHES'), findsOneWidget);
+      expect(find.text('SHOES'), findsOneWidget);
+      expect(find.text('ACCESSORIES'), findsOneWidget);
       expect(find.text('THE MINIMAL WARDROBE EDIT'), findsOneWidget);
       expect(find.text('BROWSE PRODUCTS'), findsOneWidget);
 
@@ -93,6 +156,20 @@ void main() {
 
       await tester.tap(find.byIcon(Icons.crop_16_9_outlined));
       await tester.pump();
+
+      // Switch to MEN department and verify pillars
+      await tester.tap(find.text('MEN'));
+      await tester.pump();
+      expect(find.text('CLOTHES'), findsOneWidget);
+      expect(find.text('SHOES'), findsOneWidget);
+      expect(find.text('ACCESSORIES'), findsOneWidget);
+
+      // Switch to KIDS department and verify pillars
+      await tester.tap(find.text('KIDS'));
+      await tester.pump();
+      expect(find.text('CLOTHES'), findsOneWidget);
+      expect(find.text('SHOES'), findsOneWidget);
+      expect(find.text('ACCESSORIES'), findsOneWidget);
     });
 
     testWidgets('WishlistScreen renders Wishlist header, back button, and Go to Bag actions', (tester) async {
@@ -110,12 +187,16 @@ void main() {
 
       expect(find.text('WISH LIST'), findsOneWidget);
       expect(find.byIcon(Icons.arrow_back_ios_new), findsOneWidget);
-      expect(find.byIcon(Icons.shopping_bag_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.shopping_bag_outlined), findsWidgets);
 
       await tester.tap(find.byIcon(Icons.arrow_back_ios_new));
       expect(backTapped, true);
 
-      await tester.tap(find.byIcon(Icons.shopping_bag_outlined));
+      final appbarBagIcon = find.descendant(
+        of: find.byType(AppBar),
+        matching: find.byIcon(Icons.shopping_bag_outlined),
+      );
+      await tester.tap(appbarBagIcon);
       expect(bagTapped, true);
     });
 
@@ -175,7 +256,7 @@ void main() {
       expect(find.text('MA STUDIO'), findsWidgets);
       expect(find.text('ADD TO BAG'), findsOneWidget);
       expect(find.text('THE DETAIL'), findsOneWidget);
-      expect(find.text('SIZE & FITS'), findsOneWidget);
+      expect(find.text('SIZE & FIT'), findsOneWidget);
 
       // Tap Add to Bag
       await tester.tap(find.text('ADD TO BAG'));

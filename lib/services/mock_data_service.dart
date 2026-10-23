@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../models/banner_item.dart';
-import '../models/category.dart';
+import '../models/category_item.dart';
 import '../models/product.dart';
 import '../models/cart_item.dart';
 import '../models/user_profile.dart';
@@ -16,15 +15,20 @@ class MockDataService extends ChangeNotifier {
   bool _isLoaded = false;
   bool get isLoaded => _isLoaded;
 
+  List<CategoryItem> getCategoriesForDepartment(String department) {
+    final dept = department.toLowerCase().trim();
+    return categories.where((c) => c.department.toLowerCase() == dept).toList();
+  }
+
   List<OnboardingItem> onboardingItems = [];
-  List<HomeBannerItem> heroBanners = [];
-  List<PromoOffer> promoOffers = [];
+  List<CategoryBannerItem> categoryBanners = [];
   List<CategoryItem> categories = [];
   List<Product> products = [];
   FeatureProduct? featureProducts;
   List<CartItem> cartItems = [];
   Set<int> wishlistProductIds = {1, 5};
   UserProfile? userProfile;
+  bool isLoggedIn = false;
   ShippingAddress? shippingAddress;
   String promoCode = 'FIRST20';
   double discountAmount = 50.00;
@@ -33,60 +37,43 @@ class MockDataService extends ChangeNotifier {
   Future<void> initialize() async {
     if (_isLoaded) return;
     try {
-      // Use dedicated HomeService loaders
       const homeService = HomeService();
-      final bannersData = await homeService.getBannersData();
-      
-      final rawOnboarding = bannersData['onboarding'] as List? ?? const [];
-      onboardingItems = rawOnboarding
-          .whereType<Map<String, dynamic>>()
-          .map((x) => OnboardingItem.fromJson(x))
-          .toList();
-
-      final rawBanners = bannersData['home_hero_banners'] as List? ?? const [];
-      heroBanners = rawBanners
-          .whereType<Map<String, dynamic>>()
-          .map((x) => HomeBannerItem.fromJson(x))
-          .toList();
-
-      final rawOffers = bannersData['promo_offers'] as List? ?? const [];
-      promoOffers = rawOffers
-          .whereType<Map<String, dynamic>>()
-          .map((x) => PromoOffer.fromJson(x))
-          .toList();
-
+      onboardingItems = await homeService.getOnboardingItems();
+      categoryBanners = await homeService.getCategoryBanners();
       categories = await homeService.getCategories();
       products = await homeService.getProducts();
       featureProducts = await homeService.getFeatureProducts();
 
-      // 4. Load Cart
-      final cartString = await rootBundle.loadString('assets/json/cart.json');
+      final cartString = await HomeService.loadString('assets/json/cart.json');
       final cartJson = json.decode(cartString) as Map<String, dynamic>;
       final rawCart = cartJson['items'] as List? ?? const [];
       cartItems = rawCart
           .whereType<Map<String, dynamic>>()
           .map((x) => CartItem.fromJson(x))
           .toList();
-      if (cartJson['shippingAddress'] != null && cartJson['shippingAddress'] is Map<String, dynamic>) {
-        shippingAddress = ShippingAddress.fromJson(cartJson['shippingAddress'] as Map<String, dynamic>);
+      if (cartJson['shippingAddress'] != null &&
+          cartJson['shippingAddress'] is Map<String, dynamic>) {
+        shippingAddress = ShippingAddress.fromJson(
+          cartJson['shippingAddress'] as Map<String, dynamic>,
+        );
       }
       promoCode = cartJson['promoCode'] as String? ?? 'FIRST20';
       discountAmount = (cartJson['discountAmount'] as num?)?.toDouble() ?? 50.0;
       shippingFee = (cartJson['shippingFee'] as num?)?.toDouble() ?? 15.0;
 
-      // 5. Load User Profile
-      final profileString = await rootBundle.loadString('assets/json/user_profile.json');
+      final profileString = await HomeService.loadString(
+        'assets/json/user_profile.json',
+      );
       final profileJson = json.decode(profileString) as Map<String, dynamic>;
       userProfile = UserProfile.fromJson(profileJson);
 
       _isLoaded = true;
       notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading JSON mock data: $e');
+    } catch (e, stackTrace) {
+      debugPrint('MockDataService initialization error: $e\n$stackTrace');
     }
   }
 
-  // --- Cart Actions ---
   List<CartItem> get selectedCartItems =>
       cartItems.where((item) => item.isSelected).toList();
 
@@ -110,17 +97,18 @@ class MockDataService extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get cartSubtotal =>
-      selectedCartItems.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+  double get cartSubtotal => selectedCartItems.fold(
+    0.0,
+    (sum, item) => sum + (item.price * item.quantity),
+  );
 
-  double get effectiveShippingFee => selectedCartItems.isEmpty ? 0.0 : shippingFee;
-
+  double get effectiveShippingFee =>
+      selectedCartItems.isEmpty ? 0.0 : shippingFee;
   double get effectiveDiscountAmount {
     if (selectedCartItems.isEmpty) return 0.0;
-    double discount = discountAmount;
-    if (promoCode == 'VIP10') {
-      discount = cartSubtotal * 0.10;
-    }
+    final discount = promoCode == 'VIP10'
+        ? cartSubtotal * 0.10
+        : discountAmount;
     return discount > cartSubtotal ? cartSubtotal : discount;
   }
 
@@ -139,7 +127,6 @@ class MockDataService extends ChangeNotifier {
       return true;
     } else if (cleanCode == 'VIP10') {
       promoCode = 'VIP10';
-      discountAmount = cartSubtotal * 0.10;
       notifyListeners();
       return true;
     } else if (cleanCode == 'SAVE100' && cartSubtotal >= 300) {
@@ -151,9 +138,17 @@ class MockDataService extends ChangeNotifier {
     return false;
   }
 
-  void addToCart(Product product, {required String color, required String size, int quantity = 1}) {
+  void addToCart(
+    Product product, {
+    required String color,
+    required String size,
+    int quantity = 1,
+  }) {
     final existingIndex = cartItems.indexWhere(
-      (item) => item.productId == product.id && item.color == color && item.size == size,
+      (item) =>
+          item.productId == product.id &&
+          item.color == color &&
+          item.size == size,
     );
 
     if (existingIndex != -1) {
@@ -217,7 +212,24 @@ class MockDataService extends ChangeNotifier {
     }
   }
 
-  // --- Wishlist Actions ---
+  void clearSelectedCart() {
+    cartItems.removeWhere((item) => item.isSelected);
+    notifyListeners();
+  }
+
+  void login({UserProfile? profile}) {
+    isLoggedIn = true;
+    if (profile != null) userProfile = profile;
+    notifyListeners();
+  }
+
+  void logout() {
+    isLoggedIn = false;
+    notifyListeners();
+  }
+
+  int get wishlistCount => wishlistProductIds.length;
+
   bool isFavorite(int productId) => wishlistProductIds.contains(productId);
 
   void toggleFavorite(int productId) {
@@ -231,5 +243,13 @@ class MockDataService extends ChangeNotifier {
 
   List<Product> get wishlistProducts {
     return products.where((p) => wishlistProductIds.contains(p.id)).toList();
+  }
+
+  Future<List<CategoryItem>> loadCategoryProducts() async {
+    if (categories.isNotEmpty) return categories;
+    const homeService = HomeService();
+    categories = await homeService.getCategories();
+    notifyListeners();
+    return categories;
   }
 }

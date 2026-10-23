@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/department_content.dart';
+import '../models/department_tab_item.dart';
+
+export '../models/department_tab_item.dart';
 
 /// Repository that manages curated department data, hero slides, promo drops, and lookbooks.
 class DepartmentRepository {
@@ -8,12 +11,12 @@ class DepartmentRepository {
   factory DepartmentRepository() => _instance;
   DepartmentRepository._internal();
 
-  static const List<Map<String, String>> departments = [
-    {'id': 'home', 'name': 'HOME'},
-    {'id': 'women', 'name': 'WOMEN'},
-    {'id': 'men', 'name': 'MEN'},
-    {'id': 'kids', 'name': 'KIDS'},
-    {'id': 'accessory', 'name': 'ACCESSORY'},
+  static const List<DepartmentTabItem> departments = [
+    DepartmentTabItem(id: 'home', name: 'HOME'),
+    DepartmentTabItem(id: 'women', name: 'WOMEN'),
+    DepartmentTabItem(id: 'men', name: 'MEN'),
+    DepartmentTabItem(id: 'kids', name: 'KIDS'),
+    DepartmentTabItem(id: 'accessory', name: 'ACCESSORY'),
   ];
 
   final Map<String, DepartmentContent> _departmentsData = {
@@ -26,7 +29,7 @@ class DepartmentRepository {
           tag: 'LIMITED TIME DROP',
           title: '30% - 70%\nOFF',
           subtitle: 'SALE ENDS SOON\nEXTRA 30% OFF',
-          image: 'assets/images/BannerWomen.avif',
+          image: 'assets/images/BannerWomen.jpg',
           isAsset: true,
           fallback:
               'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
@@ -38,7 +41,7 @@ class DepartmentRepository {
           tag: 'AUTUMN / WINTER 2026',
           title: 'WOMEN RUNWAY EDIT',
           subtitle: 'Double-faced virgin wool blazers & fluid pleated silk',
-          image: 'assets/images/products/product1.avif',
+          image: 'assets/images/products/product1.jpg',
           isAsset: true,
           fallback:
               'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000&auto=format&fit=crop&q=80',
@@ -62,7 +65,7 @@ class DepartmentRepository {
         title: 'WOMEN\nSALE 50%',
         subtitle: 'On selected tailoring, silk dresses & knitwear',
         color: Color(0xFFD32F2F),
-        image: 'assets/images/products/product1.avif',
+        image: 'assets/images/products/product1.jpg',
         isAsset: true,
         fallback:
             'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80',
@@ -190,7 +193,7 @@ class DepartmentRepository {
           tag: 'LIMITED TIME DROP',
           title: '30% - 70%\nOFF',
           subtitle: 'SALE ENDS SOON\nEXTRA 30% OFF',
-          image: 'assets/images/BannerWomen.avif',
+          image: 'assets/images/BannerWomen.jpg',
           isAsset: true,
           fallback:
               'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80',
@@ -228,7 +231,7 @@ class DepartmentRepository {
         subtitle:
             'On curated tailoring, graphic streetwear & leather accessories',
         color: Color(0xFFD32F2F),
-        image: 'assets/images/products/product1.avif',
+        image: 'assets/images/products/product1.jpg',
         isAsset: true,
         fallback:
             'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80',

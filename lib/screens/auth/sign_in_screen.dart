@@ -4,10 +4,13 @@ import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../main_nav_screen.dart';
+import '../../services/mock_data_service.dart';
 import 'sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  final bool returnOnSuccess;
+
+  const SignInScreen({super.key, this.returnOnSuccess = false});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -18,11 +21,23 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController(text: 'password123');
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void _handleSignIn() {
     setState(() => _isLoading = true);
     Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() => _isLoading = false);
+        MockDataService().login();
+        if (widget.returnOnSuccess && Navigator.canPop(context)) {
+          Navigator.pop(context, true);
+          return;
+        }
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const MainNavScreen()),
@@ -49,7 +64,7 @@ class _SignInScreenState extends State<SignInScreen> {
         centerTitle: true,
         title: Image.asset(
           'assets/images/logoDevs.png',
-          height: 30,
+          height: 40,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) => Text(
             'MA STUDIO',
@@ -64,16 +79,25 @@ class _SignInScreenState extends State<SignInScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              // Brand Heading
-              Text('Sign In', style: AppTypography.displayLarge),
-              const SizedBox(height: 8),
-              Text(
-                'Enter your credentials to continue',
-                style: AppTypography.bodyMedium,
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text(
+                      'Sign In',
+                      style: AppTypography.displayLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Enter your credentials to continue',
+                      style: AppTypography.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 36),
+                  ],
+                ),
               ),
-              const SizedBox(height: 36),
-
-              // Email Address
               AppTextField(
                 label: 'Email Address',
                 hint: 'name@example.com',
@@ -82,7 +106,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Password with Forgot Action
               AppTextField(
                 label: 'Password',
                 hint: '••••••••',
@@ -109,7 +132,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Primary Sign In Button
               AppButton(
                 text: 'SIGN IN',
                 isLoading: _isLoading,
@@ -117,7 +139,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Or Continue With Divider
               Row(
                 children: [
                   const Expanded(
@@ -140,7 +161,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Social Auth Options
               Row(
                 children: [
                   Expanded(
@@ -151,7 +171,10 @@ class _SignInScreenState extends State<SignInScreen> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.borderDark, width: 1.0),
+                          border: Border.all(
+                            color: AppColors.borderDark,
+                            width: 1.0,
+                          ),
                         ),
                         child: const Text(
                           'G',
@@ -170,7 +193,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _SocialButton(
-                      icon: const Icon(Icons.apple, color: AppColors.black, size: 22),
+                      icon: const Icon(
+                        Icons.apple,
+                        color: AppColors.black,
+                        size: 22,
+                      ),
                       label: 'Apple',
                       onTap: _handleSignIn,
                     ),
@@ -179,7 +206,6 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               const SizedBox(height: 48),
 
-              // Bottom Sign Up Link
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

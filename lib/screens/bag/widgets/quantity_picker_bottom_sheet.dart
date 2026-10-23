@@ -4,8 +4,6 @@ import '../../../helpers/app_colors.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../widgets/app_button.dart';
 
-/// Modal bottom sheet for selecting product quantity in the Shopping Bag.
-/// Matches the luxury Cupertino wheel picker aesthetic used across the app.
 class QuantityPickerBottomSheet extends StatefulWidget {
   final int initialQuantity;
   final int maxQuantity;
@@ -35,16 +33,27 @@ class QuantityPickerBottomSheet extends StatefulWidget {
   }
 
   @override
-  State<QuantityPickerBottomSheet> createState() => _QuantityPickerBottomSheetState();
+  State<QuantityPickerBottomSheet> createState() =>
+      _QuantityPickerBottomSheetState();
 }
 
 class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
   late int _selectedQuantity;
+  late final FixedExtentScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _selectedQuantity = widget.initialQuantity.clamp(1, widget.maxQuantity);
+    _scrollController = FixedExtentScrollController(
+      initialItem: _selectedQuantity - 1,
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _handleConfirm() {
@@ -67,7 +76,6 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header: Title centered with close button on right
             Stack(
               alignment: Alignment.center,
               children: [
@@ -87,7 +95,11 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.close, size: 22, color: AppColors.black),
+                    icon: const Icon(
+                      Icons.close,
+                      size: 22,
+                      color: AppColors.black,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
@@ -95,14 +107,11 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
             ),
             const SizedBox(height: 20),
 
-            // Cupertino Picker for smooth wheel selection
             SizedBox(
               height: 140,
               child: CupertinoPicker(
                 itemExtent: 44,
-                scrollController: FixedExtentScrollController(
-                  initialItem: _selectedQuantity - 1,
-                ),
+                scrollController: _scrollController,
                 selectionOverlay: Container(
                   decoration: const BoxDecoration(
                     border: Border(
@@ -123,7 +132,9 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
                       '$qty',
                       style: AppTypography.headingMedium.copyWith(
                         fontSize: 18,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w400,
                         color: isSelected
                             ? AppColors.textPrimary
                             : AppColors.placeholder,
@@ -135,7 +146,6 @@ class _QuantityPickerBottomSheetState extends State<QuantityPickerBottomSheet> {
             ),
             const SizedBox(height: 24),
 
-            // Confirm Button
             AppButton(
               text: 'CONFIRM QUANTITY',
               variant: AppButtonVariant.primary,

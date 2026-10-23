@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTypography {
-  // Editorial / Luxury Headings
+  // header
   static TextStyle displayLarge = GoogleFonts.playfairDisplay(
     fontSize: 32,
     fontWeight: FontWeight.w700,
@@ -23,7 +23,7 @@ class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  // Modern Headers (Poppins)
+  // Modern Headers
   static TextStyle headingLarge = GoogleFonts.poppins(
     fontSize: 20,
     fontWeight: FontWeight.w600,
@@ -42,7 +42,7 @@ class AppTypography {
     color: AppColors.textPrimary,
   );
 
-  // Body & Details (Inter)
+  // Body & Details
   static TextStyle bodyLarge = GoogleFonts.inter(
     fontSize: 15,
     fontWeight: FontWeight.w400,

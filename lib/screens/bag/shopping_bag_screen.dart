@@ -6,20 +6,14 @@ import '../../helpers/currency_helper.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../wishlist/wishlist_screen.dart';
+import '../auth/sign_in_screen.dart';
 import 'widgets/bag_item_card.dart';
 
-/// Clean, editorial Shopping Bag screen matching the luxury design specification.
-/// Features swipe-to-delete/move-to-wishlist, quantity picker overlay,
-/// promo code integration, and streamlined checkout.
 class ShoppingBagScreen extends StatefulWidget {
   final VoidCallback? onNavigateToWishlist;
   final VoidCallback? onBack;
 
-  const ShoppingBagScreen({
-    super.key,
-    this.onNavigateToWishlist,
-    this.onBack,
-  });
+  const ShoppingBagScreen({super.key, this.onNavigateToWishlist, this.onBack});
 
   @override
   State<ShoppingBagScreen> createState() => _ShoppingBagScreenState();
@@ -27,6 +21,12 @@ class ShoppingBagScreen extends StatefulWidget {
 
 class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
   final _promoController = TextEditingController(text: 'FIRST20');
+
+  @override
+  void dispose() {
+    _promoController.dispose();
+    super.dispose();
+  }
 
   void _navigateToWishlist() {
     if (widget.onNavigateToWishlist != null) {
@@ -52,31 +52,51 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+        ),
         title: Text('REMOVE ITEM', style: AppTypography.headingSmall),
-        content: Text('Are you sure you want to remove "$title" from your shopping bag?'),
+        content: Text(
+          'Are you sure you want to remove "$title" from your shopping bag?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('CANCEL', style: AppTypography.badge.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              'CANCEL',
+              style: AppTypography.badge.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.saleRed,
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.sm)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
             ),
             onPressed: () {
+              final messenger = ScaffoldMessenger.of(context);
               MockDataService().removeFromCart(cartItemId);
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 SnackBar(
-                  content: Text('Removed "$title" from your bag', style: AppTypography.bodySmall.copyWith(color: AppColors.white)),
+                  content: Text(
+                    'Removed "$title" from your bag',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.white,
+                    ),
+                  ),
                   backgroundColor: AppColors.black,
                 ),
               );
             },
-            child: Text('REMOVE', style: AppTypography.badge.copyWith(color: AppColors.white)),
+            child: Text(
+              'REMOVE',
+              style: AppTypography.badge.copyWith(color: AppColors.white),
+            ),
           ),
         ],
       ),
@@ -87,7 +107,10 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
     MockDataService().moveToWishlist(cartItemId);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Moved "$title" to your wishlist', style: AppTypography.bodySmall.copyWith(color: AppColors.white)),
+        content: Text(
+          'Moved "$title" to your wishlist',
+          style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+        ),
         backgroundColor: AppColors.black,
         action: SnackBarAction(
           label: 'VIEW WISHLIST',
@@ -98,7 +121,25 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
     );
   }
 
+  Future<void> _handleCheckout() async {
+    final mockService = MockDataService();
+    if (!mockService.isLoggedIn) {
+      final loggedIn = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SignInScreen(returnOnSuccess: true),
+        ),
+      );
+      if (loggedIn == true && mounted) {
+        _showCheckoutDialog();
+      }
+      return;
+    }
+    _showCheckoutDialog();
+  }
+
   void _showCheckoutDialog() {
+    MockDataService().clearSelectedCart();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -109,7 +150,11 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.check_circle_outline, size: 48, color: Colors.green),
+            const Icon(
+              Icons.check_circle_outline,
+              size: 48,
+              color: Colors.green,
+            ),
             const SizedBox(height: 12),
             Text(
               'Thank you for your order!',
@@ -143,7 +188,11 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.black, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.black,
+            size: 20,
+          ),
           onPressed: _handleBack,
         ),
         title: Text(
@@ -157,7 +206,11 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.favorite_border, color: AppColors.black, size: 24),
+            icon: const Icon(
+              Icons.favorite_border,
+              color: AppColors.black,
+              size: 24,
+            ),
             onPressed: _navigateToWishlist,
           ),
           const SizedBox(width: 8),
@@ -191,7 +244,9 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                     const SizedBox(height: 20),
                     Text(
                       'YOUR BAG IS EMPTY',
-                      style: AppTypography.headingMedium.copyWith(letterSpacing: 1.0),
+                      style: AppTypography.headingMedium.copyWith(
+                        letterSpacing: 1.0,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -216,14 +271,18 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Select All Header Bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   child: Row(
                     children: [
                       InkWell(
                         onTap: () {
-                          mockService.selectAllCartItems(!mockService.isAllCartSelected);
+                          mockService.selectAllCartItems(
+                            !mockService.isAllCartSelected,
+                          );
                         },
                         borderRadius: BorderRadius.circular(4),
                         child: Padding(
@@ -235,15 +294,23 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                                 width: 20,
                                 height: 20,
                                 decoration: BoxDecoration(
-                                  color: mockService.isAllCartSelected ? AppColors.black : Colors.transparent,
+                                  color: mockService.isAllCartSelected
+                                      ? AppColors.black
+                                      : Colors.transparent,
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
-                                    color: mockService.isAllCartSelected ? AppColors.black : AppColors.borderDark,
+                                    color: mockService.isAllCartSelected
+                                        ? AppColors.black
+                                        : AppColors.borderDark,
                                     width: 1.4,
                                   ),
                                 ),
                                 child: mockService.isAllCartSelected
-                                    ? const Icon(Icons.check, size: 14, color: AppColors.white)
+                                    ? const Icon(
+                                        Icons.check,
+                                        size: 14,
+                                        color: AppColors.white,
+                                      )
                                     : null,
                               ),
                               const SizedBox(width: 10),
@@ -274,8 +341,6 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                   ),
                 ),
                 const Divider(color: AppColors.border, height: 1),
-
-                // Cart Items List (with swipe to delete)
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -289,7 +354,6 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                   ),
                   itemBuilder: (context, index) {
                     final item = items[index];
-
                     return BagItemCard(
                       item: item,
                       isSelected: item.isSelected,
@@ -300,15 +364,13 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                         mockService.setCartQuantity(item.id, newQty);
                       },
                       onRemove: () => _showRemoveDialog(item.id, item.title),
-                      onMoveToWishlist: () => _moveToWishlist(item.id, item.title),
+                      onMoveToWishlist: () =>
+                          _moveToWishlist(item.id, item.title),
                     );
                   },
                 ),
-
                 const Divider(color: AppColors.border, height: 1),
                 const SizedBox(height: 20),
-
-                // Promo Code Section (matching mockup)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Container(
@@ -325,7 +387,9 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 14),
                             child: TextField(
                               controller: _promoController,
-                              style: AppTypography.bodyMedium.copyWith(color: AppColors.textPrimary),
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: AppColors.textPrimary,
+                              ),
                               decoration: InputDecoration(
                                 hintText: 'PROMO CODE',
                                 hintStyle: AppTypography.formLabel.copyWith(
@@ -342,18 +406,24 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            final success = mockService.applyPromoCode(_promoController.text);
+                            final success = mockService.applyPromoCode(
+                              _promoController.text,
+                            );
                             if (success) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Promo code "${_promoController.text.trim().toUpperCase()}" applied!'),
+                                  content: Text(
+                                    'Promo code "${_promoController.text.trim().toUpperCase()}" applied!',
+                                  ),
                                   backgroundColor: AppColors.black,
                                 ),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Invalid promo code. Try FIRST20 or VIP10.'),
+                                  content: Text(
+                                    'Invalid promo code. Try FIRST20 or VIP10.',
+                                  ),
                                   backgroundColor: AppColors.saleRed,
                                 ),
                               );
@@ -364,7 +434,9 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 22),
                             decoration: const BoxDecoration(
                               color: AppColors.black,
-                              borderRadius: BorderRadius.horizontal(right: Radius.circular(3)),
+                              borderRadius: BorderRadius.horizontal(
+                                right: Radius.circular(3),
+                              ),
                             ),
                             alignment: Alignment.center,
                             child: Text(
@@ -385,18 +457,24 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
 
                 const SizedBox(height: 24),
 
-                // Order Price Breakdown (Matching mockup)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: [
-                      _priceRow('Sub-Total', mockService.cartSubtotal.toCurrency()),
+                      _priceRow(
+                        'Sub-Total',
+                        mockService.cartSubtotal.toCurrency(),
+                      ),
                       const SizedBox(height: 10),
-                      _priceRow('Delivery Fee', mockService.effectiveShippingFee.toCurrency()),
+                      _priceRow(
+                        'Delivery Fee',
+                        mockService.effectiveShippingFee.toCurrency(),
+                      ),
                       const SizedBox(height: 10),
                       _priceRow(
                         'Discount',
-                        mockService.effectiveDiscountAmount.toDiscountCurrency(),
+                        mockService.effectiveDiscountAmount
+                            .toDiscountCurrency(),
                         isDiscount: true,
                       ),
                       const Padding(
@@ -414,7 +492,6 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
 
                 const SizedBox(height: 28),
 
-                // Checkout Button (Matching mockup "Go To Bag" / "PROCEED TO CHECKOUT")
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: AppButton(
@@ -425,11 +502,13 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                         ? AppButtonVariant.primary
                         : AppButtonVariant.secondary,
                     onPressed: mockService.selectedCartCount > 0
-                        ? _showCheckoutDialog
+                        ? _handleCheckout
                         : () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Please select at least one item to proceed.'),
+                                content: Text(
+                                  'Please select at least one item to proceed.',
+                                ),
                                 backgroundColor: AppColors.black,
                               ),
                             );
@@ -444,24 +523,42 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
     );
   }
 
-  Widget _priceRow(String label, String value, {bool isDiscount = false, bool isTotal = false}) {
+  Widget _priceRow(
+    String label,
+    String value, {
+    bool isDiscount = false,
+    bool isTotal = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: isTotal
-              ? AppTypography.headingSmall.copyWith(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.textPrimary)
-              : AppTypography.bodySmall.copyWith(fontSize: 13, color: AppColors.textSecondary),
+              ? AppTypography.headingSmall.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                )
+              : AppTypography.bodySmall.copyWith(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
         ),
         Text(
           value,
           style: isTotal
-              ? AppTypography.headingSmall.copyWith(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary)
+              ? AppTypography.headingSmall.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                )
               : AppTypography.bodySmall.copyWith(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isDiscount ? AppColors.alertRed : AppColors.textPrimary,
+                  color: isDiscount
+                      ? AppColors.alertRed
+                      : AppColors.textPrimary,
                 ),
         ),
       ],

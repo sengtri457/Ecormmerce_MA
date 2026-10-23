@@ -4,19 +4,25 @@ import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../widgets/app_button.dart';
 
-/// Sticky bottom bar with quantity stepper and primary Add To Bag CTA.
+/// Bottom bar with size selector, quantity stepper and Add to Bag button.
 class ProductBottomBar extends StatelessWidget {
   final int quantity;
+  final String selectedSize;
+  final bool isOneSize;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final VoidCallback onAddToBag;
+  final VoidCallback onOpenSizePicker;
 
   const ProductBottomBar({
     super.key,
     required this.quantity,
+    required this.selectedSize,
+    this.isOneSize = false,
     required this.onIncrement,
     required this.onDecrement,
     required this.onAddToBag,
+    required this.onOpenSizePicker,
   });
 
   @override
@@ -38,7 +44,40 @@ class ProductBottomBar extends StatelessWidget {
         top: false,
         child: Row(
           children: [
-            // Quantity Stepper
+            InkWell(
+              onTap: onOpenSizePicker,
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+              child: Container(
+                height: 48,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceLight,
+                  border: Border.all(color: AppColors.border, width: 1.0),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isOneSize ? 'OS' : selectedSize,
+                      style: AppTypography.headingSmall.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+
             Container(
               height: 48,
               decoration: BoxDecoration(
@@ -56,7 +95,7 @@ class ProductBottomBar extends StatelessWidget {
                       ),
                       onTap: onDecrement,
                       child: Container(
-                        width: 38,
+                        width: 34,
                         height: 48,
                         alignment: Alignment.center,
                         child: const Icon(Icons.remove, size: 16, color: AppColors.black),
@@ -64,7 +103,7 @@ class ProductBottomBar extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 32,
+                    width: 28,
                     alignment: Alignment.center,
                     child: Text(
                       '$quantity',
@@ -82,7 +121,7 @@ class ProductBottomBar extends StatelessWidget {
                       ),
                       onTap: onIncrement,
                       child: Container(
-                        width: 38,
+                        width: 34,
                         height: 48,
                         alignment: Alignment.center,
                         child: const Icon(Icons.add, size: 16, color: AppColors.black),
@@ -92,9 +131,8 @@ class ProductBottomBar extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: AppSpacing.md),
+            const SizedBox(width: AppSpacing.sm),
 
-            // Add to Bag Button
             Expanded(
               child: AppButton(
                 text: 'ADD TO BAG',

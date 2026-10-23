@@ -1,66 +1,290 @@
 [
   {
-    "id": "cat_women",
+    "department": "women",
     "name": "Women",
     "slug": "women",
-    "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&auto=format&fit=crop&q=80",
-    "subcategories": [
-      { "id": "w_all", "name": "All Items", "count": 240 },
-      { "id": "w_dresses", "name": "Dresses", "count": 68 },
-      { "id": "w_coats", "name": "Coats & Jackets", "count": 42 },
-      { "id": "w_tops", "name": "Tops & Blouses", "count": 55 },
-      { "id": "w_shoes", "name": "Footwear", "count": 35 },
-      { "id": "w_bags", "name": "Bags & Leather", "count": 40 }
+    "categories": [
+      {
+        "id": "clothes",
+        "department": "women",
+        "title": "CLOTHES",
+        "name": "Clothes",
+        "slug": "women-clothes",
+        "icon": "assets/icons/category-horizental/Clothes.png",
+        "image": "assets/images/BannerWomen.jpg",
+        "itemCount": 128,
+        "subcategories": [
+          { "id": "all", "name": "All Clothes", "count": 128 },
+          {
+            "id": "dresses",
+            "name": "Dresses",
+            "count": 68,
+            "icon": "assets/icons/category-horizental/dress.png"
+          },
+          {
+            "id": "coats",
+            "name": "Coats & Jackets",
+            "count": 42,
+            "icon": "assets/icons/category-horizental/coat.png"
+          },
+          { "id": "tops", "name": "Tops & Blouses", "count": 55 },
+          {
+            "id": "jackets",
+            "name": "Jackets",
+            "count": 32,
+            "icon": "assets/icons/category-horizental/jacket.png"
+          },
+          { "id": "knitwear", "name": "Knitwear", "count": 25 },
+          { "id": "pants", "name": "Pants & Denim", "count": 38 }
+        ]
+      },
+      {
+        "id": "shoes",
+        "department": "women",
+        "title": "SHOES",
+        "name": "Shoes",
+        "slug": "women-shoes",
+        "icon": "assets/icons/category-horizental/shoes.png",
+        "image": "assets/images/products/product1.jpg",
+        "itemCount": 35,
+        "subcategories": [
+          { "id": "all", "name": "All Shoes", "count": 35 },
+          { "id": "heels", "name": "Heels & Pumps", "count": 14 },
+          { "id": "boots", "name": "Boots & Booties", "count": 12 },
+          { "id": "loafers", "name": "Loafers", "count": 8 },
+          { "id": "sandals", "name": "Sandals & Slides", "count": 10 }
+        ]
+      },
+      {
+        "id": "accessories",
+        "department": "women",
+        "title": "ACCESSORIES",
+        "name": "Accessories",
+        "slug": "women-accessories",
+        "icon": "assets/icons/category-horizental/bag.png",
+        "image": "assets/images/products/image1.jpg",
+        "itemCount": 42,
+        "subcategories": [
+          { "id": "all", "name": "All Accessories", "count": 42 },
+          {
+            "id": "bags",
+            "name": "Bags & Leather",
+            "count": 40,
+            "icon": "assets/icons/category-horizental/bag.png"
+          },
+          { "id": "jewelry", "name": "Jewelry", "count": 18 },
+          { "id": "belts", "name": "Belts & Scarves", "count": 12 },
+          { "id": "eyewear", "name": "Eyewear", "count": 14 },
+          {
+            "id": "caps",
+            "name": "Caps & Beanies",
+            "count": 16,
+            "icon": "assets/icons/category-horizental/cap.png"
+          }
+        ]
+      }
     ]
   },
   {
-    "id": "cat_men",
+    "department": "men",
     "name": "Men",
     "slug": "men",
-    "imageUrl": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
-    "subcategories": [
-      { "id": "m_all", "name": "All Items", "count": 180 },
-      { "id": "m_suits", "name": "Tailoring", "count": 32 },
-      { "id": "m_shirts", "name": "Shirts", "count": 48 },
-      { "id": "m_jackets", "name": "Outerwear", "count": 36 },
-      { "id": "m_shoes", "name": "Shoes", "count": 28 },
-      { "id": "m_accessories", "name": "Accessories", "count": 36 }
+    "categories": [
+      {
+        "id": "clothes",
+        "department": "men",
+        "title": "CLOTHES",
+        "name": "Clothes",
+        "slug": "men-clothes",
+        "icon": "assets/icons/category-horizental/Clothes.png",
+        "image": "assets/images/bannerMen.gif",
+        "itemCount": 114,
+        "subcategories": [
+          { "id": "all", "name": "All Clothes", "count": 114 },
+          { "id": "shirts", "name": "T-Shirts & Tops", "count": 48 },
+          { "id": "hoodies", "name": "Hoodies & Sweats", "count": 34 },
+          {
+            "id": "jackets",
+            "name": "Jackets & Outerwear",
+            "count": 36,
+            "icon": "assets/icons/category-horizental/jacket.png"
+          },
+          {
+            "id": "coats",
+            "name": "Coats",
+            "count": 22,
+            "icon": "assets/icons/category-horizental/coat.png"
+          },
+          { "id": "pants", "name": "Pants & Denim", "count": 30 }
+        ]
+      },
+      {
+        "id": "shoes",
+        "department": "men",
+        "title": "SHOES",
+        "name": "Shoes",
+        "slug": "men-shoes",
+        "icon": "assets/icons/category-horizental/shoes.png",
+        "image": "assets/images/products/image2.jpg",
+        "itemCount": 28,
+        "subcategories": [
+          { "id": "all", "name": "All Shoes", "count": 28 },
+          { "id": "sneakers", "name": "Sneakers & Runners", "count": 18 },
+          { "id": "boots", "name": "Boots & Derbies", "count": 8 },
+          { "id": "loafers", "name": "Loafers", "count": 6 },
+          { "id": "slides", "name": "Slides", "count": 5 }
+        ]
+      },
+      {
+        "id": "accessories",
+        "department": "men",
+        "title": "ACCESSORIES",
+        "name": "Accessories",
+        "slug": "men-accessories",
+        "icon": "assets/icons/category-horizental/bag.png",
+        "image": "assets/images/products/image3.jpg",
+        "itemCount": 36,
+        "subcategories": [
+          { "id": "all", "name": "All Accessories", "count": 36 },
+          {
+            "id": "bags",
+            "name": "Bags & Backpacks",
+            "count": 16,
+            "icon": "assets/icons/category-horizental/bag.png"
+          },
+          {
+            "id": "caps",
+            "name": "Caps & Hats",
+            "count": 14,
+            "icon": "assets/icons/category-horizental/cap.png"
+          },
+          { "id": "wallets", "name": "Wallets & Belts", "count": 12 },
+          { "id": "sunglasses", "name": "Sunglasses", "count": 8 }
+        ]
+      }
     ]
   },
   {
-    "id": "cat_kids",
+    "department": "kids",
     "name": "Kids",
     "slug": "kids",
-    "imageUrl": "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=600&auto=format&fit=crop&q=80",
-    "subcategories": [
-      { "id": "k_all", "name": "All Items", "count": 95 },
-      { "id": "k_girls", "name": "Girls", "count": 45 },
-      { "id": "k_boys", "name": "Boys", "count": 38 },
-      { "id": "k_baby", "name": "Baby & Toddler", "count": 12 }
+    "categories": [
+      {
+        "id": "clothes",
+        "department": "kids",
+        "title": "CLOTHES",
+        "name": "Clothes",
+        "slug": "kids-clothes",
+        "icon": "assets/icons/category-horizental/Clothes.png",
+        "image": "assets/images/kidsbanner.jpg",
+        "itemCount": 78,
+        "subcategories": [
+          { "id": "all", "name": "All Clothes", "count": 78 },
+          { "id": "boys", "name": "Boys Clothes", "count": 38 },
+          { "id": "girls", "name": "Girls Clothes", "count": 45 },
+          {
+            "id": "dresses",
+            "name": "Dresses",
+            "count": 22,
+            "icon": "assets/icons/category-horizental/dress.png"
+          },
+          { "id": "hoodies", "name": "Hoodies & Sweats", "count": 20 },
+          {
+            "id": "jackets",
+            "name": "Jackets",
+            "count": 18,
+            "icon": "assets/icons/category-horizental/jacket.png"
+          }
+        ]
+      },
+      {
+        "id": "shoes",
+        "department": "kids",
+        "title": "SHOES",
+        "name": "Shoes",
+        "slug": "kids-shoes",
+        "icon": "assets/icons/category-horizental/shoes.png",
+        "image": "assets/images/category/banner2.jpg",
+        "itemCount": 22,
+        "subcategories": [
+          { "id": "all", "name": "All Shoes", "count": 22 },
+          { "id": "sneakers", "name": "Sneakers", "count": 14 },
+          { "id": "boots", "name": "Boots", "count": 6 },
+          { "id": "sandals", "name": "Sandals", "count": 8 }
+        ]
+      },
+      {
+        "id": "accessories",
+        "department": "kids",
+        "title": "ACCESSORIES",
+        "name": "Accessories",
+        "slug": "kids-accessories",
+        "icon": "assets/icons/category-horizental/bag.png",
+        "image": "assets/images/category/banner1.jpg",
+        "itemCount": 18,
+        "subcategories": [
+          { "id": "all", "name": "All Accessories", "count": 18 },
+          {
+            "id": "bags",
+            "name": "Backpacks & Bags",
+            "count": 10,
+            "icon": "assets/icons/category-horizental/bag.png"
+          },
+          {
+            "id": "caps",
+            "name": "Hats & Beanies",
+            "count": 8,
+            "icon": "assets/icons/category-horizental/cap.png"
+          },
+          { "id": "socks", "name": "Socks", "count": 6 }
+        ]
+      }
     ]
   },
   {
-    "id": "cat_home",
+    "department": "home",
     "name": "Home",
     "slug": "home",
-    "imageUrl": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80",
-    "subcategories": [
-      { "id": "h_all", "name": "All Items", "count": 64 },
-      { "id": "h_decor", "name": "Interior Decor", "count": 28 },
-      { "id": "h_candles", "name": "Scents & Candles", "count": 18 },
-      { "id": "h_textiles", "name": "Linen & Textiles", "count": 18 }
+    "categories": [
+      {
+        "id": "decor",
+        "department": "home",
+        "title": "DECOR",
+        "name": "Decor",
+        "slug": "home-decor",
+        "icon": "assets/icons/category-horizental/bag.png",
+        "image": "assets/images/products/image1.jpg",
+        "itemCount": 64,
+        "subcategories": [
+          { "id": "all", "name": "All Items", "count": 64 },
+          { "id": "interior", "name": "Interior Decor", "count": 28 },
+          { "id": "candles", "name": "Scents & Candles", "count": 18 },
+          { "id": "textiles", "name": "Linen & Textiles", "count": 18 }
+        ]
+      }
     ]
   },
   {
-    "id": "cat_beauty",
+    "department": "beauty",
     "name": "Beauty",
     "slug": "beauty",
-    "imageUrl": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&auto=format&fit=crop&q=80",
-    "subcategories": [
-      { "id": "b_all", "name": "All Beauty", "count": 82 },
-      { "id": "b_fragrance", "name": "Fragrance", "count": 30 },
-      { "id": "b_skincare", "name": "Skincare", "count": 34 },
-      { "id": "b_body", "name": "Body & Bath", "count": 18 }
+    "categories": [
+      {
+        "id": "beauty",
+        "department": "beauty",
+        "title": "BEAUTY",
+        "name": "Beauty",
+        "slug": "beauty-care",
+        "icon": "assets/icons/category-horizental/bag.png",
+        "image": "assets/images/products/product1.jpg",
+        "itemCount": 82,
+        "subcategories": [
+          { "id": "all", "name": "All Beauty", "count": 82 },
+          { "id": "fragrance", "name": "Fragrance", "count": 30 },
+          { "id": "skincare", "name": "Skincare", "count": 34 },
+          { "id": "body", "name": "Body & Bath", "count": 18 }
+        ]
+      }
     ]
   }
 ]

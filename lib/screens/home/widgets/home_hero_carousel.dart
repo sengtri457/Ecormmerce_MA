@@ -4,7 +4,6 @@ import '../../../helpers/app_typography.dart';
 import '../../../models/department_content.dart';
 import '../../../widgets/app_image.dart';
 
-/// Department hero banner carousel with split typography and full-bleed editorial slides.
 class HomeHeroCarousel extends StatelessWidget {
   final PageController controller;
   final List<HeroBannerSlide> slides;
@@ -49,7 +48,6 @@ class HomeHeroCarousel extends StatelessWidget {
             },
           ),
 
-          // Indicator Dots
           Positioned(
             bottom: 12,
             right: 32,
@@ -62,7 +60,9 @@ class HomeHeroCarousel extends StatelessWidget {
                   width: isActive ? 18 : 6,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: isActive ? AppColors.white : AppColors.white.withValues(alpha: 0.45),
+                    color: isActive
+                        ? AppColors.white
+                        : AppColors.white.withValues(alpha: 0.45),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 );
@@ -82,7 +82,6 @@ class HomeHeroCarousel extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Left Typography Box
           Expanded(
             flex: 11,
             child: Padding(
@@ -92,14 +91,19 @@ class HomeHeroCarousel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(alpha: 0.25),
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: Text(
                       slide.tag,
-                      style: AppTypography.badge.copyWith(color: AppColors.white),
+                      style: AppTypography.badge.copyWith(
+                        color: AppColors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -123,7 +127,10 @@ class HomeHeroCarousel extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
@@ -140,11 +147,12 @@ class HomeHeroCarousel extends StatelessWidget {
               ),
             ),
           ),
-          // Right Photo Box
           Expanded(
             flex: 10,
             child: ClipRRect(
-              borderRadius: const BorderRadius.horizontal(right: Radius.circular(6)),
+              borderRadius: const BorderRadius.horizontal(
+                right: Radius.circular(6),
+              ),
               child: AppImage(
                 imagePath: slide.image,
                 fallbackUrl: slide.fallback,
@@ -160,9 +168,7 @@ class HomeHeroCarousel extends StatelessWidget {
 
   Widget _buildFullBleedSlide(HeroBannerSlide slide) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -192,7 +198,10 @@ class HomeHeroCarousel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.black.withValues(alpha: 0.6),
                     borderRadius: BorderRadius.circular(3),
@@ -205,16 +214,24 @@ class HomeHeroCarousel extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   slide.title,
-                  style: AppTypography.displayMedium.copyWith(color: AppColors.white, fontSize: 22),
+                  style: AppTypography.displayMedium.copyWith(
+                    color: AppColors.white,
+                    fontSize: 22,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   slide.subtitle,
-                  style: AppTypography.bodySmall.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.white.withValues(alpha: 0.9),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 7,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(20),

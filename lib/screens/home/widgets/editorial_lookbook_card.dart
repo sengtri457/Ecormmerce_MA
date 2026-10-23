@@ -5,7 +5,6 @@ import '../../../models/department_content.dart';
 import '../../../widgets/app_button.dart';
 import '../../../widgets/app_image.dart';
 
-/// Full-width editorial lookbook showcase card.
 class EditorialLookbookCard extends StatelessWidget {
   final LookbookConfig lookbook;
   final VoidCallback onViewLookbook;
@@ -21,18 +20,13 @@ class EditorialLookbookCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       height: 270,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(6),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
       child: Stack(
         fit: StackFit.expand,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
-            child: AppImage(
-              imagePath: lookbook.image,
-              fit: BoxFit.cover,
-            ),
+            child: AppImage(imagePath: lookbook.image, fit: BoxFit.cover),
           ),
           Container(
             decoration: BoxDecoration(

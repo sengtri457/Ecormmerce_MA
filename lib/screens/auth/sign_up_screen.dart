@@ -4,6 +4,7 @@ import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_text_field.dart';
 import '../main_nav_screen.dart';
+import '../../services/mock_data_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,11 +21,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _agreeTerms = true;
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   void _handleSignUp() {
     setState(() => _isLoading = true);
     Future.delayed(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() => _isLoading = false);
+        MockDataService().login();
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const MainNavScreen()),
@@ -52,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         centerTitle: true,
         title: Image.asset(
           'assets/images/logoDevs.png',
-          height: 30,
+          height: 40,
           fit: BoxFit.contain,
           errorBuilder: (context, error, stackTrace) => Text(
             'MA STUDIO',
@@ -67,23 +78,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              Text('Create Account', style: AppTypography.displayLarge),
-              const SizedBox(height: 8),
-              Text(
-                'Join MA STUDIO for exclusive privileges and curated edits',
-                style: AppTypography.bodyMedium,
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Text(
+                      'Create Account',
+                      style: AppTypography.displayLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Join MA STUDIO for exclusive privileges and curated edits',
+                      style: AppTypography.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+                  ],
+                ),
               ),
-              const SizedBox(height: 32),
-
-              // Full Name
               AppTextField(
                 label: 'Full Name',
-                hint: 'Sengtri Chan',
+                hint: 'Sengtri bun',
                 controller: _nameController,
               ),
               const SizedBox(height: 20),
 
-              // Email Address
               AppTextField(
                 label: 'Email Address',
                 hint: 'name@example.com',
@@ -92,7 +112,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Password
               AppTextField(
                 label: 'Password',
                 hint: '••••••••',
@@ -101,7 +120,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Confirm Password
               AppTextField(
                 label: 'Confirm Password',
                 hint: '••••••••',
@@ -110,7 +128,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 24),
 
-              // Agree to terms checkbox
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -141,7 +158,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Register Button
               AppButton(
                 text: 'CREATE ACCOUNT',
                 isLoading: _isLoading,
@@ -149,7 +165,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const SizedBox(height: 32),
 
-              // Footer Sign In link
               Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

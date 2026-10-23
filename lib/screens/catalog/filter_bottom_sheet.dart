@@ -4,10 +4,13 @@ import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../widgets/app_button.dart';
 
+import '../../services/mock_data_service.dart';
+
 class FilterBottomSheet extends StatefulWidget {
   final RangeValues initialPrice;
   final String? initialCategory;
   final String? initialSize;
+  final List<String>? availableCategories;
   final Function(RangeValues price, String? category, String? size) onApply;
 
   const FilterBottomSheet({
@@ -15,6 +18,7 @@ class FilterBottomSheet extends StatefulWidget {
     required this.initialPrice,
     this.initialCategory,
     this.initialSize,
+    this.availableCategories,
     required this.onApply,
   });
 
@@ -27,7 +31,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   String? _selectedCategory;
   String? _selectedSize;
 
-  final List<String> _categories = ['All', 'Coats & Jackets', 'Dresses', 'Tops', 'Footwear', 'Bags'];
+  late final List<String> _categories;
   final List<String> _sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
   @override
@@ -36,6 +40,19 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     _currentRange = widget.initialPrice;
     _selectedCategory = widget.initialCategory ?? 'All';
     _selectedSize = widget.initialSize;
+
+    if (widget.availableCategories != null && widget.availableCategories!.isNotEmpty) {
+      _categories = widget.availableCategories!.contains('All')
+          ? widget.availableCategories!
+          : ['All', ...widget.availableCategories!];
+    } else {
+      final mockCats = MockDataService()
+          .categories
+          .map((c) => c.name)
+          .where((t) => t.isNotEmpty)
+          .toList();
+      _categories = mockCats.isNotEmpty ? ['All', ...mockCats] : ['All'];
+    }
   }
 
   @override
@@ -50,7 +67,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 36,
@@ -63,7 +79,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 16),
 
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -88,7 +103,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 16),
 
-          // Price Range
           Text('PRICE RANGE', style: AppTypography.formLabel),
           const SizedBox(height: 8),
           Row(
@@ -111,7 +125,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: 20),
 
-          // Category Chips
           Text('CATEGORY', style: AppTypography.formLabel),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -129,6 +142,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 selected: isSel,
                 selectedColor: AppColors.black,
+                checkmarkColor: AppColors.white,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -145,7 +159,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xl),
 
-          // Size Chips
           Text('SIZE', style: AppTypography.formLabel),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
@@ -163,6 +176,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 ),
                 selected: isSel,
                 selectedColor: AppColors.black,
+                checkmarkColor: AppColors.white,
                 backgroundColor: AppColors.surfaceLight,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -179,7 +193,6 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
           ),
           const SizedBox(height: AppSpacing.xxxl),
 
-          // Apply Button
           AppButton(
             text: 'APPLY FILTERS',
             onPressed: () {

@@ -4,6 +4,8 @@ import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
 import '../../models/product.dart';
 import '../../services/mock_data_service.dart';
+import '../bag/shopping_bag_screen.dart';
+import '../wishlist/widgets/size_picker_bottom_sheet.dart';
 import 'size_guide_sheet.dart';
 import 'widgets/product_accordion_section.dart';
 import 'widgets/product_bottom_bar.dart';
@@ -13,8 +15,6 @@ import 'widgets/product_header_info.dart';
 import 'widgets/product_recommendations.dart';
 import 'widgets/product_size_selector.dart';
 
-/// Clean, high-performance Product Detail Screen.
-/// Composes clean, decoupled subcomponents following design system best practices.
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
 
@@ -49,90 +49,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  void _showSizeSelectorSheet(List<String> sizes) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'SELECT SIZE',
-                      style: AppTypography.headingSmall.copyWith(
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                        _openSizeGuide();
-                      },
-                      child: Text(
-                        'Size Guide',
-                        style: AppTypography.bodySmall.copyWith(
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Wrap(
-                  spacing: AppSpacing.md,
-                  runSpacing: AppSpacing.md,
-                  children: sizes.map((size) {
-                    final isSelected = _selectedSize == size;
-                    return InkWell(
-                      onTap: () {
-                        setState(() => _selectedSize = size);
-                        Navigator.pop(context);
-                      },
-                      borderRadius: BorderRadius.circular(AppRadius.sm),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.xl,
-                          vertical: AppSpacing.md,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected ? AppColors.black : AppColors.surfaceLight,
-                          border: Border.all(
-                            color: isSelected ? AppColors.black : AppColors.border,
-                            width: 1.2,
-                          ),
-                          borderRadius: BorderRadius.circular(AppRadius.sm),
-                        ),
-                        child: Text(
-                          size,
-                          style: AppTypography.badge.copyWith(
-                            fontSize: 13,
-                            color: isSelected ? AppColors.white : AppColors.textPrimary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-              ],
-            ),
-          ),
-        );
-      },
+  void _openSizePicker() async {
+    final result = await SizePickerBottomSheet.show(
+      context,
+      product: widget.product,
+      initialSize: _selectedSize,
+      addToBagOnConfirm: false,
+      confirmButtonText: 'SELECT SIZE',
     );
+    if (result != null) {
+      setState(() => _selectedSize = result);
+    }
   }
 
   void _shareProduct() {
@@ -186,7 +113,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         action: SnackBarAction(
           label: 'VIEW BAG',
           textColor: AppColors.white,
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ShoppingBagScreen()),
+            );
+          },
         ),
       ),
     );
@@ -253,41 +185,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Gallery Carousel
                   const SizedBox(height: AppSpacing.sm),
                   ProductGalleryCarousel(
                     product: widget.product,
                     images: images,
                   ),
 
-                  // 2. Header, Brand, Rating & Price
                   ProductHeaderInfo(product: widget.product),
 
-                  // 3. Color Selector
                   ProductColorSelector(
                     colors: widget.product.colors,
                     selectedColor: _selectedColor,
                     onColorSelected: (col) => setState(() => _selectedColor = col),
                   ),
 
-                  // 4. Size Selector
                   ProductSizeSelector(
                     sizes: availableSizes,
                     selectedSize: _selectedSize,
                     isOneSize: isOneSize,
                     onSizeSelected: (size) => setState(() => _selectedSize = size),
                     onOpenSizeGuide: _openSizeGuide,
-                    onOpenSizeSheet: () => _showSizeSelectorSheet(availableSizes),
+                    onOpenSizeSheet: _openSizePicker,
                   ),
 
-                  // 5. Accordion Sections
                   ProductAccordionSection(
                     product: widget.product,
                     onOpenSizeGuide: _openSizeGuide,
                     onContactSupport: _contactSupport,
                   ),
 
-                  // 6. Curated Recommendations
                   ProductRecommendations(
                     currentProduct: widget.product,
                     recommendedProducts: recommendedProducts,
@@ -297,9 +223,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
 
-          // 7. Sticky Bottom Bar
           ProductBottomBar(
             quantity: _quantity,
+            selectedSize: _selectedSize,
+            isOneSize: isOneSize,
+            onOpenSizePicker: _openSizePicker,
             onIncrement: () => setState(() => _quantity++),
             onDecrement: () {
               if (_quantity > 1) setState(() => _quantity--);

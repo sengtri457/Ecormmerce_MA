@@ -7,9 +7,6 @@ import '../../../models/cart_item.dart';
 import '../../../widgets/app_image.dart';
 import 'quantity_picker_bottom_sheet.dart';
 
-/// Single item row card for the Shopping Bag matching the luxury visual design.
-/// Supports swipe-left to delete or move to wishlist, interactive quantity picker overlay,
-/// and item selection toggle.
 class BagItemCard extends StatelessWidget {
   final CartItem item;
   final bool isSelected;
@@ -48,7 +45,7 @@ class BagItemCard extends StatelessWidget {
 
     return Dismissible(
       key: ValueKey(item.id),
-      direction: DismissDirection.endToStart, // Swipe right-to-left (drag left)
+      direction: DismissDirection.endToStart,
       background: Container(
         color: AppColors.alertRed,
         alignment: Alignment.centerRight,
@@ -56,15 +53,13 @@ class BagItemCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            if (onMoveToWishlist != null)
-              IconButton(
-                icon: const Icon(Icons.favorite_border, color: AppColors.white, size: 26),
-                tooltip: 'Move to Wishlist',
-                onPressed: onMoveToWishlist,
-              ),
-            const SizedBox(width: 8),
+            if (onMoveToWishlist != null) const SizedBox(width: 8),
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: AppColors.white, size: 28),
+              icon: const Icon(
+                Icons.delete_outline,
+                color: AppColors.white,
+                size: 28,
+              ),
               tooltip: 'Remove',
               onPressed: onRemove,
             ),
@@ -74,7 +69,7 @@ class BagItemCard extends StatelessWidget {
       confirmDismiss: (direction) async {
         if (onRemove != null) {
           onRemove!();
-          return false; // Handled by callback / dialog
+          return false;
         }
         return true;
       },
@@ -85,7 +80,6 @@ class BagItemCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Left: Selection Checkbox / Toggle Box
               InkWell(
                 onTap: () => onSelectedChanged?.call(!isSelected),
                 borderRadius: BorderRadius.circular(4),
@@ -100,19 +94,24 @@ class BagItemCard extends StatelessWidget {
                       color: isSelected ? AppColors.black : Colors.transparent,
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: isSelected ? AppColors.black : AppColors.borderDark,
+                        color: isSelected
+                            ? AppColors.black
+                            : AppColors.borderDark,
                         width: 1.4,
                       ),
                     ),
                     child: isSelected
-                        ? const Icon(Icons.check, size: 15, color: AppColors.white)
+                        ? const Icon(
+                            Icons.check,
+                            size: 15,
+                            color: AppColors.white,
+                          )
                         : null,
                   ),
                 ),
               ),
               const SizedBox(width: 8),
 
-              // Product Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 child: SizedBox(
@@ -120,19 +119,18 @@ class BagItemCard extends StatelessWidget {
                   height: 125,
                   child: AppImage(
                     imagePath: item.imageUrl,
-                    fallbackUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
+                    fallbackUrl:
+                        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=80',
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               const SizedBox(width: 14),
 
-              // Product Details
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
                     Text(
                       item.title.toUpperCase(),
                       style: AppTypography.headingSmall.copyWith(
@@ -146,7 +144,6 @@ class BagItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
 
-                    // Subtitle / Brand
                     Text(
                       item.brand.toUpperCase(),
                       style: AppTypography.bodySmall.copyWith(
@@ -159,7 +156,6 @@ class BagItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
 
-                    // Price
                     Text(
                       displayPrice,
                       style: AppTypography.headingSmall.copyWith(
@@ -170,7 +166,6 @@ class BagItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
 
-                    // Descriptions label
                     Text(
                       'DESCRIPTIONS',
                       style: AppTypography.badge.copyWith(
@@ -182,7 +177,6 @@ class BagItemCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
 
-                    // Row: SIZE and QTY Dropdown Pill
                     Row(
                       children: [
                         Text(
@@ -194,12 +188,14 @@ class BagItemCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        // Quantity selector dropdown pill
                         InkWell(
                           onTap: () => _openQuantityPicker(context),
                           borderRadius: BorderRadius.circular(4),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.surfaceSubtle,
                               borderRadius: BorderRadius.circular(4),

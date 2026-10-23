@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
+import '../../models/product.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../bag/shopping_bag_screen.dart';
 import '../product/product_detail_screen.dart';
 import 'widgets/wishlist_item_card.dart';
 
-/// Clean, editorial Wishlist screen matching the luxury design specification.
-/// Features interactive size selection, item selection, and direct Bag navigation.
 class WishlistScreen extends StatefulWidget {
   final VoidCallback? onNavigateToBag;
   final VoidCallback? onBack;
 
-  const WishlistScreen({
-    super.key,
-    this.onNavigateToBag,
-    this.onBack,
-  });
+  const WishlistScreen({super.key, this.onNavigateToBag, this.onBack});
 
   @override
   State<WishlistScreen> createState() => _WishlistScreenState();
@@ -46,38 +41,99 @@ class _WishlistScreenState extends State<WishlistScreen> {
     }
   }
 
+  void _moveToBag(Product product) {
+    final size =
+        _selectedSizes[product.id] ??
+        (product.sizes.isNotEmpty ? product.sizes.first : 'M');
+    final color = product.colors.isNotEmpty
+        ? product.colors.first.name
+        : 'Standard';
+    MockDataService().addToCart(product, color: color, size: size);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Added "${product.title}" ($size) to bag',
+          style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+        ),
+        backgroundColor: AppColors.black,
+        action: SnackBarAction(
+          label: 'GO TO BAG',
+          textColor: AppColors.white,
+          onPressed: _navigateToBag,
+        ),
+      ),
+    );
+  }
+
   void _addSelectedToBag() {
     final mockService = MockDataService();
-    final itemsToAdd = mockService.wishlistProducts.where((p) => _selectedItemIds.contains(p.id)).toList();
+    final itemsToAdd = mockService.wishlistProducts
+        .where((p) => _selectedItemIds.contains(p.id))
+        .toList();
 
     if (itemsToAdd.isEmpty) {
-      // If none explicitly ticked, add all wishlist items
       for (final product in mockService.wishlistProducts) {
-        final size = _selectedSizes[product.id] ?? (product.sizes.isNotEmpty ? product.sizes.first : 'M');
-        final color = product.colors.isNotEmpty ? product.colors.first.name : 'Standard';
+        final size =
+            _selectedSizes[product.id] ??
+            (product.sizes.isNotEmpty ? product.sizes.first : 'M');
+        final color = product.colors.isNotEmpty
+            ? product.colors.first.name
+            : 'Standard';
         mockService.addToCart(product, color: color, size: size);
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Added all wishlist items to your bag', style: AppTypography.bodySmall.copyWith(color: AppColors.white)),
+          content: Text(
+            'Added all wishlist items to your bag',
+            style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+          ),
           backgroundColor: AppColors.black,
-          action: SnackBarAction(label: 'GO TO BAG', textColor: AppColors.white, onPressed: _navigateToBag),
+          action: SnackBarAction(
+            label: 'GO TO BAG',
+            textColor: AppColors.white,
+            onPressed: _navigateToBag,
+          ),
         ),
       );
     } else {
       for (final product in itemsToAdd) {
-        final size = _selectedSizes[product.id] ?? (product.sizes.isNotEmpty ? product.sizes.first : 'M');
-        final color = product.colors.isNotEmpty ? product.colors.first.name : 'Standard';
+        final size =
+            _selectedSizes[product.id] ??
+            (product.sizes.isNotEmpty ? product.sizes.first : 'M');
+        final color = product.colors.isNotEmpty
+            ? product.colors.first.name
+            : 'Standard';
         mockService.addToCart(product, color: color, size: size);
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Added ${itemsToAdd.length} item(s) to your bag', style: AppTypography.bodySmall.copyWith(color: AppColors.white)),
+          content: Text(
+            'Added ${itemsToAdd.length} item(s) to your bag',
+            style: AppTypography.bodySmall.copyWith(color: AppColors.white),
+          ),
           backgroundColor: AppColors.black,
-          action: SnackBarAction(label: 'GO TO BAG', textColor: AppColors.white, onPressed: _navigateToBag),
+          action: SnackBarAction(
+            label: 'GO TO BAG',
+            textColor: AppColors.white,
+            onPressed: _navigateToBag,
+          ),
         ),
       );
+      setState(() {
+        _selectedItemIds.clear();
+      });
     }
+  }
+
+  void _toggleSelectAll(List<Product> items) {
+    setState(() {
+      if (_selectedItemIds.length == items.length) {
+        _selectedItemIds.clear();
+      } else {
+        _selectedItemIds.clear();
+        _selectedItemIds.addAll(items.map((p) => p.id));
+      }
+    });
   }
 
   @override
@@ -91,7 +147,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.black, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.black,
+            size: 20,
+          ),
           onPressed: _handleBack,
         ),
         title: Text(
@@ -112,7 +172,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 alignment: Alignment.center,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.shopping_bag_outlined, color: AppColors.black, size: 24),
+                    icon: const Icon(
+                      Icons.shopping_bag_outlined,
+                      color: AppColors.black,
+                      size: 24,
+                    ),
                     onPressed: _navigateToBag,
                   ),
                   if (bagCount > 0)
@@ -125,7 +189,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           color: AppColors.alertRed,
                           shape: BoxShape.circle,
                         ),
-                        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
                         child: Center(
                           child: Text(
                             '$bagCount',
@@ -161,7 +228,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Container(
                       width: 80,
                       height: 80,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.surfaceSubtle,
                         shape: BoxShape.circle,
                       ),
@@ -174,7 +241,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     const SizedBox(height: 20),
                     Text(
                       'YOUR WISHLIST IS EMPTY',
-                      style: AppTypography.headingMedium.copyWith(letterSpacing: 1.0),
+                      style: AppTypography.headingMedium.copyWith(
+                        letterSpacing: 1.0,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -194,12 +263,79 @@ class _WishlistScreenState extends State<WishlistScreen> {
             );
           }
 
+          final isAllSelected = _selectedItemIds.length == items.length;
+
           return Column(
             children: [
-              // Wishlist Items List
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => _toggleSelectAll(items),
+                      borderRadius: BorderRadius.circular(4),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: isAllSelected
+                                    ? AppColors.black
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: isAllSelected
+                                      ? AppColors.black
+                                      : AppColors.borderDark,
+                                  width: 1.4,
+                                ),
+                              ),
+                              child: isAllSelected
+                                  ? const Icon(
+                                      Icons.check,
+                                      size: 14,
+                                      color: AppColors.white,
+                                    )
+                                  : null,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'SELECT ALL',
+                              style: AppTypography.badge.copyWith(
+                                fontSize: 11,
+                                letterSpacing: 1.0,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${_selectedItemIds.length} OF ${items.length} SELECTED',
+                      style: AppTypography.bodySmall.copyWith(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(color: AppColors.border, height: 1),
               Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(top: 8, bottom: 24),
+                  padding: const EdgeInsets.only(top: 8, bottom: 20),
                   itemCount: items.length,
                   separatorBuilder: (_, _) => const Divider(
                     color: AppColors.border,
@@ -219,7 +355,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ProductDetailScreen(product: product),
+                            builder: (_) =>
+                                ProductDetailScreen(product: product),
                           ),
                         );
                       },
@@ -238,18 +375,25 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         });
                       },
                       onGoToBag: _navigateToBag,
-                      onRemove: () => mockService.toggleFavorite(product.id),
+                      onRemove: () {
+                        setState(() {
+                          _selectedItemIds.remove(product.id);
+                          _selectedSizes.remove(product.id);
+                        });
+                        mockService.toggleFavorite(product.id);
+                      },
+                      onMoveToBag: () => _moveToBag(product),
                     );
                   },
                 ),
               ),
-
-              // Bottom Sticky "GO TO BAG" Action Bar
               Container(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                 decoration: const BoxDecoration(
                   color: AppColors.white,
-                  border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+                  border: Border(
+                    top: BorderSide(color: AppColors.border, width: 1),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Color(0x0A000000),
@@ -262,39 +406,35 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   top: false,
                   child: Row(
                     children: [
-                      // If items are checked, offer "Add selected to bag"
                       if (_selectedItemIds.isNotEmpty) ...[
                         Expanded(
-                          child: OutlinedButton(
+                          child: AppButton(
+                            text: 'ADD (${_selectedItemIds.length}) TO BAG',
+                            variant: AppButtonVariant.primary,
                             onPressed: _addSelectedToBag,
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: AppColors.black, width: 1.2),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                            ),
-                            child: Text(
-                              'ADD (${_selectedItemIds.length}) TO BAG',
-                              style: AppTypography.badge.copyWith(
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 11,
-                                letterSpacing: 0.8,
-                              ),
-                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
-                      ],
-                      // Main "GO TO BAG" Button
-                      Expanded(
-                        child: AppButton(
-                          text: mockService.cartItems.isNotEmpty
-                              ? 'GO TO BAG (${mockService.cartItems.length})'
-                              : 'GO TO BAG',
-                          variant: AppButtonVariant.primary,
-                          onPressed: _navigateToBag,
+                        Expanded(
+                          child: AppButton(
+                            text: mockService.cartItems.isNotEmpty
+                                ? 'GO TO BAG (${mockService.cartItems.length})'
+                                : 'GO TO BAG',
+                            variant: AppButtonVariant.outlined,
+                            onPressed: _navigateToBag,
+                          ),
                         ),
-                      ),
+                      ] else ...[
+                        Expanded(
+                          child: AppButton(
+                            text: mockService.cartItems.isNotEmpty
+                                ? 'GO TO BAG (${mockService.cartItems.length})'
+                                : 'GO TO BAG',
+                            variant: AppButtonVariant.primary,
+                            onPressed: _navigateToBag,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
