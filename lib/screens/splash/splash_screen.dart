@@ -51,15 +51,9 @@ class _SplashScreenState extends State<SplashScreen>
     } catch (_) {}
     _timer = Timer(const Duration(milliseconds: 2000), () {
       if (!mounted) return;
+
       Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 400),
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const MainNavScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
+        MaterialPageRoute(builder: (_) => const MainNavScreen()),
       );
     });
   }
