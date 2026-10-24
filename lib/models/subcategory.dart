@@ -29,4 +29,6 @@ class Subcategory {
 
   @override
   String toString() => name;
+
+  void operator [](String other) {}
 }

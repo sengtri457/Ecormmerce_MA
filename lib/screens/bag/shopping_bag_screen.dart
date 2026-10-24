@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
-import '../../helpers/currency_helper.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/app_button.dart';
 import '../wishlist/wishlist_screen.dart';
+import '../auth/sign_in_screen.dart';
 import 'widgets/bag_item_card.dart';
+import 'widgets/bag_empty_state.dart';
+import 'widgets/bag_promo_code_input.dart';
+import 'widgets/bag_order_summary.dart';
 
 class ShoppingBagScreen extends StatefulWidget {
   final VoidCallback? onNavigateToWishlist;
@@ -77,9 +80,10 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
               ),
             ),
             onPressed: () {
+              final messenger = ScaffoldMessenger.of(context);
               MockDataService().removeFromCart(cartItemId);
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 SnackBar(
                   content: Text(
                     'Removed "$title" from your bag',
@@ -119,7 +123,25 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
     );
   }
 
+  Future<void> _handleCheckout() async {
+    final mockService = MockDataService();
+    if (!mockService.isLoggedIn) {
+      final loggedIn = await Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SignInScreen(returnOnSuccess: true),
+        ),
+      );
+      if (loggedIn == true && mounted) {
+        _showCheckoutDialog();
+      }
+      return;
+    }
+    _showCheckoutDialog();
+  }
+
   void _showCheckoutDialog() {
+    MockDataService().clearSelectedCart();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -155,6 +177,27 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
         ],
       ),
     );
+  }
+
+  void _applyPromo(MockDataService mockService) {
+    final success = mockService.applyPromoCode(_promoController.text);
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Promo code "${_promoController.text.trim().toUpperCase()}" applied!',
+          ),
+          backgroundColor: AppColors.black,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid promo code. Try FIRST20 or VIP10.'),
+          backgroundColor: AppColors.saleRed,
+        ),
+      );
+    }
   }
 
   @override
@@ -202,48 +245,7 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
           final items = mockService.cartItems;
 
           if (items.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceSubtle,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.shopping_bag_outlined,
-                        size: 36,
-                        color: AppColors.placeholder,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'YOUR BAG IS EMPTY',
-                      style: AppTypography.headingMedium.copyWith(
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Items added to your shopping bag will appear here.',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.bodySmall,
-                    ),
-                    const SizedBox(height: 28),
-                    AppButton(
-                      text: 'START SHOPPING',
-                      variant: AppButtonVariant.primary,
-                      onPressed: _handleBack,
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return BagEmptyState(onStartShopping: _handleBack);
           }
 
           return SingleChildScrollView(
@@ -280,8 +282,8 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color: mockService.isAllCartSelected
-                                        ? AppColors.black
-                                        : AppColors.borderDark,
+                                      ? AppColors.black
+                                      : AppColors.borderDark,
                                     width: 1.4,
                                   ),
                                 ),
@@ -353,146 +355,21 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Container(
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceSubtle,
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14),
-                            child: TextField(
-                              controller: _promoController,
-                              style: AppTypography.bodyMedium.copyWith(
-                                color: AppColors.textPrimary,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: 'PROMO CODE',
-                                hintStyle: AppTypography.formLabel.copyWith(
-                                  color: AppColors.placeholder,
-                                  fontSize: 12,
-                                  letterSpacing: 1.0,
-                                ),
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            final success = mockService.applyPromoCode(
-                              _promoController.text,
-                            );
-                            if (success) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Promo code "${_promoController.text.trim().toUpperCase()}" applied!',
-                                  ),
-                                  backgroundColor: AppColors.black,
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Invalid promo code. Try FIRST20 or VIP10.',
-                                  ),
-                                  backgroundColor: AppColors.saleRed,
-                                ),
-                              );
-                            }
-                          },
-                          child: Container(
-                            height: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 22),
-                            decoration: const BoxDecoration(
-                              color: AppColors.black,
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(3),
-                              ),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              'APPLY',
-                              style: AppTypography.badge.copyWith(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.2,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: BagPromoCodeInput(
+                    controller: _promoController,
+                    onApply: () => _applyPromo(mockService),
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      _priceRow(
-                        'Sub-Total',
-                        mockService.cartSubtotal.toCurrency(),
-                      ),
-                      const SizedBox(height: 10),
-                      _priceRow(
-                        'Delivery Fee',
-                        mockService.effectiveShippingFee.toCurrency(),
-                      ),
-                      const SizedBox(height: 10),
-                      _priceRow(
-                        'Discount',
-                        mockService.effectiveDiscountAmount
-                            .toDiscountCurrency(),
-                        isDiscount: true,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                        child: Divider(color: AppColors.border, height: 1),
-                      ),
-                      _priceRow(
-                        'Total Cost',
-                        mockService.cartTotal.toCurrency(),
-                        isTotal: true,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: AppButton(
-                    text: mockService.selectedCartCount > 0
-                        ? 'PROCEED TO CHECKOUT • ${mockService.cartTotal.toCurrency()}'
-                        : 'SELECT ITEMS TO CHECKOUT',
-                    variant: mockService.selectedCartCount > 0
-                        ? AppButtonVariant.primary
-                        : AppButtonVariant.secondary,
-                    onPressed: mockService.selectedCartCount > 0
-                        ? _showCheckoutDialog
-                        : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Please select at least one item to proceed.',
-                                ),
-                                backgroundColor: AppColors.black,
-                              ),
-                            );
-                          },
+                  child: BagOrderSummary(
+                    subtotal: mockService.cartSubtotal,
+                    shippingFee: mockService.effectiveShippingFee,
+                    discountAmount: mockService.effectiveDiscountAmount,
+                    total: mockService.cartTotal,
+                    selectedCount: mockService.selectedCartCount,
+                    onCheckout: _handleCheckout,
                   ),
                 ),
               ],
@@ -500,48 +377,6 @@ class _ShoppingBagScreenState extends State<ShoppingBagScreen> {
           );
         },
       ),
-    );
-  }
-
-  Widget _priceRow(
-    String label,
-    String value, {
-    bool isDiscount = false,
-    bool isTotal = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: isTotal
-              ? AppTypography.headingSmall.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                )
-              : AppTypography.bodySmall.copyWith(
-                  fontSize: 13,
-                  color: AppColors.textSecondary,
-                ),
-        ),
-        Text(
-          value,
-          style: isTotal
-              ? AppTypography.headingSmall.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                )
-              : AppTypography.bodySmall.copyWith(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: isDiscount
-                      ? AppColors.alertRed
-                      : AppColors.textPrimary,
-                ),
-        ),
-      ],
     );
   }
 }

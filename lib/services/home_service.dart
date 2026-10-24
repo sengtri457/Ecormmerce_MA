@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/services.dart';
 import '../models/banner_item.dart';
 import '../models/category_item.dart';
@@ -8,19 +7,8 @@ import '../models/product.dart';
 
 class HomeService {
   const HomeService();
-
   static Future<String> loadString(String path) async {
-    try {
-      return await rootBundle.loadString(path);
-    } catch (_) {
-      try {
-        final file = File(path);
-        if (await file.exists()) {
-          return await file.readAsString();
-        }
-      } catch (_) {}
-      rethrow;
-    }
+    return rootBundle.loadString(path);
   }
 
   Future<Map<String, dynamic>> getBannersData() async {
@@ -37,7 +25,6 @@ class HomeService {
         .toList();
   }
 
-  /// Loads the unified department taxonomy tree from categories.json
   Future<List<DepartmentTaxonomy>> getTaxonomy() async {
     final response = await loadString('assets/json/categories.json');
     final list = json.decode(response) as List? ?? const [];
@@ -47,7 +34,6 @@ class HomeService {
         .toList();
   }
 
-  /// Returns all categories across all departments
   Future<List<CategoryItem>> getCategories() async {
     final taxonomies = await getTaxonomy();
     return taxonomies.expand((t) => t.categories).toList();
@@ -68,12 +54,6 @@ class HomeService {
     return FeatureProduct.fromJson(map);
   }
 
-  /// Returns category pillars
-  Future<List<CategoryItem>> getCategoryProducts() async {
-    return getCategories();
-  }
-
-  /// Returns curated category banners for DepartmentCategoryGrid
   Future<List<CategoryBannerItem>> getCategoryBanners() async {
     return const [
       CategoryBannerItem(

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_dimensions.dart';
 import '../../helpers/app_typography.dart';
-import '../../models/category_item.dart';
 import '../../services/mock_data_service.dart';
-import '../../widgets/app_button.dart';
-import '../../widgets/app_image.dart';
+import '../../widgets/app_wireframe.dart';
 import '../catalog/filter_bottom_sheet.dart';
 import '../catalog/product_list_screen.dart';
+import 'widgets/category_department_switcher.dart';
+import 'widgets/category_pillar_card.dart';
+import 'widgets/category_pillars_grid.dart';
+import 'widgets/category_promo_banner.dart';
 
 class CategoryScreen extends StatefulWidget {
   final VoidCallback? onNavigateToBag;
@@ -27,7 +29,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
-    if (MockDataService().visualCategories.isEmpty) {
+    if (MockDataService().categories.isEmpty) {
       MockDataService().loadCategoryProducts();
     }
   }
@@ -197,12 +199,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Department Segment Switcher
-                  _buildDepartmentSwitcher(),
-
+                  CategoryDepartmentSwitcher(
+                    departments: _departments,
+                    selectedDepartment: _selectedDepartment,
+                    onDepartmentSelected: (dept) {
+                      setState(() => _selectedDepartment = dept);
+                    },
+                  ),
                   const SizedBox(height: 20),
-
-                  // Header with Title and List/Grid toggle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -276,19 +280,52 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 18),
-
-                  // Content: List Mode or Symmetrical 2x2 Grid Mode
-                  if (!_isGridView)
-                    _buildPillarsList(categories)
+                  if (categories.isEmpty)
+                    _buildWireframeContent()
+                  else if (!_isGridView)
+                    Column(
+                      children: categories.map((cat) {
+                        return CategoryPillarCard(
+                          category: cat,
+                          onTap: () => _navigateToCatalog(
+                            slug: _selectedDepartment,
+                            title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
+                            pillar: cat.id,
+                          ),
+                          onSubcategoryTap: (subName) {
+                            final isAll = subName.startsWith('All');
+                            _navigateToCatalog(
+                              slug: _selectedDepartment,
+                              title: subName,
+                              subcategory: isAll ? null : subName,
+                              pillar: cat.id,
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )
                   else
-                    _buildPillarsGrid(categories),
-
+                    CategoryPillarsGrid(
+                      categories: categories,
+                      onCategoryTap: (cat) => _navigateToCatalog(
+                        slug: _selectedDepartment,
+                        title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
+                        pillar: cat.id,
+                      ),
+                      onNewInTap: () => _navigateToCatalog(
+                        slug: _selectedDepartment,
+                        title: '${_selectedDepartment.toUpperCase()} New Arrivals',
+                      ),
+                    ),
                   const SizedBox(height: 28),
-
-                  // Editorial Promo Lookbook Box
-                  _buildPromoBox(),
+                  CategoryPromoBanner(
+                    onBrowse: () => _navigateToCatalog(
+                      slug: _selectedDepartment,
+                      title:
+                          '${_selectedDepartment.toUpperCase()} - The Minimal Wardrobe Edit',
+                    ),
+                  ),
                 ],
               ),
             );
@@ -298,406 +335,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  Widget _buildDepartmentSwitcher() {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.border, width: 1.0)),
-      ),
-      child: Row(
-        children: _departments.map((dept) {
-          final isSelected = _selectedDepartment == dept.toLowerCase();
-          return Expanded(
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  _selectedDepartment = dept.toLowerCase();
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: isSelected ? AppColors.black : Colors.transparent,
-                      width: 2.2,
-                    ),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    dept,
-                    style: AppTypography.headingSmall.copyWith(
-                      fontSize: 13,
-                      fontWeight: isSelected
-                          ? FontWeight.w800
-                          : FontWeight.w500,
-                      letterSpacing: 2.0,
-                      color: isSelected
-                          ? AppColors.textPrimary
-                          : AppColors.textSecondary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildPillarsList(List<CategoryItem> categories) {
+  Widget _buildWireframeContent() {
     return Column(
-      children: categories.map((cat) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: AppColors.surfaceLight,
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(color: AppColors.border, width: 0.8),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Hero Banner Image
-              InkWell(
-                onTap: () => _navigateToCatalog(
-                  slug: _selectedDepartment,
-                  title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
-                  pillar: cat.id,
-                ),
-                child: SizedBox(
-                  height: 140,
-                  width: double.infinity,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      AppImage(
-                        imagePath: cat.image,
-                        fallbackUrl: cat.fallback,
-                        fit: BoxFit.cover,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withValues(alpha: 0.70),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 16,
-                        bottom: 14,
-                        right: 16,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  cat.title,
-                                  style: AppTypography.headingLarge.copyWith(
-                                    color: AppColors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 2.0,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  '${cat.itemCount > 0 ? cat.itemCount : 40}+ ITEMS',
-                                  style: AppTypography.badge.copyWith(
-                                    color: AppColors.white.withValues(
-                                      alpha: 0.85,
-                                    ),
-                                    fontSize: 10,
-                                    letterSpacing: 1.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: AppColors.white.withValues(alpha: 0.5),
-                                  width: 0.8,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'VIEW ALL',
-                                    style: AppTypography.badge.copyWith(
-                                      color: AppColors.white,
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.8,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  const Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 9,
-                                    color: AppColors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Subcategory Quick Navigation Chips
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: cat.subcategories.map((sub) {
-                    final subName = sub.name;
-                    final isAll = subName.startsWith('All');
-                    return InkWell(
-                      onTap: () => _navigateToCatalog(
-                        slug: _selectedDepartment,
-                        title: subName,
-                        subcategory: isAll ? null : subName,
-                        pillar: cat.id,
-                      ),
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isAll ? AppColors.black : AppColors.white,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: isAll ? AppColors.black : AppColors.border,
-                          ),
-                        ),
-                        child: Text(
-                          subName,
-                          style: AppTypography.bodySmall.copyWith(
-                            fontSize: 11,
-                            fontWeight: isAll
-                                ? FontWeight.w700
-                                : FontWeight.w500,
-                            color: isAll
-                                ? AppColors.white
-                                : AppColors.textPrimary,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildPillarsGrid(List<CategoryItem> categories) {
-    // Symmetrical 2x2 layout: 3 Category Pillars + 1 Editorial New Arrival Card
-    final cards = <Widget>[
-      ...categories.take(3).map((cat) {
-        return _buildGridCard(
-          title: cat.title,
-          subtitle: '${cat.itemCount > 0 ? cat.itemCount : 35}+ Items',
-          image: cat.image,
-          fallback: cat.fallback,
-          onTap: () => _navigateToCatalog(
-            slug: _selectedDepartment,
-            title: '${_selectedDepartment.toUpperCase()} ${cat.title}',
-            pillar: cat.id,
-          ),
-        );
-      }),
-      _buildGridCard(
-        title: 'NEW IN',
-        subtitle: 'Curated SS26 Edit',
-        image: 'assets/images/products/image1.jpg',
-        fallback:
-            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&auto=format&fit=crop&q=80',
-        badge: 'LIMITED',
-        onTap: () => _navigateToCatalog(
-          slug: _selectedDepartment,
-          title: '${_selectedDepartment.toUpperCase()} New Arrivals',
-        ),
-      ),
-    ];
-
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 0.85,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: cards,
-    );
-  }
-
-  Widget _buildGridCard({
-    required String title,
-    required String subtitle,
-    required String image,
-    required String fallback,
-    required VoidCallback onTap,
-    String? badge,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.card),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppRadius.card),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            AppImage(
-              imagePath: image,
-              fallbackUrl: fallback,
-              fit: BoxFit.cover,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.75),
-                  ],
-                ),
-              ),
-            ),
-            if (badge != null)
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.alertRed,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  child: Text(
-                    badge,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                ),
-              ),
-            Positioned(
-              left: 12,
-              right: 12,
-              bottom: 12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.headingSmall.copyWith(
-                      color: AppColors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.white.withValues(alpha: 0.85),
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPromoBox() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 26, horizontal: 20),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceLight,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: AppColors.border, width: 0.8),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'THE MINIMAL WARDROBE EDIT',
-            style: AppTypography.headingSmall.copyWith(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.2,
-              color: AppColors.textPrimary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Tactile natural fibers cut with architectural proportion and calm intent.',
-            style: AppTypography.bodySmall.copyWith(
-              fontSize: 11,
-              color: AppColors.textSecondary,
-              height: 1.4,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          AppButton.outlined(
-            text: 'BROWSE PRODUCTS',
-            uppercase: true,
-            width: 220,
-            height: 42,
-            onPressed: () => _navigateToCatalog(
-              slug: _selectedDepartment,
-              title:
-                  '${_selectedDepartment.toUpperCase()} - The Minimal Wardrobe Edit',
-            ),
-          ),
-        ],
-      ),
+      children: [
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+        const SizedBox(height: 14),
+        AppWireframe.box(width: double.infinity, height: 110, borderRadius: AppRadius.md),
+      ],
     );
   }
 }

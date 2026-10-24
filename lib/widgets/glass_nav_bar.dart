@@ -71,9 +71,13 @@ class GlassFloatingNavBar extends StatelessWidget {
                   final item = navItems[index];
                   int badgeCount = 0;
                   final lowerLabel = item.label.toLowerCase();
-                  if (index == 2 || lowerLabel.contains('fav') || lowerLabel.contains('wish')) {
+                  if (index == 2 ||
+                      lowerLabel.contains('fav') ||
+                      lowerLabel.contains('wish')) {
                     badgeCount = wishlistBadgeCount;
-                  } else if (index == 4 || lowerLabel.contains('bag') || lowerLabel.contains('cart')) {
+                  } else if (index == 4 ||
+                      lowerLabel.contains('bag') ||
+                      lowerLabel.contains('cart')) {
                     badgeCount = bagBadgeCount;
                   }
                   return _navItem(

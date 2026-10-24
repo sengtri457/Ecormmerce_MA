@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/department_content.dart';
+import '../models/department_tab_item.dart';
+
+export '../models/department_tab_item.dart';
 
 /// Repository that manages curated department data, hero slides, promo drops, and lookbooks.
 class DepartmentRepository {
@@ -8,12 +11,12 @@ class DepartmentRepository {
   factory DepartmentRepository() => _instance;
   DepartmentRepository._internal();
 
-  static const List<Map<String, String>> departments = [
-    {'id': 'home', 'name': 'HOME'},
-    {'id': 'women', 'name': 'WOMEN'},
-    {'id': 'men', 'name': 'MEN'},
-    {'id': 'kids', 'name': 'KIDS'},
-    {'id': 'accessory', 'name': 'ACCESSORY'},
+  static const List<DepartmentTabItem> departments = [
+    DepartmentTabItem(id: 'home', name: 'HOME'),
+    DepartmentTabItem(id: 'women', name: 'WOMEN'),
+    DepartmentTabItem(id: 'men', name: 'MEN'),
+    DepartmentTabItem(id: 'kids', name: 'KIDS'),
+    DepartmentTabItem(id: 'accessory', name: 'ACCESSORY'),
   ];
 
   final Map<String, DepartmentContent> _departmentsData = {

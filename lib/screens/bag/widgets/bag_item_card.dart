@@ -7,7 +7,6 @@ import '../../../models/cart_item.dart';
 import '../../../widgets/app_image.dart';
 import 'quantity_picker_bottom_sheet.dart';
 
-/// Shopping bag item card with swipe actions.
 class BagItemCard extends StatelessWidget {
   final CartItem item;
   final bool isSelected;
