@@ -23,6 +23,7 @@ class ProductGalleryCarousel extends StatelessWidget {
     return SizedBox(
       height: 360,
       child: ListView.separated(
+        key: PageStorageKey<String>('carousel_${product.id}'),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),

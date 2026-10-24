@@ -14,6 +14,7 @@ import 'widgets/product_gallery_carousel.dart';
 import 'widgets/product_header_info.dart';
 import 'widgets/product_recommendations.dart';
 import 'widgets/product_size_selector.dart';
+import 'widgets/rate_product_bottom_sheet.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -62,6 +63,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  void _openRateBottomSheet(Product currentProduct) async {
+    final result = await RateProductBottomSheet.show(
+      context,
+      product: currentProduct,
+    );
+    if (result == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Thank you for rating ${currentProduct.title}!'),
+          backgroundColor: AppColors.black,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   void _shareProduct() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -88,16 +105,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('CLOSE', style: TextStyle(color: AppColors.black)),
+            child: const Text(
+              'CLOSE',
+              style: TextStyle(color: AppColors.black),
+            ),
           ),
         ],
       ),
     );
   }
 
-  void _handleAddToCart() {
+  void _handleAddToCart(Product currentProduct) {
     MockDataService().addToCart(
-      widget.product,
+      currentProduct,
       color: _selectedColor,
       size: _selectedSize,
       quantity: _quantity,
@@ -106,7 +126,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Added $_quantity x ${widget.product.title} ($_selectedColor, $_selectedSize) to bag.',
+          'Added $_quantity x ${currentProduct.title} ($_selectedColor, $_selectedSize) to bag.',
         ),
         backgroundColor: AppColors.black,
         behavior: SnackBarBehavior.floating,
@@ -137,7 +157,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ? widget.product.images
         : ['assets/images/bannerMen.gif'];
 
-    final bool isOneSize = widget.product.sizes.length == 1 &&
+    final bool isOneSize =
+        widget.product.sizes.length == 1 &&
         widget.product.sizes.first.toLowerCase() == 'one size';
 
     final List<String> availableSizes = widget.product.sizes.isNotEmpty
@@ -191,19 +212,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     images: images,
                   ),
 
-                  ProductHeaderInfo(product: widget.product),
+                  ListenableBuilder(
+                    listenable: mockService,
+                    builder: (context, _) {
+                      final liveProduct =
+                          mockService.getProductById(widget.product.id) ??
+                          widget.product;
+                      return ProductHeaderInfo(
+                        product: liveProduct,
+                        onRateTap: () => _openRateBottomSheet(liveProduct),
+                      );
+                    },
+                  ),
 
                   ProductColorSelector(
                     colors: widget.product.colors,
                     selectedColor: _selectedColor,
-                    onColorSelected: (col) => setState(() => _selectedColor = col),
+                    onColorSelected: (col) =>
+                        setState(() => _selectedColor = col),
                   ),
 
                   ProductSizeSelector(
                     sizes: availableSizes,
                     selectedSize: _selectedSize,
                     isOneSize: isOneSize,
-                    onSizeSelected: (size) => setState(() => _selectedSize = size),
+                    onSizeSelected: (size) =>
+                        setState(() => _selectedSize = size),
                     onOpenSizeGuide: _openSizeGuide,
                     onOpenSizeSheet: _openSizePicker,
                   ),
@@ -232,7 +266,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             onDecrement: () {
               if (_quantity > 1) setState(() => _quantity--);
             },
-            onAddToBag: _handleAddToCart,
+            onAddToBag: () {
+              final liveProduct =
+                  mockService.getProductById(widget.product.id) ??
+                  widget.product;
+              _handleAddToCart(liveProduct);
+            },
           ),
         ],
       ),

@@ -23,6 +23,7 @@ class Product {
   final int discountPercent;
   final double rating;
   final int reviewCount;
+  final double? userRating;
   final bool isNew;
   final bool isFeatured;
   final String description;
@@ -43,6 +44,7 @@ class Product {
     required this.discountPercent,
     required this.rating,
     required this.reviewCount,
+    this.userRating,
     required this.isNew,
     required this.isFeatured,
     required this.description,
@@ -52,6 +54,50 @@ class Product {
     required this.sizes,
     required this.images,
   });
+
+  Product copyWith({
+    int? id,
+    String? title,
+    String? brand,
+    String? category,
+    String? subcategory,
+    double? price,
+    double? originalPrice,
+    int? discountPercent,
+    double? rating,
+    int? reviewCount,
+    double? userRating,
+    bool? isNew,
+    bool? isFeatured,
+    String? description,
+    String? material,
+    String? care,
+    List<ProductColor>? colors,
+    List<String>? sizes,
+    List<String>? images,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      brand: brand ?? this.brand,
+      category: category ?? this.category,
+      subcategory: subcategory ?? this.subcategory,
+      price: price ?? this.price,
+      originalPrice: originalPrice ?? this.originalPrice,
+      discountPercent: discountPercent ?? this.discountPercent,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      userRating: userRating ?? this.userRating,
+      isNew: isNew ?? this.isNew,
+      isFeatured: isFeatured ?? this.isFeatured,
+      description: description ?? this.description,
+      material: material ?? this.material,
+      care: care ?? this.care,
+      colors: colors ?? this.colors,
+      sizes: sizes ?? this.sizes,
+      images: images ?? this.images,
+    );
+  }
 
   factory Product.fromJson(Map<String, dynamic> json) {
     final rawColors = json['colors'] as List? ?? const [];
@@ -71,6 +117,7 @@ class Product {
       discountPercent: (json['discountPercent'] as num?)?.toInt() ?? 0,
       rating: (json['rating'] as num?)?.toDouble() ?? 5.0,
       reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
+      userRating: (json['userRating'] as num?)?.toDouble(),
       isNew: json['isNew'] as bool? ?? false,
       isFeatured: json['isFeatured'] as bool? ?? false,
       description: json['description'] as String? ?? '',

@@ -4,15 +4,33 @@ import '../../../helpers/app_dimensions.dart';
 import '../../../helpers/app_typography.dart';
 import '../../../helpers/currency_helper.dart';
 import '../../../models/product.dart';
+import '../../../services/mock_data_service.dart';
+import '../../../widgets/app_rating_stars.dart';
 
 /// Product title, brand, rating, price, and description.
 class ProductHeaderInfo extends StatelessWidget {
   final Product product;
+  final VoidCallback? onRateTap;
 
-  const ProductHeaderInfo({super.key, required this.product});
+  const ProductHeaderInfo({
+    super.key,
+    required this.product,
+    this.onRateTap,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final mockService = MockDataService();
+    // Directly reads updated user rating or average rating
+    final displayRating = mockService.getDisplayRating(
+      product.id,
+      product.userRating ?? product.rating,
+    );
+    final reviewCount = mockService.getDisplayReviewCount(
+      product.id,
+      product.reviewCount,
+    );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -25,6 +43,7 @@ class ProductHeaderInfo extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 product.brand.toUpperCase(),
@@ -35,30 +54,18 @@ class ProductHeaderInfo extends StatelessWidget {
                   letterSpacing: 0.8,
                 ),
               ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.star_rounded,
-                    size: 15,
-                    color: AppColors.black,
+              InkWell(
+                onTap: onRateTap,
+                borderRadius: BorderRadius.circular(AppRadius.xs),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  child: AppRatingStars(
+                    rating: displayRating,
+                    reviewCount: reviewCount,
+                    starSize: 14,
+                    starSpacing: 2,
                   ),
-                  const SizedBox(width: 3),
-                  Text(
-                    '${product.rating}',
-                    style: AppTypography.headingSmall.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(width: 3),
-                  Text(
-                    '(${product.reviewCount})',
-                    style: AppTypography.bodySmall.copyWith(
-                      fontSize: 11,
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
