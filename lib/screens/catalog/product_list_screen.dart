@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../helpers/app_colors.dart';
 import '../../helpers/app_typography.dart';
-import '../../models/product.dart';
+import '../../helpers/catalog_filter_helper.dart';
 import '../../models/subcategory.dart';
 import '../../services/mock_data_service.dart';
 import '../../widgets/product_card.dart';
 import '../product/product_detail_screen.dart';
 import 'filter_bottom_sheet.dart';
+import 'widgets/catalog_empty_state.dart';
+import 'widgets/catalog_toolbar.dart';
 
 class ProductListScreen extends StatefulWidget {
   final String categorySlug;
@@ -45,38 +47,23 @@ class _ProductListScreenState extends State<ProductListScreen> {
     super.dispose();
   }
 
-  bool _matchesPillar(Product p, String pillar) {
-    final sub = p.subcategory.toLowerCase();
-    final title = p.title.toLowerCase();
-    if (pillar == 'clothes' || pillar == 'clothing') {
-      return sub.contains('coat') ||
-          sub.contains('dress') ||
-          sub.contains('top') ||
-          sub.contains('shirt') ||
-          sub.contains('jacket') ||
-          sub.contains('suit') ||
-          sub.contains('pant') ||
-          sub.contains('hoodie') ||
-          sub.contains('knit') ||
-          sub.contains('boy') ||
-          sub.contains('girl');
-    } else if (pillar == 'shoes') {
-      return sub.contains('shoe') ||
-          sub.contains('footwear') ||
-          title.contains('shoe') ||
-          title.contains('boot') ||
-          title.contains('sneaker') ||
-          title.contains('derby');
-    } else if (pillar == 'accessories') {
-      return sub.contains('bag') ||
-          sub.contains('leather') ||
-          sub.contains('accessory') ||
-          sub.contains('hat') ||
-          sub.contains('belt') ||
-          title.contains('bag') ||
-          title.contains('candle');
-    }
-    return true;
+  void _openFilterBottomSheet(List<String> availableCategories) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => FilterBottomSheet(
+        initialPrice: _priceRange,
+        initialSize: _sizeFilter,
+        availableCategories: availableCategories,
+        onApply: (price, cat, size) {
+          setState(() {
+            _priceRange = price;
+            _sizeFilter = size;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -95,7 +82,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final categoryProducts = allProducts.where((p) {
       if (isGeneric) {
         if (slug != 'all') {
-          return _matchesPillar(p, slug);
+          return CatalogFilterHelper.matchesPillar(p, slug);
         }
         return true;
       }
@@ -125,12 +112,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
     final filtered = allProducts.where((p) {
       final matchesCategory = isGeneric
-          ? (slug == 'all' ? true : _matchesPillar(p, slug))
+          ? (slug == 'all' ? true : CatalogFilterHelper.matchesPillar(p, slug))
           : p.category.toLowerCase() == slug;
 
       final matchesPillarConstraint =
           widget.initialPillar == null ||
-          _matchesPillar(p, widget.initialPillar!.toLowerCase());
+          CatalogFilterHelper.matchesPillar(p, widget.initialPillar!.toLowerCase());
 
       final matchesSearch =
           _searchController.text.isEmpty ||
@@ -225,7 +212,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
               ),
             ),
           ),
-
           SizedBox(
             height: 44,
             child: ListView.separated(
@@ -262,169 +248,77 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${filtered.length} ITEMS',
-                  style: AppTypography.formLabel.copyWith(
-                    color: AppColors.textSecondary,
-                    letterSpacing: 0.8,
-                  ),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        _isGridView
-                            ? Icons.view_agenda_outlined
-                            : Icons.grid_view,
-                        size: 20,
-                        color: AppColors.black,
-                      ),
-                      onPressed: () =>
-                          setState(() => _isGridView = !_isGridView),
-                    ),
-                    const SizedBox(width: 4),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) => FilterBottomSheet(
-                            initialPrice: _priceRange,
-                            initialSize: _sizeFilter,
-                            availableCategories: subcategories
-                                .map((s) => s.name)
-                                .toList(),
-                            onApply: (price, cat, size) {
-                              setState(() {
-                                _priceRange = price;
-                                _sizeFilter = size;
-                              });
-                            },
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 7,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.border),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.tune,
-                              size: 16,
-                              color: AppColors.black,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'FILTER',
-                              style: AppTypography.badge.copyWith(
-                                letterSpacing: 0.8,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+          CatalogToolbar(
+            itemCount: filtered.length,
+            isGridView: _isGridView,
+            onToggleView: () => setState(() => _isGridView = !_isGridView),
+            onOpenFilter: () => _openFilterBottomSheet(
+              subcategories.map((s) => s.name).toList(),
             ),
           ),
           const Divider(height: 1, color: AppColors.border),
-
           Expanded(
             child: filtered.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.search_off,
-                          size: 48,
-                          color: AppColors.placeholder,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'NO PRODUCTS MATCH YOUR FILTER',
-                          style: AppTypography.headingSmall,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Try resetting filters or adjusting search term.',
-                          style: AppTypography.bodySmall,
-                        ),
-                      ],
-                    ),
-                  )
+                ? const CatalogEmptyState()
                 : _isGridView
-                ? GridView.builder(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 16,
-                      bottom: 24,
-                    ),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.58,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 20,
+                    ? GridView.builder(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          top: 16,
+                          bottom: 24,
                         ),
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) {
-                      final prod = filtered[index];
-                      return ProductCard(
-                        product: prod,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  ProductDetailScreen(product: prod),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.58,
+                              crossAxisSpacing: 14,
+                              mainAxisSpacing: 20,
                             ),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final prod = filtered[index];
+                          return ProductCard(
+                            product: prod,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ProductDetailScreen(product: prod),
+                                ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.only(
-                      left: 16,
-                      right: 16,
-                      top: 16,
-                      bottom: 24,
-                    ),
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final prod = filtered[index];
-                      return ProductCard(
-                        product: prod,
-                        isHorizontal: true,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  ProductDetailScreen(product: prod),
-                            ),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          top: 16,
+                          bottom: 24,
+                        ),
+                        itemCount: filtered.length,
+                        separatorBuilder: (_, index) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final prod = filtered[index];
+                          return ProductCard(
+                            product: prod,
+                            isHorizontal: true,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ProductDetailScreen(product: prod),
+                                ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  ),
+                      ),
           ),
         ],
       ),

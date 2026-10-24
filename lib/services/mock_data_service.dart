@@ -34,6 +34,20 @@ class MockDataService extends ChangeNotifier {
   double discountAmount = 50.00;
   double shippingFee = 15.00;
 
+  final Map<int, double> _userRatings = {};
+  final Map<int, double> _averageRatings = {};
+  final Map<int, int> _reviewCounts = {};
+
+  double? getUserRating(int productId) => _userRatings[productId];
+  double? getAverageRating(int productId) => _averageRatings[productId];
+  int? getReviewCount(int productId) => _reviewCounts[productId];
+
+  double getDisplayRating(int productId, double defaultRating) =>
+      _userRatings[productId] ?? _averageRatings[productId] ?? defaultRating;
+
+  int getDisplayReviewCount(int productId, int defaultCount) =>
+      _reviewCounts[productId] ?? defaultCount;
+
   Future<void> initialize() async {
     if (_isLoaded) return;
     try {
@@ -90,7 +104,7 @@ class MockDataService extends ChangeNotifier {
     }
   }
 
-  void selectAllCartItems(bool isSelected) {
+  dynamic selectAllCartItems(bool isSelected) {
     for (final item in cartItems) {
       item.isSelected = isSelected;
     }
@@ -243,6 +257,131 @@ class MockDataService extends ChangeNotifier {
 
   List<Product> get wishlistProducts {
     return products.where((p) => wishlistProductIds.contains(p.id)).toList();
+  }
+
+  Product? getProductById(int productId) {
+    Product? found;
+    try {
+      found = products.firstWhere((p) => p.id == productId);
+    } catch (_) {
+      if (featureProducts != null) {
+        for (final p in [
+          ...featureProducts!.exclusiveOffers,
+          ...featureProducts!.bestSellings,
+          ...featureProducts!.features,
+        ]) {
+          if (p.id == productId) {
+            found = p;
+            break;
+          }
+        }
+      }
+    }
+    if (found != null && _userRatings.containsKey(productId)) {
+      return found.copyWith(
+        rating: _averageRatings[productId] ?? found.rating,
+        reviewCount: _reviewCounts[productId] ?? found.reviewCount,
+        userRating: _userRatings[productId],
+      );
+    }
+    return found;
+  }
+
+  Product rateProduct(
+    int productId,
+    double userRating, [
+    Product? fallbackProduct,
+  ]) {
+    final clampedRating = userRating.clamp(1.0, 5.0);
+
+    // Look up current product to compute running average
+    Product? base;
+    try {
+      base = products.firstWhere((p) => p.id == productId);
+    } catch (_) {
+      base = fallbackProduct;
+    }
+
+    final currentAverage = _averageRatings[productId] ?? base?.rating ?? 5.0;
+    final currentCount = _reviewCounts[productId] ?? base?.reviewCount ?? 0;
+    final oldUserRating = _userRatings[productId] ?? base?.userRating;
+
+    double newAverage;
+    int newCount;
+
+    if (oldUserRating != null) {
+      final totalScore =
+          (currentAverage * currentCount) - oldUserRating + clampedRating;
+      newCount = currentCount;
+      newAverage = newCount > 0 ? (totalScore / newCount) : clampedRating;
+    } else {
+      final totalScore = (currentAverage * currentCount) + clampedRating;
+      newCount = currentCount + 1;
+      newAverage = totalScore / newCount;
+    }
+
+    final roundedRating = double.parse(newAverage.toStringAsFixed(1));
+
+    // Save strictly to rating maps
+    _userRatings[productId] = clampedRating;
+    _averageRatings[productId] = roundedRating;
+    _reviewCounts[productId] = newCount;
+
+    // In-place update of rating fields ONLY (never touches images or other attributes)
+    Product updateOnlyRating(Product p) {
+      if (p.id != productId) return p;
+      return p.copyWith(
+        rating: roundedRating,
+        reviewCount: newCount,
+        userRating: clampedRating,
+      );
+    }
+
+    products = products.map(updateOnlyRating).toList();
+
+    if (featureProducts != null) {
+      featureProducts = FeatureProduct(
+        exclusiveOffersTitle: featureProducts!.exclusiveOffersTitle,
+        bestSellingsTitle: featureProducts!.bestSellingsTitle,
+        featuresTitle: featureProducts!.featuresTitle,
+        exclusiveOffers: featureProducts!.exclusiveOffers
+            .map(updateOnlyRating)
+            .toList(),
+        bestSellings: featureProducts!.bestSellings
+            .map(updateOnlyRating)
+            .toList(),
+        features: featureProducts!.features.map(updateOnlyRating).toList(),
+      );
+    }
+
+    notifyListeners();
+
+    return (base ?? fallbackProduct)?.copyWith(
+          rating: roundedRating,
+          reviewCount: newCount,
+          userRating: clampedRating,
+        ) ??
+        Product(
+          id: productId,
+          title: '',
+          brand: '',
+          category: '',
+          subcategory: '',
+          price: 0,
+          originalPrice: 0,
+          discountPercent: 0,
+          rating: roundedRating,
+          reviewCount: newCount,
+          userRating: clampedRating,
+          isNew: false,
+          isFeatured: false,
+          description: '',
+          material: '',
+          care: '',
+          colors: [],
+          sizes: [],
+          images: [],
+        );
   }
 
   Future<List<CategoryItem>> loadCategoryProducts() async {
